@@ -2,5 +2,16 @@
 import { env } from '$env/dynamic/public';
 import { PUBLIC_RAILS_DEVELOPMENT_URL } from '$env/static/public';
 
+export const devMode = () => env.PUBLIC_NODE_ENV === 'dev';
+
 export const devModeUrlFix = (url: string) =>
-	env.PUBLIC_NODE_ENV === 'dev' ? PUBLIC_RAILS_DEVELOPMENT_URL + url : url;
+	devMode() ? PUBLIC_RAILS_DEVELOPMENT_URL + url : url;
+
+export const devModeAuthorizationHeader = () =>
+	devMode()
+		? {
+				headers: {
+					Authorization: localStorage.getItem('AuthorizationToken')!
+				}
+		  }
+		: undefined;
