@@ -7,7 +7,7 @@
 	onMount(() => authenticated.verify());
 
 	$: loading = $authenticated === null;
-	$: $authenticated === true && goto('/app');
+	$: $authenticated === false && goto('/');
 </script>
 
 <main class="full-dynamic-viewport-height full-dynamic-viewport-width h-full flex flex-col">

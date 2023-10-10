@@ -1,8 +1,18 @@
 Rails.application.routes.draw do
+  devise_for :users, path: "api/auth", path_names: {
+    sign_in: 'login',
+    sign_out: 'logout',
+    registration: 'signup'
+  },
+  controllers: {
+    sessions: 'users/sessions',
+    registrations: 'users/registrations'
+  }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
   scope "api" do
+    get "/auth/status", to: "users/authentication_status#index"
     get "/", to: "home#index"
   end
 end

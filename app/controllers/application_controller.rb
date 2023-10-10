@@ -10,7 +10,6 @@ class ApplicationController < ActionController::API
 
   private
     def update_headers_to_disable_caching
-      response.headers['Access-Control-Allow-Origin'] = '*'
       response.headers['Cache-Control'] = 'no-cache, no-cache="set-cookie", no-store, private, proxy-revalidate'
       response.headers['Pragma'] = 'no-cache'
       response.headers['Expires'] = '-1'

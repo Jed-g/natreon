@@ -62,6 +62,10 @@ gem 'shakapacker'
 gem 'devise'
 gem 'cancancan'
 
+gem 'devise-jwt'
+gem 'jsonapi-serializer'
+gem 'rack-cors'
+
 gem 'whenever'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
