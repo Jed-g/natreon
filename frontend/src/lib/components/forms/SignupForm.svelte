@@ -133,7 +133,7 @@
 			/>
 		</div>
 		{#if formValidation.emailValid !== null || formValidation.emailNotTaken !== null || formValidation.passwordMin8 !== null || formValidation.passwordsMatch !== null}
-			<div class="divider" />
+			<div class="divider my-1" />
 		{/if}
 		{#if formValidation.emailValid === false}
 			<div class="flex">
