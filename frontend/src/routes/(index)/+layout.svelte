@@ -3,6 +3,8 @@
 	import { authenticated } from '$lib/stores';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import HeaderDesktop from '$lib/components/landing/header/HeaderDesktop.svelte';
+	import HeaderMobile from '$lib/components/landing/header/HeaderMobile.svelte';
 
 	onMount(() => authenticated.verify());
 
@@ -16,6 +18,8 @@
 			<span class="loading loading-ring loading-lg" />
 		</div>
 	{:else}
+		<HeaderDesktop />
+		<HeaderMobile />
 		<slot />
 	{/if}
 </main>
