@@ -1,5 +1,5 @@
-<div class="navbar bg-base-100 justify-between hidden sm:flex">
-	<h1 class="select-none px-4">Natureon&#8482;</h1>
+<div class="navbar bg-base-100 justify-between hidden sm:flex fixed opacity-90 z-10">
+	<h1 class="select-none px-4">Natreon&#8482;</h1>
 
 	<ul class="menu menu-horizontal px-1">
 		<li><a href="/">Home</a></li>

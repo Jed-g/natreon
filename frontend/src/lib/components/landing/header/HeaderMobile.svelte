@@ -1,4 +1,4 @@
-<div class="navbar bg-base-100 justify-between sm:hidden">
+<div class="navbar bg-base-100 justify-between sm:hidden fixed opacity-90 z-10">
 	<div>
 		<div class="dropdown">
 			<label tabindex="0" class="btn btn-ghost">
@@ -26,7 +26,7 @@
 				<li><a href="/about">About Us</a></li>
 			</ul>
 		</div>
-		<h1 class="select-none px-4">Natureon&#8482;</h1>
+		<h1 class="select-none px-4">Natreon&#8482;</h1>
 	</div>
 	<a class="btn" href="/login">Login</a>
 </div>

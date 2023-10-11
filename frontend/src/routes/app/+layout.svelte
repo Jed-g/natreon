@@ -3,6 +3,7 @@
 	import { authenticated } from '$lib/stores';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { scale } from 'svelte/transition';
 
 	onMount(() => authenticated.verify());
 
@@ -10,15 +11,15 @@
 	$: $authenticated === false && goto('/');
 </script>
 
-<main
-	class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex flex-col"
->
+<main class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex">
 	{#if loading}
 		<div class="grow flex items-center justify-center">
 			<span class="loading loading-ring loading-lg" />
 		</div>
 	{:else}
-		<slot />
+		<div class="grow overflow-hidden" transition:scale={{ start: 1.1, duration: 500, opacity: 0 }}>
+			<slot />
+		</div>
 	{/if}
 </main>
 

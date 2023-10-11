@@ -1,15 +1,12 @@
-<script lang="ts">
-</script>
-
-<h2>
-	<span class="text-1 text-xl">Natureon&#8482;</span>
+<h2 class="absolute">
+	<span class="text-1 text-xl">Natreon&#8482;</span>
 	<span class="text-2 text-xl">Enchancing outdoor experiences.</span>
 </h2>
 
 <style>
 	.text-1 {
 		animation: text1;
-		animation-timing-function: steps(15, end);
+		animation-timing-function: steps(12, end);
 	}
 
 	.text-2 {
@@ -46,7 +43,7 @@
 		}
 		10%,
 		40% {
-			width: 5.4em;
+			width: 4.8em;
 		}
 	}
 
