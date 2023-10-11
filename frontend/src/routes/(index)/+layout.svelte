@@ -12,7 +12,9 @@
 	$: $authenticated === true && goto('/app');
 </script>
 
-<main class="full-dynamic-viewport-height full-dynamic-viewport-width h-full flex flex-col">
+<main
+	class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex flex-col"
+>
 	{#if loading}
 		<div class="grow flex items-center justify-center">
 			<span class="loading loading-ring loading-lg" />

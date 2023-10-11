@@ -1,14 +1,9 @@
 <script lang="ts">
-	import { logOut } from '$lib/auth';
-	import { authenticated } from '$lib/stores';
-
-	const handleLogout = async () => {
-		const logoutSuccessful = await logOut();
-		logoutSuccessful && authenticated.verify();
-	};
+	import Map from '$lib/components/app/map/Map.svelte';
+	import LogoutButton from '$lib/components/app/LogoutButton.svelte';
 </script>
 
-<div class="flex flex-col grow items-center justify-center">
-	<p class="mb-4">You are now logged in.</p>
-	<button class="btn" on:click={handleLogout}>Logout</button>
+<Map />
+<div class="absolute top-2 right-2">
+	<LogoutButton />
 </div>
