@@ -1,14 +1,10 @@
 <script lang="ts">
 	const clickButtonByTitleProperty = (title: string) => {
 		const button = document.querySelector(`button[title="${title}"]`) as HTMLButtonElement;
-		button.click();
+		button?.click();
 
-		try {
-			const button2 = document.querySelector(
-				`button[title="${title} Slide 1"]`
-			) as HTMLButtonElement;
-			button2.click();
-		} catch (error) {}
+		const button2 = document.querySelector(`button[title="${title} Slide 1"]`) as HTMLButtonElement;
+		button2?.click();
 	};
 </script>
 
