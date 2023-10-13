@@ -1,7 +1,21 @@
-<div class="navbar bg-base-100 justify-between sm:hidden fixed opacity-90 z-10">
+<script lang="ts">
+	const clickButtonByTitleProperty = (title: string) => {
+		const button = document.querySelector(`button[title="${title}"]`) as HTMLButtonElement;
+		button.click();
+
+		try {
+			const button2 = document.querySelector(
+				`button[title="${title} Slide 1"]`
+			) as HTMLButtonElement;
+			button2.click();
+		} catch (error) {}
+	};
+</script>
+
+<div class="navbar bg-base-100 justify-between sm:hidden">
 	<div>
 		<div class="dropdown">
-			<label tabindex="0" class="btn btn-ghost">
+			<button class="btn btn-ghost">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-5 w-5"
@@ -15,15 +29,20 @@
 						d="M4 6h16M4 12h8m-8 6h16"
 					/></svg
 				>
-			</label>
-			<ul
-				tabindex="0"
-				class="menu dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-			>
-				<li><a href="/">Home</a></li>
-				<li><a href="/features">Features</a></li>
-				<li><a href="/pricing">Pricing</a></li>
-				<li><a href="/about">About Us</a></li>
+			</button>
+			<ul class="menu dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+				<li>
+					<button on:click={() => clickButtonByTitleProperty('Home')}>Home</button>
+				</li>
+				<li>
+					<button on:click={() => clickButtonByTitleProperty('Features')}>Features</button>
+				</li>
+				<li>
+					<button on:click={() => clickButtonByTitleProperty('Pricing')}>Pricing</button>
+				</li>
+				<li>
+					<button on:click={() => clickButtonByTitleProperty('About Us')}>About Us</button>
+				</li>
 			</ul>
 		</div>
 		<h1 class="select-none px-4">Natreon&#8482;</h1>

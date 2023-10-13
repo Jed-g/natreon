@@ -17,7 +17,7 @@
 			<span class="loading loading-ring loading-lg" />
 		</div>
 	{:else}
-		<div class="grow overflow-hidden" transition:scale={{ start: 1.1, duration: 500, opacity: 0 }}>
+		<div class="grow overflow-hidden" transition:scale={{ start: 0.9, duration: 500, opacity: 0 }}>
 			<slot />
 		</div>
 	{/if}

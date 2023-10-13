@@ -20,8 +20,8 @@
 		</div>
 	{:else}
 		<div
-			class="grow overflow-x-hidden"
-			transition:scale={{ start: 1.1, duration: 500, opacity: 0 }}
+			class="flex flex-col grow overflow-x-hidden"
+			transition:scale={{ start: 0.9, duration: 500, opacity: 0 }}
 		>
 			<HeaderDesktop />
 			<HeaderMobile />

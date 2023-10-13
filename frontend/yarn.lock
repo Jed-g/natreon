@@ -2331,6 +2331,11 @@ svelte-check@^3.4.3:
     postcss "^8.4.29"
     postcss-scss "^4.0.8"
 
+svelte-fullpage@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/svelte-fullpage/-/svelte-fullpage-1.1.0.tgz#5ed74e0bfff4fcf0475faea84aff2033187d9e02"
+  integrity sha512-b7JaQydeq8BSThNFRcvoo7HnwJdGXjAYysX0Hufr5r/pBU2FZlyTqXgw9QhQ046rz3PFzyyd6nAu1e4tkEmk5A==
+
 svelte-hmr@^0.15.3:
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.15.3.tgz#df54ccde9be3f091bf5f18fc4ef7b8eb6405fbe6"
