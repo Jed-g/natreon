@@ -21,7 +21,7 @@
 	{:else}
 		<div
 			class="flex flex-col grow overflow-x-hidden"
-			transition:scale={{ start: 0.9, duration: 500, opacity: 0 }}
+			in:scale={{ start: 0.9, duration: 500, opacity: 0 }}
 		>
 			<HeaderDesktop />
 			<HeaderMobile />

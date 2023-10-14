@@ -1,4 +1,4 @@
-<h2 class="absolute">
+<h2 class="relative">
 	<span class="text-1 text-xl">Natreon&#8482;</span>
 	<span class="text-2 text-xl">Enchancing outdoor experiences.</span>
 </h2>
