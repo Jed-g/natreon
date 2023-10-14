@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	const clickButtonByTitleProperty = (title: string) => {
 		const button = document.querySelector(`button[title="${title}"]`) as HTMLButtonElement;
 		button?.click();
@@ -28,16 +30,36 @@
 			</button>
 			<ul class="menu dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
 				<li>
-					<button on:click={() => clickButtonByTitleProperty('Home')}>Home</button>
+					<button
+						on:click={async () => {
+							await goto('/');
+							clickButtonByTitleProperty('Home');
+						}}>Home</button
+					>
 				</li>
 				<li>
-					<button on:click={() => clickButtonByTitleProperty('Features')}>Features</button>
+					<button
+						on:click={async () => {
+							await goto('/');
+							clickButtonByTitleProperty('Features');
+						}}>Features</button
+					>
 				</li>
 				<li>
-					<button on:click={() => clickButtonByTitleProperty('Pricing')}>Pricing</button>
+					<button
+						on:click={async () => {
+							await goto('/');
+							clickButtonByTitleProperty('Pricing');
+						}}>Pricing</button
+					>
 				</li>
 				<li>
-					<button on:click={() => clickButtonByTitleProperty('About Us')}>About Us</button>
+					<button
+						on:click={async () => {
+							await goto('/');
+							clickButtonByTitleProperty('About Us');
+						}}>About Us</button
+					>
 				</li>
 			</ul>
 		</div>

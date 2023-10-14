@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	const clickButtonByTitleProperty = (title: string) => {
 		const button = document.querySelector(`button[title="${title}"]`) as HTMLButtonElement;
 		button?.click();
@@ -13,16 +15,36 @@
 
 	<ul class="menu menu-horizontal px-1">
 		<li class="mx-1">
-			<button on:click={() => clickButtonByTitleProperty('Home')}>Home</button>
+			<button
+				on:click={async () => {
+					await goto('/');
+					clickButtonByTitleProperty('Home');
+				}}>Home</button
+			>
 		</li>
 		<li class="mx-1">
-			<button on:click={() => clickButtonByTitleProperty('Features')}>Features</button>
+			<button
+				on:click={async () => {
+					await goto('/');
+					clickButtonByTitleProperty('Features');
+				}}>Features</button
+			>
 		</li>
 		<li class="mx-1">
-			<button on:click={() => clickButtonByTitleProperty('Pricing')}>Pricing</button>
+			<button
+				on:click={async () => {
+					await goto('/');
+					clickButtonByTitleProperty('Pricing');
+				}}>Pricing</button
+			>
 		</li>
 		<li class="mx-1">
-			<button on:click={() => clickButtonByTitleProperty('About Us')}>About Us</button>
+			<button
+				on:click={async () => {
+					await goto('/');
+					clickButtonByTitleProperty('About Us');
+				}}>About Us</button
+			>
 		</li>
 	</ul>
 
