@@ -1,17 +1,17 @@
 <h2 class="relative">
-	<span class="text-1 text-xl">Natreon&#8482;</span>
-	<span class="text-2 text-xl">Enchancing outdoor experiences.</span>
+	<span class="text-1 text-4xl">Natreon&#8482;</span>
+	<span class="text-2 text-4xl">Go Explore.</span>
 </h2>
 
 <style>
 	.text-1 {
 		animation: text1;
-		animation-timing-function: steps(12, end);
+		animation-timing-function: steps(20, end);
 	}
 
 	.text-2 {
 		animation: text2;
-		animation-timing-function: steps(38, end);
+		animation-timing-function: steps(20, end);
 	}
 
 	.text-1,
@@ -56,7 +56,7 @@
 
 		60%,
 		90% {
-			width: 15em;
+			width: 5.4em;
 		}
 	}
 
