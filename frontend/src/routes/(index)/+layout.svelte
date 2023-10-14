@@ -13,6 +13,10 @@
 	$: $authenticated === true && goto('/app');
 </script>
 
+<svelte:head>
+	<title>Natreon&#8482;</title>
+</svelte:head>
+
 <main class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex">
 	{#if loading}
 		<div class="grow flex items-center justify-center">

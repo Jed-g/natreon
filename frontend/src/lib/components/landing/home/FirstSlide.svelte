@@ -8,10 +8,11 @@
 	id="home"
 >
 	<AnimatedLogo
-		height={240}
-		strokeColour="#000000"
+		height={400}
+		strokeColour1="#2c9296"
+		strokeColour2="#fa7443"
 		duration={4500}
-		strokeWidthHeightProportion={0.5}
+		strokeWidthHeightProportion={0.025}
 	/>
 	<AnimatedBusinessName />
 </div>
