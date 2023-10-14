@@ -5,13 +5,13 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
+	},
+	server: {
+		proxy: {
+			'/api': {
+				target: 'http://localhost:3000',
+				changeOrigin: true
+			}
+		}
 	}
-	// server: {
-	// 	port: 3000,
-	// 	strictPort: false
-	// },
-	// preview: {
-	// 	port: 3000,
-	// 	strictPort: false
-	// }
 });

@@ -21,6 +21,7 @@ module Project
   class Application < Rails::Application
     config.api_only = true
     config.load_defaults 7.0
+    config.middleware.use ActionDispatch::Cookies
 
     config.active_job.queue_adapter = :delayed_job
 

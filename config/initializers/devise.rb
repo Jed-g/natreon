@@ -318,4 +318,8 @@ Devise.setup do |config|
     ]
     jwt.expiration_time = 7.days.to_i
   end
+
+  config.jwt_cookie do |jwt_cookie|
+    jwt_cookie.secure = false if Rails.env.development?
+  end
 end

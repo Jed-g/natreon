@@ -1,5 +1,4 @@
 class HomeController < ApplicationController
-  include ApplicationHelper
 
   def index
     if is_authenticated
@@ -8,4 +7,5 @@ class HomeController < ApplicationController
       render json: {message: "not authenticated"}
     end
   end
+  
 end

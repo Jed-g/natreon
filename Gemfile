@@ -62,9 +62,10 @@ gem 'shakapacker'
 gem 'devise'
 gem 'cancancan'
 
+gem 'dry-container', '0.7.2'
 gem 'devise-jwt'
+gem 'devise-jwt-cookie'
 gem 'jsonapi-serializer'
-gem 'rack-cors'
 
 gem 'whenever'
 gem 'delayed_job'

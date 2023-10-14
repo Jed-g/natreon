@@ -2,8 +2,9 @@
 	"name": "frontend",
 	"version": "0.0.1",
 	"private": true,
+	"proxy": "http://localhost:3000",
 	"scripts": {
-		"dev": "cross-env PUBLIC_NODE_ENV=dev vite dev",
+		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
 		"deploy": "yarn build && rm -rf ../public/** && cp -rf ./build/** ../public",
@@ -25,7 +26,6 @@
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"autoprefixer": "^10.4.16",
-		"cross-env": "^7.0.3",
 		"daisyui": "^3.9.2",
 		"eslint": "^8.28.0",
 		"eslint-config-prettier": "^8.5.0",

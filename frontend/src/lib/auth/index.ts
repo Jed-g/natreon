@@ -1,8 +1,6 @@
-import { devModeUrlFix, devMode, devModeAuthorizationHeader } from '$lib/utils';
-
 export const isAuthenticated = async () => {
 	try {
-		const response = await fetch(devModeUrlFix('/api/auth/status'), devModeAuthorizationHeader());
+		const response = await fetch('/api/auth/status');
 		return response.status === 200;
 	} catch (error) {
 		return false;
@@ -11,18 +9,14 @@ export const isAuthenticated = async () => {
 
 export const logIn = async (email: string, password: string) => {
 	try {
-		const response = await fetch(devModeUrlFix('/api/auth/login'), {
+		const response = await fetch('/api/auth/login', {
 			method: 'POST',
 			body: JSON.stringify({ user: { email, password } }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
-		const responseOk = response.status === 200;
-		responseOk &&
-			devMode() &&
-			localStorage.setItem('AuthorizationToken', response.headers.get('Authorization')!);
-		return responseOk;
+		return response.status === 200;
 	} catch (error) {
 		return false;
 	}
@@ -30,18 +24,14 @@ export const logIn = async (email: string, password: string) => {
 
 export const signUp = async (email: string, password: string) => {
 	try {
-		const response = await fetch(devModeUrlFix('/api/auth/signup'), {
+		const response = await fetch('/api/auth/signup', {
 			method: 'POST',
 			body: JSON.stringify({ user: { email, password } }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
 		});
-		const responseOk = response.status === 200;
-		responseOk &&
-			devMode() &&
-			localStorage.setItem('AuthorizationToken', response.headers.get('Authorization')!);
-		return responseOk;
+		return response.status === 200;
 	} catch (error) {
 		return false;
 	}
@@ -49,13 +39,10 @@ export const signUp = async (email: string, password: string) => {
 
 export const logOut = async () => {
 	try {
-		const response = await fetch(devModeUrlFix('/api/auth/logout'), {
-			method: 'DELETE',
-			...devModeAuthorizationHeader()
+		const response = await fetch('/api/auth/logout', {
+			method: 'DELETE'
 		});
-		const responseOk = response.status === 200;
-		responseOk && devMode() && localStorage.removeItem('AuthorizationToken');
-		return responseOk;
+		return response.status === 200;
 	} catch (error) {
 		return false;
 	}
