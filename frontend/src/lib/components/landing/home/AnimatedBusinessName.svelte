@@ -1,6 +1,6 @@
-<h2 class="relative font-mono">
-	<span class="text-1 text-4xl">Natreon&#8482;</span>
-	<span class="text-2 text-3xl">Trek into the wild.</span>
+<h2 class="font-mono">
+	<span class="text-1 sm:text-4xl text-3xl">Natreon&#8482;</span>
+	<span class="text-2 sm:text-3xl text-2xl">Trek into the wild.</span>
 </h2>
 
 <style>

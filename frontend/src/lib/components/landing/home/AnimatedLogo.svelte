@@ -7,13 +7,7 @@
 	export let duration: number;
 </script>
 
-<svg
-	class="relative -mt-40"
-	version="1.0"
-	xmlns="http://www.w3.org/2000/svg"
-	{height}
-	viewBox="0 0 1024 1024"
->
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" {height} viewBox="0 0 1024 1024">
 	<path
 		in:draw={{ duration }}
 		fill="none"
