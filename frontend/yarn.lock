@@ -463,11 +463,6 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.5.3.tgz#9a726e116beb26c24f1ccd6850201e1246122e04"
   integrity sha512-OxepLK9EuNEIPxWNME+C6WwbRAOOI2o2BaQEGzz5Lu2e4Z5eDnEo+/aVEDMIXywoJitJ7xWd641wrGLZdtwRyw==
 
-"@types/siema@^1.4.9":
-  version "1.4.9"
-  resolved "https://registry.yarnpkg.com/@types/siema/-/siema-1.4.9.tgz#ff77036952a1157ac794038f535c561b36935e63"
-  integrity sha512-eZuYKuJkV3axOLutyFSWOoRh/qWVth05W0OgXLXb6TjOPAZjvd+MXohhuxS1yyebZtHb9mAclFjl789H14WQxw==
-
 "@types/supercluster@^7.1.1":
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/@types/supercluster/-/supercluster-7.1.1.tgz#b7bd11dc793c1e658d0549ead4a93e594a8fb478"
@@ -2200,11 +2195,6 @@ shebang-regex@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
   integrity sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==
-
-siema@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/siema/-/siema-1.5.1.tgz#eff312b77e8340fa4d81d5d053ebbeb9113ff888"
-  integrity sha512-BUNFdTSbC9/2gA6r6teBY9B8O/XZOUz8kVyttpsbq4gbHF9PidUDzs6aPtiObhV4KoEuPQdhRvK5hPPi9lgSTg==
 
 siginfo@^2.0.0:
   version "2.0.0"

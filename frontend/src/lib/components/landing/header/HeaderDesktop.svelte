@@ -48,5 +48,5 @@
 		</li>
 	</ul>
 
-	<a class="btn" href="/login">Login</a>
+	<a class="btn btn-primary" href="/login">Login</a>
 </div>

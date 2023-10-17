@@ -65,5 +65,5 @@
 		</div>
 		<h1 class="select-none px-4">Natreon&#8482;</h1>
 	</div>
-	<a class="btn" href="/login">Login</a>
+	<a class="btn btn-primary" href="/login">Login</a>
 </div>
