@@ -44,15 +44,8 @@
 </div>
 {#if showCircle}
 	<div
-		class="rounded-full h-14 w-14 absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none circle"
+		class="rounded-full h-8 w-8 absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none backdrop-invert"
 		bind:this={circle}
 		style={`translate: ${cursorPosition.x}px ${cursorPosition.y}px`}
 	/>
 {/if}
-
-<style>
-	.circle {
-		background-image: radial-gradient(rgba(30, 184, 84, 0.5) 0%, transparent 60%);
-		backdrop-filter: blur(2px);
-	}
-</style>
