@@ -6,10 +6,10 @@ services:
     alias: chrome
 
 variables:
-  POSTGRES_DB: 'ci_test'
-  POSTGRES_USER: 'runner'
-  POSTGRES_PASSWORD: 'runner'
-  POSTGRES_HOST_AUTH_METHOD: 'trust'
+  POSTGRES_DB: "ci_test"
+  POSTGRES_USER: "runner"
+  POSTGRES_PASSWORD: "runner"
+  POSTGRES_HOST_AUTH_METHOD: "trust"
   SELENIUM_HOST: chrome
   SELENIUM_PORT: 4444
 
@@ -20,7 +20,7 @@ stages:
 
 .except:
   rules:
-    - if:  $CI_COMMIT_TAG != null || $CI_COMMIT_BRANCH =~ /^qa|demo|training$/
+    - if: $CI_COMMIT_TAG != null || $CI_COMMIT_BRANCH =~ /^qa|demo|training$/
       when: never
     - when: always
 
@@ -95,6 +95,9 @@ rspec:
   script:
     - RAILS_ENV=test bundle exec rake
 
+include:
+  - 'frontend/.gitlab-ci.yml'
+
 # jest:
 #   stage: test
 #   interruptible: true
@@ -109,7 +112,7 @@ rspec:
     - if: $SKIP_CI_SECURITY_STAGE == "1"
       when: manual
       allow_failure: true
-    - if:  $CI_COMMIT_TAG != null || $CI_COMMIT_BRANCH =~ /^qa|demo|training$/
+    - if: $CI_COMMIT_TAG != null || $CI_COMMIT_BRANCH =~ /^qa|demo|training$/
       when: never
     - when: always
       allow_failure: false
@@ -138,7 +141,6 @@ yarn-audit:
   script:
     - yarn check --integrity
     - yarn run improved-yarn-audit --fail-on-missing-exclusions
-
 
 brakeman:
   stage: security
