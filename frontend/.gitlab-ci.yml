@@ -12,6 +12,7 @@ yarn-frontend:
   extends: .except
 
   script:
+    - cd frontend
     - yarn check --integrity || yarn install
   artifacts:
     paths:
@@ -34,5 +35,6 @@ frontend:
     - bundler
     - yarn
   script:
+    - cd frontend
     - RAILS_ENV=test bundle exec rails s &
     - yarn test
