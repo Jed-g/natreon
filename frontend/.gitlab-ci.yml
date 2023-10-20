@@ -1,26 +1,3 @@
-yarn-frontend:
-  stage: setup
-  interruptible: true
-  cache:
-    key:
-      files:
-        - yarn.lock
-    paths:
-      - node_modules
-    policy: pull-push
-  services: []
-  extends: .except
-
-  script:
-    - cd frontend
-    - yarn check --integrity || yarn install
-    - yarn playwright install-deps
-  artifacts:
-    paths:
-      - frontend/node_modules
-    expire_in: 1 day
-  timeout: 20m
-
 frontend:
   stage: test
   interruptible: true
@@ -34,8 +11,9 @@ frontend:
   extends: .except
   needs:
     - bundler
-    - yarn
   script:
     - cd frontend
-    - RAILS_ENV=test bundle exec rails s &
-    - yarn test
+    - yarn check --integrity || yarn install
+    - yarn playwright install
+    - yarn deploy
+    - RAILS_ENV=test bundle exec rails s & yarn test
