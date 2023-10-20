@@ -1,0 +1,39 @@
+yarn-frontend:
+  stage: setup
+  interruptible: true
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - node_modules
+    policy: pull-push
+  services: []
+  extends: .except
+
+  script:
+    - yarn check --integrity || yarn install
+    - yarn playwright install
+  artifacts:
+    paths:
+      - node_modules
+    expire_in: 1 day
+  timeout: 20m
+
+frontend:
+  stage: test
+  interruptible: true
+  before_script:
+    - bundle config --global jobs "$(nproc)"
+    - bundle config --local path 'vendor/gems'
+
+    - "echo -e \"test:\n  adapter: postgresql\n  host: postgres\n  database: ci_test\n  username: runner\n  password: runner\" > config/database.yml"
+    - bundle check
+    - RAILS_ENV=test bundle exec rails db:test:prepare
+  extends: .except
+  needs:
+    - bundler
+    - yarn
+  script:
+    - RAILS_ENV=test bundle exec rails s &
+    - yarn test
