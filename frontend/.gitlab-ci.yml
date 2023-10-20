@@ -14,9 +14,10 @@ yarn-frontend:
   script:
     - cd frontend
     - yarn check --integrity || yarn install
+    - yarn playwright install
   artifacts:
     paths:
-      - node_modules
+      - frontend/node_modules
     expire_in: 1 day
   timeout: 20m
 
