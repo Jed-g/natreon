@@ -1,12 +1,12 @@
-<h2 class="relative">
-	<span class="text-1 text-4xl">Natreon&#8482;</span>
-	<span class="text-2 text-4xl">Go Explore.</span>
+<h2 class="font-mono">
+	<span class="text-1 sm:text-4xl text-3xl">Natreon&#8482;</span>
+	<span class="text-2 sm:text-3xl text-2xl">Trek into the wild.</span>
 </h2>
 
 <style>
 	.text-1 {
 		animation: text1;
-		animation-timing-function: steps(20, end);
+		animation-timing-function: steps(16, end);
 	}
 
 	.text-2 {
@@ -27,7 +27,7 @@
 
 	.text-1::after,
 	.text-2::after {
-		content: '|';
+		content: '▐';
 		position: absolute;
 		right: 0;
 		animation: caret infinite;
@@ -43,7 +43,7 @@
 		}
 		10%,
 		40% {
-			width: 4.8em;
+			width: 4.9em;
 		}
 	}
 
@@ -56,7 +56,7 @@
 
 		60%,
 		90% {
-			width: 5.4em;
+			width: 10.8em;
 		}
 	}
 
