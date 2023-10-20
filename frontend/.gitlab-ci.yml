@@ -13,7 +13,6 @@ yarn-frontend:
 
   script:
     - yarn check --integrity || yarn install
-    - yarn playwright install
   artifacts:
     paths:
       - node_modules
