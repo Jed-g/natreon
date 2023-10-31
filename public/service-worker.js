@@ -1,16 +1,16 @@
 const t = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), f = [
-  t + "/_app/immutable/entry/app.a776188e.js",
+  t + "/_app/immutable/entry/app.fefbcac7.js",
   t + "/_app/immutable/nodes/0.f4337d0e.js",
-  t + "/_app/immutable/nodes/1.ad0ad718.js",
+  t + "/_app/immutable/nodes/1.27f58c1a.js",
   t + "/_app/immutable/assets/2.76f3e416.css",
-  t + "/_app/immutable/nodes/2.b92e30af.js",
-  t + "/_app/immutable/nodes/3.566d6b81.js",
+  t + "/_app/immutable/nodes/2.53bf5ea4.js",
+  t + "/_app/immutable/nodes/3.5b9e4920.js",
   t + "/_app/immutable/assets/4.cf062968.css",
   t + "/_app/immutable/nodes/4.e25d8bc9.js",
-  t + "/_app/immutable/assets/5.1417e81c.css",
-  t + "/_app/immutable/nodes/5.2dda4de6.js",
-  t + "/_app/immutable/assets/6.6cb82484.css",
-  t + "/_app/immutable/nodes/6.0286b476.js",
+  t + "/_app/immutable/assets/5.727bb112.css",
+  t + "/_app/immutable/nodes/5.722c1a2b.js",
+  t + "/_app/immutable/assets/6.1b880871.css",
+  t + "/_app/immutable/nodes/6.ceb52e6b.js",
   t + "/_app/immutable/assets/7.d5b5701a.css",
   t + "/_app/immutable/nodes/7.afdfe7f2.js",
   t + "/_app/immutable/chunks/close-box.d76c3357.js",
@@ -18,12 +18,12 @@ const t = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), f
   t + "/_app/immutable/chunks/index.6a063d08.js",
   t + "/_app/immutable/chunks/index.cbcae5bf.js",
   t + "/_app/immutable/chunks/index.de19a9b0.js",
-  t + "/_app/immutable/chunks/navigation.7033d3ad.js",
+  t + "/_app/immutable/chunks/navigation.f30b2e61.js",
   t + "/_app/immutable/assets/navigation.9c2e4d3a.css",
   t + "/_app/immutable/chunks/scheduler.f5065b4e.js",
-  t + "/_app/immutable/chunks/singletons.fdd57e20.js",
+  t + "/_app/immutable/chunks/singletons.efe6e2e6.js",
   t + "/_app/immutable/chunks/spread.fb33f1cf.js",
-  t + "/_app/immutable/entry/start.9230f381.js"
+  t + "/_app/immutable/entry/start.c0483fe1.js"
 ], c = [
   t + "/apple-store.png",
   t + "/favicon.png",
@@ -83,7 +83,7 @@ const t = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), f
   t + "/app",
   t + "/login",
   t + "/signup"
-], l = "1698780114431", o = self, n = `cache${l}`, G = [...f, ...c, ...p];
+], l = "1698784093297", o = self, n = `cache${l}`, G = [...f, ...c, ...p];
 o.addEventListener("install", (e) => {
   e.waitUntil(
     caches.open(n).then((s) => s.addAll(G)).then(() => o.skipWaiting())
