@@ -26,4 +26,4 @@ module Delayed::WorkerClassReloadingPatch
     # no-op
   end
 end
-Delayed::Worker.send(:prepend, Delayed::WorkerClassReloadingPatch)
+Delayed::Worker.prepend Delayed::WorkerClassReloadingPatch

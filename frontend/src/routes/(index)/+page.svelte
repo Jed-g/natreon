@@ -6,6 +6,7 @@
 	import PricingFirstSlide from '$lib/components/landing/pricing/FirstSlide.svelte';
 	import AboutUsFirstSlide from '$lib/components/landing/about/FirstSlide.svelte';
 
+	let isMobileDevice = false;
 	let showCircle = false;
 	let circle: HTMLDivElement;
 	let container: HTMLDivElement;
@@ -20,11 +21,13 @@
 	};
 </script>
 
+<svelte:window on:touchstart={() => (isMobileDevice = true)} />
+
 <div class="overflow-hidden grow flex relative">
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
 		class="grow"
-		on:mouseenter={() => (showCircle = true)}
+		on:mouseenter={() => (showCircle = !isMobileDevice)}
 		on:mouseleave={() => (showCircle = false)}
 		on:mousemove={updateCursorPosition}
 		bind:this={container}
