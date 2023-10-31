@@ -49,6 +49,7 @@ group :development do
   # gem "spring"
 end
 
+gem 'rubocop'
 gem 'activerecord-session_store'
 gem 'hamlit'
 gem 'hamlit-rails'
