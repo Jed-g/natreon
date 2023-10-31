@@ -1,4 +1,5 @@
-<h2 class="font-mono">
+<h2 class="font-mono flex items-center justify-center">
+	<span class="sm:text-4xl text-3xl">&#10240;</span>
 	<span class="text-1 sm:text-4xl text-3xl">Natreon&#8482;</span>
 	<span class="text-2 sm:text-3xl text-2xl">Trek into the wild.</span>
 </h2>
@@ -19,7 +20,7 @@
 		overflow: hidden;
 		white-space: nowrap;
 		display: inline-block;
-		position: relative;
+		position: absolute;
 		animation-duration: 20s;
 		/* animation-timing-function: steps(25, end); */
 		animation-iteration-count: infinite;
@@ -43,7 +44,7 @@
 		}
 		10%,
 		40% {
-			width: 4.9em;
+			width: 5.3em;
 		}
 	}
 
@@ -56,7 +57,7 @@
 
 		60%,
 		90% {
-			width: 10.8em;
+			width: 11.6em;
 		}
 	}
 
