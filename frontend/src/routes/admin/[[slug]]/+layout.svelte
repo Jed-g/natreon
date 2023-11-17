@@ -5,7 +5,6 @@
 	import { onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import UserType from '$lib/enums/userType';
-	import Header from '$lib/components/metrics/header/Header.svelte';
 
 	onMount(() => authenticated.verify());
 
@@ -18,8 +17,8 @@
 			case UserType.CUSTOMER:
 				goto('/app');
 				break;
-			case UserType.ADMIN:
-				goto('/admin');
+			case UserType.REPORTER:
+				goto('/metrics');
 				break;
 			default:
 				break;
@@ -28,7 +27,7 @@
 </script>
 
 <svelte:head>
-	<title>Metrics</title>
+	<title>Admin Dashboard</title>
 </svelte:head>
 
 <main class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex">
@@ -41,7 +40,6 @@
 			class="flex flex-col grow overflow-x-hidden"
 			in:scale={{ start: 0.9, duration: 500, opacity: 0 }}
 		>
-			<Header />
 			<slot />
 		</div>
 	{/if}

@@ -1,29 +1,37 @@
 const t = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), f = [
-  t + "/_app/immutable/entry/app.fefbcac7.js",
+  t + "/_app/immutable/entry/app.8d28410b.js",
   t + "/_app/immutable/nodes/0.f4337d0e.js",
-  t + "/_app/immutable/nodes/1.27f58c1a.js",
+  t + "/_app/immutable/nodes/1.b3fee860.js",
+  t + "/_app/immutable/assets/10.d5b5701a.css",
+  t + "/_app/immutable/nodes/10.6c1d015b.js",
+  t + "/_app/immutable/nodes/11.b1994622.js",
   t + "/_app/immutable/assets/2.76f3e416.css",
-  t + "/_app/immutable/nodes/2.53bf5ea4.js",
-  t + "/_app/immutable/nodes/3.5b9e4920.js",
-  t + "/_app/immutable/assets/4.cf062968.css",
-  t + "/_app/immutable/nodes/4.e25d8bc9.js",
-  t + "/_app/immutable/assets/5.727bb112.css",
-  t + "/_app/immutable/nodes/5.722c1a2b.js",
-  t + "/_app/immutable/assets/6.1b880871.css",
-  t + "/_app/immutable/nodes/6.ceb52e6b.js",
-  t + "/_app/immutable/assets/7.d5b5701a.css",
-  t + "/_app/immutable/nodes/7.afdfe7f2.js",
-  t + "/_app/immutable/chunks/close-box.d76c3357.js",
-  t + "/_app/immutable/chunks/index.1edb9bf8.js",
+  t + "/_app/immutable/nodes/2.c5510b67.js",
+  t + "/_app/immutable/nodes/3.ec67ee78.js",
+  t + "/_app/immutable/nodes/4.fd06484c.js",
+  t + "/_app/immutable/nodes/5.5fb33ba2.js",
+  t + "/_app/immutable/assets/6.cf062968.css",
+  t + "/_app/immutable/nodes/6.bd9f4d0f.js",
+  t + "/_app/immutable/assets/7.f6273a62.css",
+  t + "/_app/immutable/nodes/7.afb021d2.js",
+  t + "/_app/immutable/assets/8.9d3d0fbc.css",
+  t + "/_app/immutable/nodes/8.f291750c.js",
+  t + "/_app/immutable/assets/9.556f629f.css",
+  t + "/_app/immutable/nodes/9.842ce1fb.js",
+  t + "/_app/immutable/chunks/Icon.bf3e43ac.js",
+  t + "/_app/immutable/chunks/LogoutButton.11a20322.js",
+  t + "/_app/immutable/chunks/close-box.75461ac6.js",
+  t + "/_app/immutable/chunks/each.e59479a4.js",
+  t + "/_app/immutable/chunks/index.1aea65ab.js",
   t + "/_app/immutable/chunks/index.6a063d08.js",
   t + "/_app/immutable/chunks/index.cbcae5bf.js",
   t + "/_app/immutable/chunks/index.de19a9b0.js",
-  t + "/_app/immutable/chunks/navigation.f30b2e61.js",
-  t + "/_app/immutable/assets/navigation.9c2e4d3a.css",
+  t + "/_app/immutable/chunks/navigation.a1d7492a.js",
+  t + "/_app/immutable/assets/navigation.bb366e7e.css",
   t + "/_app/immutable/chunks/scheduler.f5065b4e.js",
-  t + "/_app/immutable/chunks/singletons.efe6e2e6.js",
-  t + "/_app/immutable/chunks/spread.fb33f1cf.js",
-  t + "/_app/immutable/entry/start.c0483fe1.js"
+  t + "/_app/immutable/chunks/singletons.adceb85f.js",
+  t + "/_app/immutable/chunks/spread.84d39b6c.js",
+  t + "/_app/immutable/entry/start.b0328e83.js"
 ], c = [
   t + "/apple-store.png",
   t + "/favicon.png",
@@ -82,11 +90,17 @@ const t = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), f
   t + "/",
   t + "/app",
   t + "/login",
-  t + "/signup"
-], l = "1698784093297", o = self, n = `cache${l}`, G = [...f, ...c, ...p];
+  t + "/metrics",
+  t + "/signup",
+  t + "/admin",
+  t + "/admin/users",
+  t + "/admin/reviews",
+  t + "/admin/qa",
+  t + "/admin/mailing-list"
+], l = "1700195185796", o = self, n = `cache${l}`, m = [...f, ...c, ...p];
 o.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open(n).then((s) => s.addAll(G)).then(() => o.skipWaiting())
+    caches.open(n).then((s) => s.addAll(m)).then(() => o.skipWaiting())
   );
 });
 o.addEventListener("fetch", (e) => {
@@ -96,8 +110,11 @@ o.addEventListener("fetch", (e) => {
         return s;
       const i = s.clone();
       return caches.open(n).then((a) => {
-        a.put(e.request, i);
+        try {
+          a.put(e.request, i);
+        } catch {
+        }
       }), s;
-    }).catch(() => caches.match(e.request).then((s) => s ?? new Response()))
+    }).catch(async () => await caches.match(e.request) ?? new Response())
   );
 });
