@@ -1,13 +1,12 @@
 module ApplicationHelper
   def is_authenticated
-    return false unless cookies[:access_token].present?
+    user = get_current_user
 
-    jwt_payload = JWT.decode(cookies[:access_token], Rails.application.secrets.devise_jwt_secret_key!).first
-    current_user = User.find(jwt_payload['sub'])
+    if !user
+      return false
+    end
 
-    return false unless current_user
-
-    true
+    user.user_type
   end
 
   def get_current_user

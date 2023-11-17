@@ -1,11 +1,24 @@
+import UserType from '$lib/enums/userType';
+
 /**
- * Checks if the user is authenticated by making a request to the server.
- * @returns A promise that resolves to a boolean indicating whether the user is authenticated or not.
+ * Checks if the user is authenticated / Determines userType by making a request to the server.
+ * @returns A promise that resolves to false if user is not authenticated or a UserType Enum value otherwise.
  */
-export const isAuthenticated = async () => {
+export const authenticationStatus = async () => {
 	try {
 		const response = await fetch('/api/auth/status');
-		return response.status === 200;
+		const data = await response.json();
+
+		switch (data.userType) {
+			case 'customer':
+				return UserType.CUSTOMER;
+			case 'admin':
+				return UserType.ADMIN;
+			case 'reporter':
+				return UserType.REPORTER;
+			default:
+				return false;
+		}
 	} catch (error) {
 		return false;
 	}

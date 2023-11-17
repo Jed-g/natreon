@@ -1,5 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { signUp, logIn, logOut, isAuthenticated } from '$lib/auth';
+import { describe, it, expect, vi, beforeEach, expectTypeOf } from 'vitest';
+import { signUp, logIn, logOut, authenticationStatus } from '$lib/auth';
+import 'isomorphic-fetch';
+import UserType from '$lib/enums/userType';
 
 const EMAIL = 'test@example.com';
 const PASSWORD = 'password';
@@ -128,25 +130,45 @@ describe('logOut', () => {
 	});
 });
 
-describe('isAuthenticated', () => {
-	it('returns true if the server responds with a 200 status code', async () => {
+describe('authenticationStatus', () => {
+	it("returns UserType.CUSTOMER if the server responds with a 200 status code body: { userType: 'customer' }", async () => {
 		const mockFetch = vi.spyOn(global, 'fetch');
-		mockFetch.mockResolvedValueOnce({ status: 200 } as Response);
-		const result = await isAuthenticated();
-		expect(result).toBe(true);
+		mockFetch.mockResolvedValueOnce(
+			new Response(JSON.stringify({ userType: 'customer' }), { status: 200 })
+		);
+		const result = await authenticationStatus();
+		expect(result).toBe(UserType.CUSTOMER);
+	});
+
+	it("returns UserType.ADMIN if the server responds with a 200 status code body: { userType: 'admin' }", async () => {
+		const mockFetch = vi.spyOn(global, 'fetch');
+		mockFetch.mockResolvedValueOnce(
+			new Response(JSON.stringify({ userType: 'admin' }), { status: 200 })
+		);
+		const result = await authenticationStatus();
+		expect(result).toBe(UserType.ADMIN);
+	});
+
+	it("returns UserType.REPORTER if the server responds with a 200 status code body: { userType: 'reporter' }", async () => {
+		const mockFetch = vi.spyOn(global, 'fetch');
+		mockFetch.mockResolvedValueOnce(
+			new Response(JSON.stringify({ userType: 'reporter' }), { status: 200 })
+		);
+		const result = await authenticationStatus();
+		expect(result).toBe(UserType.REPORTER);
 	});
 
 	it('returns false if the server responds with a 401 status code', async () => {
 		const mockFetch = vi.spyOn(global, 'fetch');
 		mockFetch.mockResolvedValueOnce({ status: 401 } as Response);
-		const result = await isAuthenticated();
+		const result = await authenticationStatus();
 		expect(result).toBe(false);
 	});
 
 	it('returns false if the fetch function throws an error', async () => {
 		const mockFetch = vi.spyOn(global, 'fetch');
 		mockFetch.mockRejectedValueOnce(new Error('Network error'));
-		const result = await isAuthenticated();
+		const result = await authenticationStatus();
 		expect(result).toBe(false);
 	});
 });

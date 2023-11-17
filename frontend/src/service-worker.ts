@@ -34,13 +34,16 @@ sw.addEventListener('fetch', (event) => {
 				const responseToCache = response.clone();
 
 				caches.open(cacheId).then((cache) => {
-					cache.put(event.request, responseToCache);
+					try {
+						cache.put(event.request, responseToCache);
+					} catch (error) {}
 				});
 
 				return response;
 			})
-			.catch(() => {
-				return caches.match(event.request).then((response) => response ?? new Response());
+			.catch(async () => {
+				const response = await caches.match(event.request);
+				return response ?? new Response();
 			})
 	);
 });

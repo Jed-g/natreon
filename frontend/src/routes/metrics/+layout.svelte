@@ -3,8 +3,6 @@
 	import { authenticated } from '$lib/stores';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import HeaderDesktop from '$lib/components/landing/header/HeaderDesktop.svelte';
-	import HeaderMobile from '$lib/components/landing/header/HeaderMobile.svelte';
 	import { scale } from 'svelte/transition';
 	import UserType from '$lib/enums/userType';
 
@@ -13,14 +11,14 @@
 	$: loading = $authenticated === null;
 	$: {
 		switch ($authenticated) {
+			case false:
+				goto('/login');
+				break;
 			case UserType.CUSTOMER:
 				goto('/app');
 				break;
 			case UserType.ADMIN:
 				goto('/admin');
-				break;
-			case UserType.REPORTER:
-				goto('/metrics');
 				break;
 			default:
 				break;
@@ -29,7 +27,7 @@
 </script>
 
 <svelte:head>
-	<title>Natreon&#8482;</title>
+	<title>Metrics</title>
 </svelte:head>
 
 <main class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex">
@@ -38,12 +36,7 @@
 			<span class="loading loading-ring loading-lg" />
 		</div>
 	{:else}
-		<div
-			class="flex flex-col grow overflow-x-hidden"
-			in:scale={{ start: 0.9, duration: 500, opacity: 0 }}
-		>
-			<HeaderDesktop />
-			<HeaderMobile />
+		<div class="grow overflow-hidden" in:scale={{ start: 0.9, duration: 500, opacity: 0 }}>
 			<slot />
 		</div>
 	{/if}

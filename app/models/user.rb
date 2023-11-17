@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -9,6 +11,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  user_type              :integer          default("customer"), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -24,4 +27,6 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :jwt_cookie_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
+
+  enum user_type: { customer: 0, admin: 1, reporter: 2 }
 end
