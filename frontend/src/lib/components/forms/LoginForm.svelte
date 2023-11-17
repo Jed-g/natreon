@@ -52,7 +52,7 @@
 		</div>
 		{#if emailOrPasswordInvalid}
 			<div class="flex mt-1">
-				<Icon icon={errorIcon} height={24} class="scale-125" color="hsl(var(--er));" />
+				<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
 				<p class="ml-3">Email Or Password Invalid</p>
 			</div>
 		{/if}

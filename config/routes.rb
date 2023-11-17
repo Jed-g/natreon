@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   scope 'api' do
     get '/auth/status', to: 'users/authentication_status#index'
+    get '/admin/users', to: 'admin#get_users'
+    post '/admin/users', to: 'admin#update_user'
+    delete '/admin/users', to: 'admin#delete_user'
     get '/', to: 'home#index'
   end
 end

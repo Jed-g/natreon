@@ -1,6 +1,4 @@
 class Users::AuthenticationStatusController < ApplicationController
-  include ApplicationHelper
-
   def index
     user_type = is_authenticated
 

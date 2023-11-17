@@ -19,4 +19,14 @@ module ApplicationHelper
 
     current_user
   end
+
+  def is_admin
+    user = get_current_user
+
+    if !user || user.user_type != "admin"
+      return false
+    end
+
+    true
+  end
 end

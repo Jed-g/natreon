@@ -39,7 +39,7 @@
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
-		class="flex grow bg-base-200 md:brightness-100"
+		class="relative flex grow bg-base-200 md:brightness-100 overflow-hidden"
 		class:brightness-50={!menuClosed}
 		on:click={() => (menuClosed = true)}
 	>

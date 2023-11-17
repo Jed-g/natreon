@@ -3,6 +3,6 @@
 </script>
 
 <div class="navbar bg-base-100 justify-between">
-	<h1 class="select-none px-4">Natreon&#8482;</h1>
+	<h1 class="select-none px-4">Metrics</h1>
 	<LogoutButton />
 </div>
