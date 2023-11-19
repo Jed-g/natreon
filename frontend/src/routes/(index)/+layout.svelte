@@ -1,7 +1,6 @@
 <script lang="ts">
 	import '$lib/global.css';
 	import { authenticated } from '$lib/stores';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import HeaderDesktop from '$lib/components/landing/header/HeaderDesktop.svelte';
 	import HeaderMobile from '$lib/components/landing/header/HeaderMobile.svelte';
@@ -14,13 +13,13 @@
 	$: {
 		switch ($authenticated) {
 			case UserType.CUSTOMER:
-				goto('/app');
+				window.location.href = '/app';
 				break;
 			case UserType.ADMIN:
-				goto('/admin');
+				window.location.href = '/admin';
 				break;
 			case UserType.REPORTER:
-				goto('/metrics');
+				window.location.href = '/metrics';
 				break;
 			default:
 				break;

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import '$lib/global.css';
 	import { authenticated } from '$lib/stores';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import UserType from '$lib/enums/userType';
@@ -13,13 +12,13 @@
 	$: {
 		switch ($authenticated) {
 			case false:
-				goto('/login');
+				window.location.href = '/login';
 				break;
 			case UserType.CUSTOMER:
-				goto('/app');
+				window.location.href = '/app';
 				break;
 			case UserType.ADMIN:
-				goto('/admin');
+				window.location.href = '/admin';
 				break;
 			default:
 				break;
