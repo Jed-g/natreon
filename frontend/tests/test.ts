@@ -8,6 +8,7 @@ test('login button visible', async ({ page }) => {
 test('animated logo visible after navigation: Home -> Login -> Home', async ({ page }) => {
 	await page.goto('/');
 	await page.getByRole('link', { name: 'Login' }).first().click();
+	await page.locator('label', { hasText: 'Home' }).first().click();
 	await page.getByRole('button', { name: 'Home' }).first().click();
 	await expect(page.getByRole('img')).toBeVisible();
 });
