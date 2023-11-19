@@ -4,7 +4,6 @@
 	import FeaturesFirstSlide from '$lib/components/landing/features/FirstSlide.svelte';
 	import FeaturesSecondSlide from '$lib/components/landing/features/SecondSlide.svelte';
 	import PricingFirstSlide from '$lib/components/landing/pricing/FirstSlide.svelte';
-	import AboutUsFirstSlide from '$lib/components/landing/about/FirstSlide.svelte';
 
 	let isMobileDevice = false;
 	let showCircle = false;
@@ -46,9 +45,6 @@
 			</FullpageSection>
 			<FullpageSection disableCentering title="Pricing">
 				<PricingFirstSlide />
-			</FullpageSection>
-			<FullpageSection disableCentering title="About Us">
-				<AboutUsFirstSlide />
 			</FullpageSection>
 		</Fullpage>
 	</div>

@@ -38,28 +38,10 @@
 					>
 				</li>
 				<li>
-					<button
-						on:click={async () => {
-							await goto('/');
-							clickButtonByTitleProperty('Features');
-						}}>Features</button
-					>
+					<button on:click={() => goto('/reviews')}>Reviews</button>
 				</li>
 				<li>
-					<button
-						on:click={async () => {
-							await goto('/');
-							clickButtonByTitleProperty('Pricing');
-						}}>Pricing</button
-					>
-				</li>
-				<li>
-					<button
-						on:click={async () => {
-							await goto('/');
-							clickButtonByTitleProperty('About Us');
-						}}>About Us</button
-					>
+					<button on:click={() => goto('/questions')}>Questions</button>
 				</li>
 			</ul>
 		</div>
