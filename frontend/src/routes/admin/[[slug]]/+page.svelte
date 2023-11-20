@@ -34,15 +34,23 @@
 </script>
 
 <Header bind:menuClosed />
-<div class="relative flex grow">
-	<SideMenu bind:menuClosed slug={data.slug} />
+<div class="relative flex grow height">
+	<div class="overflow-y-auto">
+		<SideMenu bind:menuClosed slug={data.slug} />
+	</div>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
-		class="relative flex grow bg-base-200 md:brightness-100 overflow-hidden"
+		class="relative flex grow bg-base-200 md:brightness-100 overflow-x-hidden"
 		class:brightness-50={!menuClosed}
 		on:click={() => (menuClosed = true)}
 	>
 		<svelte:component this={mainComponent} />
 	</div>
 </div>
+
+<style>
+	.height {
+		height: calc(100% - 64px);
+	}
+</style>

@@ -13,7 +13,7 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<ul class="menu menu-lg p-4 min-h-full text-base-content">
+<ul class="menu menu-lg p-4 min-h-full text-base-content flex-nowrap">
 	<li>
 		<a
 			class:font-semibold={!slug}

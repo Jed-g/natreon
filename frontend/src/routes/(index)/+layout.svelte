@@ -38,17 +38,24 @@
 		</div>
 	{:else}
 		<div
-			class="flex flex-col grow overflow-x-hidden"
+			class="flex flex-col grow overflow-x-hidden relative"
 			in:scale={{ start: 0.9, duration: 500, opacity: 0 }}
 		>
 			<HeaderDesktop />
 			<HeaderMobile />
-			<slot />
+			<div class="height flex flex-col">
+				<slot />
+			</div>
 		</div>
 	{/if}
 </main>
 
 <style>
+	.height {
+		height: calc(100% - 64px);
+		margin-top: 64px;
+	}
+
 	@supports (height: 100dvh) {
 		.full-dynamic-viewport-height {
 			height: 100dvh;

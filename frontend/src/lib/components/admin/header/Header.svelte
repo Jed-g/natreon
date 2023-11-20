@@ -4,7 +4,7 @@
 	export let menuClosed: boolean;
 </script>
 
-<div class="navbar bg-base-100 justify-between">
+<div class="navbar bg-base-100 justify-between relative">
 	<div class="px-1 md:hidden">
 		<button class="btn-ghost btn-square btn flex-col" on:click={() => (menuClosed = !menuClosed)}>
 			<div

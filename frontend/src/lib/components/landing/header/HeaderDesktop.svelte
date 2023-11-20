@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Icon from '@iconify/svelte';
+	import menuDownIcon from '@iconify-icons/mdi/menu-down';
 
 	const clickButtonByTitleProperty = (title: string) => {
 		const button = document.querySelector(`button[title="${title}"]`) as HTMLButtonElement;
@@ -10,13 +12,18 @@
 	};
 </script>
 
-<div class="navbar bg-base-100 justify-between hidden sm:flex">
+<div class="navbar bg-base-100 justify-between hidden sm:flex fixed z-10">
 	<h1 class="select-none px-4">Natreon&#8482;</h1>
 	<ul class="menu menu-horizontal px-1 absolute left-1/2 -translate-x-1/2 flex-nowrap z-[1]">
 		<li class="dropdown dropdown-hover">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-			<label tabindex="0" class="mx-1 btn btn-sm btn-ghost px-4 py-2">Home</label>
+			<label tabindex="0" class="mx-1 btn btn-sm btn-ghost px-4 py-2 flex items-center"
+				><p>Home</p>
+				<div class="scale">
+					<Icon icon={menuDownIcon} height={12} />
+				</div></label
+			>
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-36">
 				<li>
@@ -59,3 +66,9 @@
 
 	<a class="btn btn-primary" href="/login">Login</a>
 </div>
+
+<style>
+	.scale {
+		scale: 2;
+	}
+</style>

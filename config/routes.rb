@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get '/admin/users', to: 'admin#get_users'
     post '/admin/users', to: 'admin#update_user'
     delete '/admin/users', to: 'admin#delete_user'
-    get '/', to: 'home#index'
+    get '/reviews', to: 'reviews#get_reviews'
+    post "/reviews", to: "reviews#submit_review"
   end
 end

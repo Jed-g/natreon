@@ -10,7 +10,7 @@
 	};
 </script>
 
-<div class="navbar bg-base-100 justify-between sm:hidden">
+<div class="navbar bg-base-100 justify-between sm:hidden fixed z-10">
 	<div>
 		<div class="dropdown">
 			<button class="btn btn-ghost">
