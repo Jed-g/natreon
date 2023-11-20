@@ -1,6 +1,6 @@
 class ReviewsController < ApplicationController
   def get_reviews
-    render json: { reviews: Review.all.select(:id, :content, :author, :upvotes, :downvotes, :rating) }
+    render json: { reviews: Review.all.order(created_at: :desc).select(:id, :content, :author, :upvotes, :downvotes, :rating) }
   end
 
   def submit_review
@@ -20,6 +20,52 @@ class ReviewsController < ApplicationController
     if review.valid?
       review.save
       return render json: { message: 'Review created successfully' }
+    else
+      return render json: { message: 'Bad request' }, status: 400
+    end
+  end
+
+  def upvote_review
+    id = params[:id]
+
+    if id.nil?
+      return render json: { message: 'Bad request' }, status: 400
+    end
+
+    review = Review.find(id)
+
+    if review.nil?
+      return render json: { message: 'Bad request' }, status: 400
+    end
+
+    review.upvotes += 1
+
+    if review.valid?
+      review.save
+      return render json: { message: 'Review upvoted successfully' }
+    else
+      return render json: { message: 'Bad request' }, status: 400
+    end
+  end
+
+  def downvote_review
+    id = params[:id]
+
+    if id.nil?
+      return render json: { message: 'Bad request' }, status: 400
+    end
+
+    review = Review.find(id)
+
+    if review.nil?
+      return render json: { message: 'Bad request' }, status: 400
+    end
+
+    review.upvotes -= 1
+
+    if review.valid?
+      review.save
+      return render json: { message: 'Review downvoted successfully' }
     else
       return render json: { message: 'Bad request' }, status: 400
     end

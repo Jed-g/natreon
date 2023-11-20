@@ -18,5 +18,7 @@ Rails.application.routes.draw do
     delete '/admin/users', to: 'admin#delete_user'
     get '/reviews', to: 'reviews#get_reviews'
     post "/reviews", to: "reviews#submit_review"
+    post "/reviews/upvote", to: "reviews#upvote_review"
+    post "/reviews/downvote", to: "reviews#downvote_review"
   end
 end
