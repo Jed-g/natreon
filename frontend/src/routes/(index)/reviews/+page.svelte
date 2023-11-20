@@ -3,7 +3,9 @@
 	import { onMount } from 'svelte';
 	import thumbUpIcon from '@iconify-icons/mdi/thumb-up';
 	import thumbDownIcon from '@iconify-icons/mdi/thumb-down';
+	import AddReview from '$lib/components/landing/reviews/AddReview.svelte';
 
+	let showAddReview = false;
 	let loading = true;
 	let reviews: {
 		id: number;
@@ -50,7 +52,9 @@
 							<option>Usefullness</option>
 						</select>
 						<div class="indicator">
-							<button class="btn join-item btn-primary">Add Review</button>
+							<button class="btn join-item btn-primary" on:click={() => (showAddReview = true)}
+								>Add Review</button
+							>
 						</div>
 					</div>
 					<div class="join hidden sm:max-md:inline-flex">
@@ -61,55 +65,26 @@
 							<option>Usefullness</option>
 						</select>
 						<div class="indicator">
-							<button class="btn join-item btn-primary">Add Review</button>
+							<button class="btn join-item btn-primary" on:click={() => (showAddReview = true)}
+								>Add Review</button
+							>
 						</div>
 					</div>
-					<button class="btn btn-primary sm:hidden">Add Review</button>
+					<button class="btn btn-primary sm:hidden" on:click={() => (showAddReview = true)}
+						>Add Review</button
+					>
 				</div>
 				<div class="divider" />
 				{#if reviews.length > 0}
 					{#each reviews as { id, author, content, rating, upvotes, downvotes }, index (id)}
-						<div
-							class="card bg-base-100 p-4 flex items-center flex-row glass"
-							class:mt-4={index > 0}
-						>
+						<div class="card p-4 flex items-center flex-row glass" class:mt-4={index > 0}>
 							<div class="sm:inline-flex hidden">
 								<div class="rating">
-									<input
-										type="radio"
-										name="rating-1"
-										class="mask mask-star"
-										disabled
-										checked={rating === 1}
-									/>
-									<input
-										type="radio"
-										name="rating-1"
-										class="mask mask-star"
-										disabled
-										checked={rating === 2}
-									/>
-									<input
-										type="radio"
-										name="rating-1"
-										class="mask mask-star"
-										disabled
-										checked={rating === 3}
-									/>
-									<input
-										type="radio"
-										name="rating-1"
-										class="mask mask-star"
-										disabled
-										checked={rating === 4}
-									/>
-									<input
-										type="radio"
-										name="rating-1"
-										class="mask mask-star"
-										disabled
-										checked={rating === 5}
-									/>
+									<input type="radio" class="mask mask-star" disabled checked={rating === 1} />
+									<input type="radio" class="mask mask-star" disabled checked={rating === 2} />
+									<input type="radio" class="mask mask-star" disabled checked={rating === 3} />
+									<input type="radio" class="mask mask-star" disabled checked={rating === 4} />
+									<input type="radio" class="mask mask-star" disabled checked={rating === 5} />
 								</div>
 							</div>
 							<p class="sm:hidden w-7 ml-2 text-lg">{rating}/5</p>
@@ -139,6 +114,9 @@
 			{/if}
 		</div>
 	</div>
+	{#if showAddReview}
+		<AddReview bind:showAddReview refreshCallback={updateReviewsUiState} />
+	{/if}
 </div>
 
 <style>
