@@ -1,4 +1,4 @@
-class AdminController < ApplicationController
+class Admin::UsersController < ApplicationController
   def get_users
     if !is_admin
       render json: { message: 'Not Authenticated' }, status: 401

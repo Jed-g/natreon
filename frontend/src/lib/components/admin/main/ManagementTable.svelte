@@ -6,8 +6,9 @@
 	//type TypeFromVar<T> = T[keyof T][];
 	type itemType = Record<string, string> & { id: number };
 	export let getItemsAction: () => Promise<itemType[]>;
-	export let editAction: (id: number, values: Record<string, string>) => Promise<void>;
-	export let deleteAction: (id: number) => Promise<void>;
+	export let editAction: ((id: number, values: Record<string, string>) => Promise<void>) | null =
+		null;
+	export let deleteAction: ((id: number) => Promise<void>) | null = null;
 	export let tableName: string;
 	export let tableHeaders: string[];
 	export let editFields: (new (...args: any[]) => SvelteComponent)[];
@@ -49,7 +50,7 @@
 	<div class="grow flex items-center justify-center">
 		<span class="loading loading-ring loading-lg" />
 	</div>
-{:else if currentlyEdited !== null}
+{:else if currentlyEdited !== null && editAction !== null}
 	<div class="relative grow flex items-center justify-center">
 		<div class="relative card w-3/4 h-3/4 dims flex bg-base-200 shadow-xl p-6 flex-col">
 			<div class="flex justify-center"><h2>Edit User</h2></div>
@@ -57,7 +58,7 @@
 			<form
 				class="flex flex-col grow"
 				on:submit|preventDefault={async () => {
-					if (currentlyEdited !== null) {
+					if (currentlyEdited !== null && editAction !== null) {
 						await editAction(currentlyEdited.id, currentlyEdited.values);
 						currentlyEdited = null;
 						updateTableUiState();
@@ -102,20 +103,26 @@
 								<td>{item[key]}</td>
 							{/if}
 						{/each}
-						<td class="flex items-center justify-center"
-							><button
-								class="btn btn-primary mr-4"
-								on:click={() => (currentlyEdited = { id: item.id, values: removeIdFromItem(item) })}
-								>Edit</button
-							>
-							<button
-								class="btn btn-error"
-								on:click={async () => {
-									await deleteAction(item.id);
-									updateTableUiState();
-								}}>Delete</button
-							></td
-						>
+						<td class="flex items-center justify-center">
+							{#if editAction !== null}<button
+									class="btn btn-primary mr-4"
+									on:click={() =>
+										(currentlyEdited = { id: item.id, values: removeIdFromItem(item) })}
+									>Edit</button
+								>
+							{/if}
+							{#if deleteAction !== null}
+								<button
+									class="btn btn-error"
+									on:click={async () => {
+										if (deleteAction !== null) {
+											await deleteAction(item.id);
+											updateTableUiState();
+										}
+									}}>Delete</button
+								>
+							{/if}
+						</td>
 					</tr>
 				{/each}
 			</tbody>

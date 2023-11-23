@@ -84,7 +84,7 @@
 			{:else}
 				<div class="flex justify-between items-center">
 					<div class="flex">
-						<div class="stat md:hidden">
+						<div class="stat md:hidden py-0">
 							<div class="stat-figure text-primary hidden sm:block">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +103,7 @@
 							<div class="stat-value text-primary">{averageRating.toFixed(1)}</div>
 							<div class="stat-desc">Out of {reviews.length} reviews</div>
 						</div>
-						<div class="stat hidden md:inline-grid">
+						<div class="stat hidden md:inline-grid py-0">
 							<div class="stat-figure text-primary">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +121,7 @@
 							<div class="stat-title">Average Review</div>
 							<div class="stat-value text-primary">{averageRating.toFixed(1)}</div>
 						</div>
-						<div class="stat hidden md:inline-grid">
+						<div class="stat hidden md:inline-grid py-0">
 							<div class="stat-figure text-secondary">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
