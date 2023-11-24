@@ -10,7 +10,7 @@ test('animated logo visible after navigation: Home -> Login -> Home', async ({ p
 	await page.getByRole('link', { name: 'Login' }).first().click();
 	await page.locator('label', { hasText: 'Home' }).first().click();
 	await page.getByRole('button', { name: 'Home' }).first().click();
-	await expect(page.getByRole('img')).toBeVisible();
+	await expect(page.getByTestId('animated-logo')).toBeVisible();
 });
 
 test('signup header visible after navigation: Home -> Login -> Signup', async ({ page }) => {
