@@ -4,6 +4,8 @@
 	import FeaturesFirstSlide from '$lib/components/landing/features/FirstSlide.svelte';
 	import FeaturesSecondSlide from '$lib/components/landing/features/SecondSlide.svelte';
 	import PricingFirstSlide from '$lib/components/landing/pricing/FirstSlide.svelte';
+	import SolutionFirstSlide from '$lib/components/landing/solution/FirstSlide.svelte';
+	import SignupFirstSlide from '$lib/components/landing/signup/FirstSlide.svelte';
 
 	let isMobileDevice = false;
 	let showCircle = false;
@@ -35,16 +37,17 @@
 			<FullpageSection disableCentering title="Home">
 				<HomeFirstSlide />
 			</FullpageSection>
+			<FullpageSection disableCentering title="Solution">
+				<SolutionFirstSlide />
+			</FullpageSection>
 			<FullpageSection disableCentering title="Features">
-				<FullpageSlide disableCentering title="Features Slide 1">
-					<FeaturesFirstSlide />
-				</FullpageSlide>
-				<FullpageSlide disableCentering title="Features Slide 2">
-					<FeaturesSecondSlide />
-				</FullpageSlide>
+				<FeaturesFirstSlide />
 			</FullpageSection>
 			<FullpageSection disableCentering title="Pricing">
 				<PricingFirstSlide />
+			</FullpageSection>
+			<FullpageSection disableCentering title="Signup">
+				<SignupFirstSlide />
 			</FullpageSection>
 		</Fullpage>
 	</div>
