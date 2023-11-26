@@ -11,7 +11,14 @@ class Admin::ReviewsController < ApplicationController
       if !is_admin
         render json: { message: 'Not Authenticated' }, status: 401
       else
-        #TODO
+        review = Review.find(params[:id])
+
+        if !review.nil?
+          review.destroy
+          return render json: { message: 'Deleted review successfully' }
+        else
+          return render json: { message: 'Bad request' }, status: 400
+        end
       end
     end
   end

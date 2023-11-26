@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ManagementTable from '$lib/components/admin/main/ManagementTable.svelte';
+	import ManagementTable from '$lib/components/admin/main/users/ManagementTable.svelte';
 	import EmailField from '$lib/components/admin/main/users/editfields/EmailField.svelte';
 	import UserTypeField from '$lib/components/admin/main/users/editfields/UserTypeField.svelte';
 	import { authenticated } from '$lib/stores';

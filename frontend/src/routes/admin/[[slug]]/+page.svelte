@@ -4,7 +4,7 @@
 	import AdminDashboardUrls from '$lib/enums/adminDashboardUrls.js';
 	import Overview from '$lib/components/admin/main/Overview.svelte';
 	import Users from '$lib/components/admin/main/users/Users.svelte';
-	import Reviews from '$lib/components/admin/main/Reviews.svelte';
+	import Reviews from '$lib/components/admin/main/reviews/Reviews.svelte';
 	import QA from '$lib/components/admin/main/QA.svelte';
 	import MailingList from '$lib/components/admin/main/MailingList.svelte';
 

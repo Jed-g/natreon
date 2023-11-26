@@ -61,7 +61,7 @@ class ReviewsController < ApplicationController
       return render json: { message: 'Bad request' }, status: 400
     end
 
-    review.upvotes -= 1
+    review.downvotes += 1
 
     if review.valid?
       review.save

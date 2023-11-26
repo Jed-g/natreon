@@ -6,9 +6,8 @@
 	//type TypeFromVar<T> = T[keyof T][];
 	type itemType = Record<string, string> & { id: number };
 	export let getItemsAction: () => Promise<itemType[]>;
-	export let editAction: ((id: number, values: Record<string, string>) => Promise<void>) | null =
-		null;
-	export let deleteAction: ((id: number) => Promise<void>) | null = null;
+	export let editAction: (id: number, values: Record<string, string>) => Promise<void>;
+	export let deleteAction: (id: number) => Promise<void>;
 	export let tableName: string;
 	export let tableHeaders: string[];
 	export let editFields: (new (...args: any[]) => SvelteComponent)[];
@@ -50,15 +49,17 @@
 	<div class="grow flex items-center justify-center">
 		<span class="loading loading-ring loading-lg" />
 	</div>
-{:else if currentlyEdited !== null && editAction !== null}
+{:else if currentlyEdited !== null}
 	<div class="relative grow flex items-center justify-center">
-		<div class="relative card w-3/4 h-3/4 dims flex bg-base-200 shadow-xl p-6 flex-col">
+		<div
+			class="relative card h-full w-full md:w-3/4 max-w-3xl md:max-h-[32rem] max-h-none flex bg-base-200 shadow-xl p-6 flex-col"
+		>
 			<div class="flex justify-center"><h2>Edit User</h2></div>
 			<div class="divider my-2" />
 			<form
 				class="flex flex-col grow"
 				on:submit|preventDefault={async () => {
-					if (currentlyEdited !== null && editAction !== null) {
+					if (currentlyEdited !== null) {
 						await editAction(currentlyEdited.id, currentlyEdited.values);
 						currentlyEdited = null;
 						updateTableUiState();
@@ -72,6 +73,7 @@
 							value={currentlyEdited.values[Object.keys(currentlyEdited.values)[index]]}
 							onValueChange={onValueChange(index)}
 						/>
+						<div class="divider" />
 					{/each}
 				</div>
 				<div class="flex justify-between">
@@ -104,24 +106,18 @@
 							{/if}
 						{/each}
 						<td class="flex items-center justify-center">
-							{#if editAction !== null}<button
-									class="btn btn-primary mr-4"
-									on:click={() =>
-										(currentlyEdited = { id: item.id, values: removeIdFromItem(item) })}
-									>Edit</button
-								>
-							{/if}
-							{#if deleteAction !== null}
-								<button
-									class="btn btn-error"
-									on:click={async () => {
-										if (deleteAction !== null) {
-											await deleteAction(item.id);
-											updateTableUiState();
-										}
-									}}>Delete</button
-								>
-							{/if}
+							<button
+								class="btn btn-primary mr-4"
+								on:click={() => (currentlyEdited = { id: item.id, values: removeIdFromItem(item) })}
+								>Edit</button
+							>
+							<button
+								class="btn btn-error"
+								on:click={async () => {
+									await deleteAction(item.id);
+									updateTableUiState();
+								}}>Delete</button
+							>
 						</td>
 					</tr>
 				{/each}
@@ -129,12 +125,3 @@
 		</table>
 	</div>
 {/if}
-
-<style>
-	.dims {
-		min-height: 360px;
-		min-width: 300px;
-		max-height: 420px;
-		max-width: 500px;
-	}
-</style>

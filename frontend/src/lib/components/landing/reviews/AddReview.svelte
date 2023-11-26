@@ -53,7 +53,7 @@
 		<div class="form-control">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label class="label">
-				<span class="label-text">Rating:</span>
+				<span class="label-text">Rating*</span>
 			</label>
 			<div class="rating flex justify-center custom-star-size">
 				<input
@@ -91,21 +91,30 @@
 		<div class="form-control mt-2">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label class="label">
-				<span class="label-text">Review:</span>
+				<span class="label-text">Review*</span>
 			</label>
 			<textarea
 				class="textarea textarea-bordered h-24"
 				placeholder="Type here"
+				maxlength={600}
+				class:textarea-error={isError}
 				bind:value={review}
 			/>
 		</div>
 		<div class="form-control mt-2">
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label class="label">
-				<span class="label-text">Author:</span>
+				<span class="label-text">Author</span>
 			</label>
-			<input type="text" placeholder="Type here" class="input input-bordered" bind:value={author} />
+			<input
+				type="text"
+				placeholder="Type here"
+				class="input input-bordered"
+				maxlength={40}
+				bind:value={author}
+			/>
 		</div>
+		<p class="self-end mt-4 label-text">*Required</p>
 		<div class="flex justify-between grow items-end mt-2">
 			<button class="btn" type="button" on:click={() => (showAddReview = false)}>Cancel</button>
 			<button class="btn btn-primary" class:btn-error={isError} type="submit">Submit</button>

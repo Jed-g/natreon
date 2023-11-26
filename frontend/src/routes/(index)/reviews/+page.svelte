@@ -5,6 +5,12 @@
 	import thumbDownIcon from '@iconify-icons/mdi/thumb-down';
 	import AddReview from '$lib/components/landing/reviews/AddReview.svelte';
 
+	const enum Order {
+		RECENCY,
+		RATING,
+		USEFULLNESS
+	}
+
 	let showAddReview = false;
 	let loading = true;
 	let reviews: {
@@ -16,6 +22,32 @@
 		downvotes: number;
 	}[] = [];
 	let averageRating = 5;
+	let orderBy: Order = Order.RECENCY;
+	let reviewsByRecency: {
+		id: number;
+		content: string;
+		author: string;
+		rating: number;
+		upvotes: number;
+		downvotes: number;
+	}[] = [];
+
+	$: {
+		switch (orderBy) {
+			case Order.RECENCY:
+				reviews = reviewsByRecency;
+				break;
+			case Order.RATING:
+				reviews = reviews.toSorted((a, b) => b.rating - a.rating);
+				break;
+			case Order.USEFULLNESS:
+				reviews = reviews.toSorted((a, b) => b.upvotes - b.downvotes - (a.upvotes - a.downvotes));
+				break;
+			default:
+				reviews = reviewsByRecency;
+				break;
+		}
+	}
 
 	const upvote = async (id: number) => {
 		const response = await fetch('/api/reviews/upvote', {
@@ -63,6 +95,7 @@
 	const updateReviewsUiState = async () => {
 		loading = true;
 		reviews = await getAllReviews();
+		reviewsByRecency = [...reviews];
 
 		if (reviews.length > 0) {
 			averageRating = reviews.reduce((total, review) => total + review.rating, 0) / reviews.length;
@@ -141,11 +174,13 @@
 						</div>
 					</div>
 					<div class="join hidden sm:inline-flex">
-						<select class="select select-bordered join-item">
-							<option disabled selected>Order By</option>
-							<option>Rating</option>
-							<option>Recency</option>
-							<option>Usefullness</option>
+						<select class="select select-bordered join-item" bind:value={orderBy}>
+							<option disabled>Order By</option>
+							<option selected={orderBy === Order.RECENCY} value={Order.RECENCY}>Recency</option>
+							<option selected={orderBy === Order.RATING} value={Order.RATING}>Rating</option>
+							<option selected={orderBy === Order.USEFULLNESS} value={Order.USEFULLNESS}
+								>Usefullness</option
+							>
 						</select>
 						<div class="indicator">
 							<button class="btn join-item btn-primary" on:click={() => (showAddReview = true)}
@@ -157,11 +192,13 @@
 						<button class="btn btn-primary btn-sm" on:click={() => (showAddReview = true)}
 							>Add Review</button
 						>
-						<select class="select select-bordered select-sm mt-2">
-							<option disabled selected>Order By</option>
-							<option>Rating</option>
-							<option>Recency</option>
-							<option>Usefullness</option>
+						<select class="select select-bordered select-sm mt-2" bind:value={orderBy}>
+							<option disabled>Order By</option>
+							<option selected={orderBy === Order.RECENCY} value={Order.RECENCY}>Recency</option>
+							<option selected={orderBy === Order.RATING} value={Order.RATING}>Rating</option>
+							<option selected={orderBy === Order.USEFULLNESS} value={Order.USEFULLNESS}
+								>Usefullness</option
+							>
 						</select>
 					</div>
 				</div>
@@ -181,8 +218,12 @@
 								</div>
 								<p class="sm:hidden w-7 ml-2 text-lg">{rating}/5</p>
 								<div class="divider divider-horizontal" />
-								<div class="flex flex-col grow">
-									<p>{content}</p>
+								<div class="flex flex-col grow overflow-x-auto">
+									<p>
+										{content.length > 600
+											? Array.from(content).slice(0, 600).join('') + '...'
+											: content}
+									</p>
 									<div class="flex justify-between items-center pt-4">
 										<div class="flex items-center">
 											<button class="btn btn-sm btn-circle" on:click={() => upvote(id)}
@@ -193,7 +234,11 @@
 												><Icon icon={thumbDownIcon} height={18} /></button
 											>
 										</div>
-										<p class="my-0 font-semibold">{author}</p>
+										<p class="my-0 font-semibold">
+											{author.length > 40
+												? Array.from(author).slice(0, 40).join('') + '...'
+												: author}
+										</p>
 									</div>
 								</div>
 							</div>
