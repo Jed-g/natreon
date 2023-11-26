@@ -31,6 +31,8 @@
 		upvotes: number;
 		downvotes: number;
 	}[] = [];
+	let upvoted: number[] = [];
+	let downvoted: number[] = [];
 
 	$: {
 		switch (orderBy) {
@@ -50,6 +52,8 @@
 	}
 
 	const upvote = async (id: number) => {
+		downvoted.includes(id) && cancelDownvote(id, false);
+
 		const response = await fetch('/api/reviews/upvote', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -59,15 +63,20 @@
 				'Content-Type': 'application/json'
 			}
 		});
-		const index = reviews.findIndex(({ id: _id }) => _id === id);
 
+		if (!response.ok) {
+			return;
+		}
+		const index = reviews.findIndex(({ id: _id }) => _id === id);
 		if (index !== -1) {
 			reviews[index].upvotes += 1;
 		}
-		return response.ok;
+		upvoted = [...upvoted, id];
 	};
 
 	const downvote = async (id: number) => {
+		upvoted.includes(id) && cancelUpvote(id, false);
+
 		const response = await fetch('/api/reviews/downvote', {
 			method: 'POST',
 			body: JSON.stringify({
@@ -78,23 +87,74 @@
 			}
 		});
 
+		if (!response.ok) {
+			return;
+		}
 		const index = reviews.findIndex(({ id: _id }) => _id === id);
+		if (index !== -1) {
+			reviews[index].downvotes += 1;
+		}
+		downvoted = [...downvoted, id];
+	};
 
+	const cancelUpvote = async (id: number, makeAPICall = true) => {
+		if (makeAPICall) {
+			const response = await fetch('/api/reviews/upvote', {
+				method: 'DELETE',
+				body: JSON.stringify({
+					id
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) {
+				return;
+			}
+		}
+		const index = reviews.findIndex(({ id: _id }) => _id === id);
 		if (index !== -1) {
 			reviews[index].upvotes -= 1;
 		}
-		return response.ok;
+		upvoted = upvoted.filter((x) => x !== id);
+	};
+
+	const cancelDownvote = async (id: number, makeAPICall = true) => {
+		if (makeAPICall) {
+			const response = await fetch('/api/reviews/downvote', {
+				method: 'DELETE',
+				body: JSON.stringify({
+					id
+				}),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) {
+				return;
+			}
+		}
+		const index = reviews.findIndex(({ id: _id }) => _id === id);
+		if (index !== -1) {
+			reviews[index].downvotes -= 1;
+		}
+		downvoted = downvoted.filter((x) => x !== id);
 	};
 
 	const getAllReviews = async () => {
 		const response = await fetch('/api/reviews');
 		const data = await response.json();
-		return data.reviews;
+		return data;
 	};
 
 	const updateReviewsUiState = async () => {
 		loading = true;
-		reviews = await getAllReviews();
+		const data = await getAllReviews();
+		reviews = data.reviews;
+		upvoted = data.upvoted;
+		downvoted = data.downvoted;
 		reviewsByRecency = [...reviews];
 
 		if (reviews.length > 0) {
@@ -226,12 +286,25 @@
 									</p>
 									<div class="flex justify-between items-center pt-4">
 										<div class="flex items-center">
-											<button class="btn btn-sm btn-circle" on:click={() => upvote(id)}
-												><Icon icon={thumbUpIcon} height={18} /></button
+											<button
+												class="btn btn-sm btn-circle"
+												on:click={() => (upvoted.includes(id) ? cancelUpvote(id) : upvote(id))}
+												><Icon
+													icon={thumbUpIcon}
+													height={18}
+													color={upvoted.includes(id) ? 'oklch(var(--su))' : undefined}
+												/></button
 											>
 											<p class="mx-2">{upvotes - downvotes}</p>
-											<button class="btn btn-sm btn-circle" on:click={() => downvote(id)}
-												><Icon icon={thumbDownIcon} height={18} /></button
+											<button
+												class="btn btn-sm btn-circle"
+												on:click={() =>
+													downvoted.includes(id) ? cancelDownvote(id) : downvote(id)}
+												><Icon
+													icon={thumbDownIcon}
+													height={18}
+													color={downvoted.includes(id) ? 'oklch(var(--er))' : undefined}
+												/></button
 											>
 										</div>
 										<p class="my-0 font-semibold">

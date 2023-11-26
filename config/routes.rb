@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     post "/reviews", to: "reviews#submit_review"
     post "/reviews/upvote", to: "reviews#upvote_review"
     post "/reviews/downvote", to: "reviews#downvote_review"
+    delete "/reviews/upvote", to: "reviews#cancel_upvote_review"
+    delete "/reviews/downvote", to: "reviews#cancel_downvote_review"
     get '/admin/reviews', to: 'admin/reviews#get_reviews'
     delete '/admin/reviews', to: 'admin/reviews#delete_review'
   end
