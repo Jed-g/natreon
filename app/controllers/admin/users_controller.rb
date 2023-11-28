@@ -10,8 +10,8 @@ class Admin::UsersController < ApplicationController
 
     user = User.find(params[:id])
 
-    update_email = !params[:email].nil? && user.email != params[:email] && valid_email(params[:email])
-    update_user_type = !params[:user_type].nil? && user.user_type != params[:user_type] && valid_user_type(params[:user_type])
+    update_email = !params[:email].nil? && user.email != params[:email] && valid_email?(params[:email])
+    update_user_type = !params[:user_type].nil? && user.user_type != params[:user_type] && valid_user_type?(params[:user_type])
 
     user.email = params[:email] if update_email
 
@@ -36,12 +36,13 @@ class Admin::UsersController < ApplicationController
     end
   end
 
-  private def valid_email(_email)
-    regex = ~r/^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$/i
-    return Regex.match?(regex, _email)
-  end
-
-  private def valid_user_type(user_type)
+  private def valid_user_type?(user_type)
     %w[customer admin reporter].include?(user_type)
   end
+
+  private def valid_email?(_email)
+    _email.match(EMAIL_REGEX)
+  end
+
+  EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/
 end
