@@ -1,16 +1,15 @@
 # == Schema Information
 #
-# Table name: reviews
+# Table name: questions
 #
 #  id         :bigint           not null, primary key
-#  author     :string           default(""), not null
-#  content    :text             default(""), not null
+#  answer     :text
 #  downvotes  :integer          default(0), not null
-#  rating     :integer          not null
+#  question   :text             default(""), not null
 #  upvotes    :integer          default(0), not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
-class Review < ApplicationRecord
-  self.table_name = 'reviews'
+class Question < ApplicationRecord
+  self.table_name = 'questions'
 end

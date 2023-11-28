@@ -13,16 +13,28 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   scope 'api' do
     get '/auth/status', to: 'users/authentication_status#index'
+
     get '/admin/users', to: 'admin/users#get_users'
     post '/admin/users', to: 'admin/users#update_user'
     delete '/admin/users', to: 'admin/users#delete_user'
-    get '/reviews', to: 'reviews#get_reviews'
-    post "/reviews", to: "reviews#submit_review"
-    post "/reviews/upvote", to: "reviews#upvote_review"
-    post "/reviews/downvote", to: "reviews#downvote_review"
-    delete "/reviews/upvote", to: "reviews#cancel_upvote_review"
-    delete "/reviews/downvote", to: "reviews#cancel_downvote_review"
     get '/admin/reviews', to: 'admin/reviews#get_reviews'
     delete '/admin/reviews', to: 'admin/reviews#delete_review'
+    get '/admin/questions', to: 'admin/questions#get_questions'
+    post '/admin/questions', to: 'admin/questions#answer_edit_create_question'
+    delete '/admin/questions', to: 'admin/questions#delete_question'
+
+    get '/questions', to: 'questions#get_questions'
+    post '/questions', to: 'questions#submit_question'
+    post '/questions/upvote', to: 'questions#upvote_question'
+    post '/questions/downvote', to: 'questions#downvote_question'
+    delete '/questions/upvote', to: 'questions#cancel_upvote_question'
+    delete '/questions/downvote', to: 'questions#cancel_downvote_question'
+
+    get '/reviews', to: 'reviews#get_reviews'
+    post '/reviews', to: 'reviews#submit_review'
+    post '/reviews/upvote', to: 'reviews#upvote_review'
+    post '/reviews/downvote', to: 'reviews#downvote_review'
+    delete '/reviews/upvote', to: 'reviews#cancel_upvote_review'
+    delete '/reviews/downvote', to: 'reviews#cancel_downvote_review'
   end
 end

@@ -2,7 +2,7 @@ enum AdminDashboardUrls {
 	OVERVIEW = '',
 	USERS = 'users',
 	REVIEWS = 'reviews',
-	QA = 'qa',
+	QA = 'questions',
 	MAILING_LIST = 'mailing-list'
 }
 

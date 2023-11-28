@@ -5,7 +5,7 @@
 	import Overview from '$lib/components/admin/main/Overview.svelte';
 	import Users from '$lib/components/admin/main/users/Users.svelte';
 	import Reviews from '$lib/components/admin/main/reviews/Reviews.svelte';
-	import QA from '$lib/components/admin/main/QA.svelte';
+	import QA from '$lib/components/admin/main/questions/QA.svelte';
 	import MailingList from '$lib/components/admin/main/MailingList.svelte';
 
 	export let data;

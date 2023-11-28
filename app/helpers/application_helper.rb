@@ -2,9 +2,7 @@ module ApplicationHelper
   def is_authenticated
     user = get_current_user
 
-    if !user
-      return false
-    end
+    return false unless user
 
     user.user_type
   end
@@ -23,9 +21,7 @@ module ApplicationHelper
   def is_admin
     user = get_current_user
 
-    if !user || user.user_type != "admin"
-      return false
-    end
+    return false if !user || user.user_type != 'admin'
 
     true
   end
