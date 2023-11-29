@@ -1,7 +1,10 @@
 class ReviewsController < ApplicationController
   def get_reviews
+    upvoted = session[:reviews_upvoted].nil? ? [] : session[:reviews_upvoted]
+    downvoted = session[:reviews_downvoted].nil? ? [] : session[:reviews_downvoted]
+
     render json: { reviews: Review.all.order(created_at: :desc).select(:id, :content, :author, :upvotes, :downvotes, :rating),
-                   upvoted: session[:reviews_upvoted], downvoted: session[:reviews_downvoted] }
+                   upvoted:, downvoted: }
   end
 
   def submit_review
