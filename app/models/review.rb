@@ -12,5 +12,5 @@
 #  updated_at :datetime         not null
 #
 class Review < ApplicationRecord
-  self.table_name = 'reviews'
+  self.table_name = "reviews"
 end

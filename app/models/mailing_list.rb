@@ -8,5 +8,5 @@
 #  updated_at :datetime         not null
 #
 class MailingList < ApplicationRecord
-    self.table_name = 'mailing_list'
-  end
+  self.table_name = "mailing_list"
+end

@@ -11,5 +11,5 @@
 #  updated_at :datetime         not null
 #
 class Question < ApplicationRecord
-  self.table_name = 'questions'
+  self.table_name = "questions"
 end

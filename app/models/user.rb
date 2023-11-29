@@ -28,5 +28,5 @@ class User < ApplicationRecord
   devise :database_authenticatable, :jwt_cookie_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
 
-  enum user_type: { customer: 0, admin: 1, reporter: 2 }
+  enum user_type: {customer: 0, admin: 1, reporter: 2}
 end

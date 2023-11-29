@@ -1,12 +1,12 @@
 class Admin::UsersController < ApplicationController
   def get_users
-    return render json: { message: 'Not Authorized' }, status: 401 unless is_admin
+    return render json: {message: "Not Authorized"}, status: :unauthorized unless is_admin
 
-    render json: { users: User.all.select(:id, :email, :user_type) }
+    render json: {users: User.all.select(:id, :email, :user_type)}
   end
 
   def update_user
-    return render json: { message: 'Not Authorized' }, status: 401 unless is_admin
+    return render json: {message: "Not Authorized"}, status: :unauthorized unless is_admin
 
     user = User.find(params[:id])
 
@@ -17,22 +17,22 @@ class Admin::UsersController < ApplicationController
 
     user.user_type = params[:user_type] if update_user_type
 
-    return render json: { message: 'Bad request' }, status: 400 unless user.valid?
+    return render json: {message: "Bad request"}, status: :bad_request unless user.valid?
 
     user.save
-    render json: { message: 'Updated user successfully' }
+    render json: {message: "Updated user successfully"}
   end
 
   def delete_user
-    if !is_admin
-      render json: { message: 'Not Authorized' }, status: 401
-    else
+    if is_admin
       user = User.find(params[:id])
 
-      return render json: { message: 'Bad request' }, status: 400 if user.nil?
+      return render json: {message: "Bad request"}, status: :bad_request if user.nil?
 
       user.destroy
-      render json: { message: 'Deleted user successfully' }
+      render json: {message: "Deleted user successfully"}
+    else
+      render json: {message: "Not Authorized"}, status: :unauthorized
     end
   end
 
