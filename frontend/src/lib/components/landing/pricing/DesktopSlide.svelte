@@ -37,11 +37,7 @@
                     <div class="collapse-title text-xl font-medium">Affiliate Marketplace</div>
                     <div class="collapse-content">
                         <p>A Marketplace for affliate companies to sell their products. 
-							We will prioritise companies which are pro-environmental.</p>
-                        <div class="flex items-center justify-center space-x-4 py-5">
-                            <button class="btn btn-primary">Email</button>
-                            <button class="btn btn-secondary">Social Media</button>
-                        </div>  
+							We will prioritise companies which are pro-environmental.</p> 
                     </div>
                 </div>
                 <div>
@@ -66,10 +62,6 @@
                         <p>Activities will appear on our in-app map, sponsored by local companies. This will provide an opportunity for local 
 							companies to attract pro-environment minded customers.
 						</p>
-                        <div class="flex items-center justify-center space-x-4 py-5">
-                            <button class="btn btn-primary">Email</button>
-                            <button class="btn btn-secondary">Social Media</button>
-                        </div>  
                     </div>
                 </div>
                 <div>
@@ -93,10 +85,6 @@
                     <div class="collapse-content">
                         <p>Our content will be supported through funds from government trusts, 
 							with a partnership with the National Trust being a potential possibility.</p>
-                        <div class="flex items-center justify-center space-x-4 py-5">
-                            <button class="btn btn-primary">Email</button>
-                            <button class="btn btn-secondary">Social Media</button>
-                        </div>  
                     </div>
                 </div>
                 <div>
