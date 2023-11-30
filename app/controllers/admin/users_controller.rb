@@ -9,12 +9,12 @@ module Admin
     end
 
     def update_user
-      user = User.find(params[:id])
-      user.email = params[:email] if update_email?
-      user.user_type = params[:user_type] if update_user_type?
-      return render_bad_request unless user.valid?
+      @user = User.find(params[:id])
+      @user.email = params[:email] if update_email?
+      @user.user_type = params[:user_type] if update_user_type?
+      return render_bad_request unless @user.valid?
 
-      user.save
+      @user.save
       render json: {message: "Updated user successfully"}
     end
 
@@ -38,12 +38,12 @@ module Admin
       email_.match(EMAIL_REGEX)
     end
 
-    def update_user?
-      !params[:email].nil? && user.email != params[:email] && valid_email?(params[:email])
+    def update_email?
+      !params[:email].nil? && @user.email != params[:email] && valid_email?(params[:email])
     end
 
     def update_user_type?
-      !params[:user_type].nil? && user.user_type != params[:user_type] && valid_user_type?(params[:user_type])
+      !params[:user_type].nil? && @user.user_type != params[:user_type] && valid_user_type?(params[:user_type])
     end
   end
 end

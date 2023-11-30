@@ -2,7 +2,7 @@
 	class="flex flex-col h-full items-center justify-center relative select-none background-image"
 	id="home"
 >
-	<div class="hero min-h-screen">
+	<div class="hero">
 		<div class="hero-content text-center">
 			<div class="max-w-2xl">
 				<h1 class="text-5xl font-bold">Register your interest here!</h1>

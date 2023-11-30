@@ -2,14 +2,6 @@
 	import { goto } from '$app/navigation';
 	import Icon from '@iconify/svelte';
 	import menuDownIcon from '@iconify-icons/mdi/menu-down';
-
-	const clickButtonByTitleProperty = (title: string) => {
-		const button = document.querySelector(`button[title="${title}"]`) as HTMLButtonElement;
-		button?.click();
-
-		const button2 = document.querySelector(`button[title="${title} Slide 1"]`) as HTMLButtonElement;
-		button2?.click();
-	};
 </script>
 
 <div class="navbar bg-base-100 justify-between hidden sm:flex fixed z-10">
@@ -25,12 +17,13 @@
 				</div></label
 			>
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-			<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-36">
+			<ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-40">
 				<li>
 					<button
 						on:click={async () => {
 							await goto('/');
-							clickButtonByTitleProperty('Home');
+							const element = document.getElementById('home-desktop');
+							element?.scrollIntoView({ behavior: 'smooth' });
 						}}>Home</button
 					>
 				</li>
@@ -38,7 +31,17 @@
 					<button
 						on:click={async () => {
 							await goto('/');
-							clickButtonByTitleProperty('Features');
+							const element = document.getElementById('solution-desktop');
+							element?.scrollIntoView({ behavior: 'smooth' });
+						}}>Our Solution</button
+					>
+				</li>
+				<li>
+					<button
+						on:click={async () => {
+							await goto('/');
+							const element = document.getElementById('features-desktop');
+							element?.scrollIntoView({ behavior: 'smooth' });
 						}}>Features</button
 					>
 				</li>
@@ -46,8 +49,18 @@
 					<button
 						on:click={async () => {
 							await goto('/');
-							clickButtonByTitleProperty('Pricing');
+							const element = document.getElementById('pricing-desktop');
+							element?.scrollIntoView({ behavior: 'smooth' });
 						}}>Pricing</button
+					>
+				</li>
+				<li>
+					<button
+						on:click={async () => {
+							await goto('/');
+							const element = document.getElementById('signup-desktop');
+							element?.scrollIntoView({ behavior: 'smooth' });
+						}}>Register Interest</button
 					>
 				</li>
 			</ul>
