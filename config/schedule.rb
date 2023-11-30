@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 #####
 #
 # These are required to make rvm work properly within crontab
 #
-if ENV["MY_RUBY_HOME"] && ENV["MY_RUBY_HOME"].include?("rvm")
+if ENV["MY_RUBY_HOME"]&.include?("rvm")
   env "PATH",         ENV.fetch("PATH", nil)
   env "GEM_HOME",     ENV.fetch("GEM_HOME", nil)
   env "MY_RUBY_HOME", ENV["MY_RUBY_HOME"]

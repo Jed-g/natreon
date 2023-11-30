@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 app_name = "project"
 
 Rails.application.config.session_store :active_record_store,

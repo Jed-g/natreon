@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## Application deployment configuration
 set :server,      "PRODUCTION_SERVER"
 set :user,        "PRODUCTION_USER"

@@ -6,6 +6,11 @@ require:
 
 AllCops:
   NewCops: enable
+  Exclude:
+    - "config/**/*"
+    - "db/**/*"
+    - "lib/**/*"
+    - "bin/**/*"
 
 Rails:
   Enabled: true

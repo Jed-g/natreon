@@ -1,42 +1,54 @@
-class Admin::QuestionsController < ApplicationController
-  def get_questions
-    return render json: {message: "Not Authorized"}, status: :unauthorized unless is_admin
+# frozen_string_literal: true
 
-    render json: {questions: Question.all.order(created_at: :desc).select(:id, :question, :answer, :upvotes,
-                                                                          :downvotes)}
-  end
+module Admin
+  class QuestionsController < ApplicationController
+    before_action :authorize_admin_controllers
 
-  def answer_edit_create_question
-    return render json: {message: "Not Authorized"}, status: :unauthorized unless is_admin
+    def all_questions
+      render json: {questions: Question.order(created_at: :desc).select(:id, :question, :answer, :upvotes,
+                                                                        :downvotes)}
+    end
 
-    question_object = Question.find(params[:id])
+    def answer_edit_create_question
+      read_id_param
+      question_object = find_question
 
-    return render json: {message: "Bad request"}, status: :bad_request if question_object.nil?
+      update_question_and_answer(question_object)
+      return render_internal_server_error unless question_object.valid?
 
-    question = params[:question]
-    answer = params[:answer]
+      question_object.save
+      render json: {message: "Question answered/edited successfully"}
+    end
 
-    question = question_object.question if question.nil? || question.length == 0
+    def delete_question
+      read_id_param
+      find_question
 
-    answer = nil if !answer.nil? && answer.length == 0
+      question.destroy
+      render json: {message: "Question deleted successfully"}
+    end
 
-    question_object.question = question
-    question_object.answer = answer
+    private
 
-    return render json: {message: "Internal server error"}, status: :internal_server_error unless question_object.valid?
+    def find_question
+      question = Question.find(@id)
+      return render_bad_request if question_object.nil?
 
-    question_object.save
-    render json: {message: "Question answered/edited successfully"}
-  end
+      question
+    end
 
-  def delete_question
-    return render json: {message: "Not Authorized"}, status: :unauthorized unless is_admin
+    def update_question_and_answer(question_object)
+      question = params[:question]
+      answer = params[:answer]
+      question = question_object.question if question.blank?
+      answer = nil if !answer.nil? && answer.empty?
+      question_object.question = question
+      question_object.answer = answer
+    end
 
-    question = Question.find(params[:id])
-
-    return render json: {message: "Bad request"}, status: :bad_request if review.nil?
-
-    question.destroy
-    render json: {message: "Question deleted successfully"}
+    def read_id_param
+      @id = params[:id]
+      render_bad_request if @id.nil?
+    end
   end
 end

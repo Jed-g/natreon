@@ -1,19 +1,27 @@
-class Admin::ReviewsController < ApplicationController
-  def get_reviews
-    return render json: {message: "Not Authorized"}, status: :unauthorized unless is_admin
+# frozen_string_literal: true
 
-    render json: {users: Review.all.order(created_at: :desc).select(:id, :content, :author, :upvotes, :downvotes,
-                                                                    :rating)}
-  end
+module Admin
+  class ReviewsController < ApplicationController
+    before_action :authorize_admin_controllers
 
-  def delete_review
-    return render json: {message: "Not Authorized"}, status: :unauthorized unless is_admin
+    def all_reviews
+      render json: {users: Review.order(created_at: :desc).select(:id, :content, :author, :upvotes, :downvotes,
+                                                                  :rating)}
+    end
 
-    review = Review.find(params[:id])
+    def delete_review
+      read_id_param
+      review = Review.find(@id)
 
-    return render json: {message: "Bad request"}, status: :bad_request if review.nil?
+      return render_bad_request if review.nil?
 
-    review.destroy
-    render json: {message: "Deleted review successfully"}
+      review.destroy
+      render json: {message: "Deleted review successfully"}
+    end
+
+    def read_id_param
+      @id = params[:id]
+      render_bad_request if @id.nil?
+    end
   end
 end

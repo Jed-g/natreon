@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Sentry.init do |config|
   # Sentry is only enabled when the dsn is set.
   config.dsn = "REPLACE_WITH_YOUR_DSN" unless Rails.env.development? || Rails.env.test?

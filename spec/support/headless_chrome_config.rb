@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Capybara.register_driver :headless_chrome do |app|
   chrome_options = Selenium::WebDriver::Chrome::Options.new
   chrome_options.add_argument("--headless") unless ENV["SHOW_CHROME"]
