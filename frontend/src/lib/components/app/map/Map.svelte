@@ -21,7 +21,9 @@
 				parseFloat(ipToGeoCoords.latitude)
 			];
 			foundLocationByIP = true;
-		} catch (error) {}
+		} catch (error) {
+			console.error(error);
+		}
 
 		const map = new maplibregl.Map({
 			container: 'map',

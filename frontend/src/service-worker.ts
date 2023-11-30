@@ -38,7 +38,9 @@ sw.addEventListener('fetch', (event) => {
 						if (event.request.method === 'GET' && !event.request.url.includes('api')) {
 							cache.put(event.request, responseToCache);
 						}
-					} catch (error) {}
+					} catch (error) {
+						console.error(error);
+					}
 				});
 
 				return response;

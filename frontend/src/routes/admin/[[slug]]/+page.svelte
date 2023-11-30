@@ -7,10 +7,12 @@
 	import Reviews from '$lib/components/admin/main/reviews/Reviews.svelte';
 	import QA from '$lib/components/admin/main/questions/QA.svelte';
 	import MailingList from '$lib/components/admin/main/MailingList.svelte';
+	import type { SvelteComponent } from 'svelte';
 
 	export let data;
 	let menuClosed = true;
-	let mainComponent: any = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	let mainComponent: (new (...args: any[]) => SvelteComponent) | null = null;
 
 	$: {
 		switch (data.slug) {

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { authenticated } from '$lib/stores';
 	import { onMount } from 'svelte';
 	import type { SvelteComponent } from 'svelte';
 
@@ -10,6 +9,7 @@
 	export let deleteAction: (id: number) => Promise<void>;
 	export let tableName: string;
 	export let tableHeaders: string[];
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	export let editFields: (new (...args: any[]) => SvelteComponent)[];
 	export let tableFieldFormatters: Record<string, (value: string) => string>;
 
