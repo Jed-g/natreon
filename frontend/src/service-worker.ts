@@ -35,7 +35,9 @@ sw.addEventListener('fetch', (event) => {
 
 				caches.open(cacheId).then((cache) => {
 					try {
-						cache.put(event.request, responseToCache);
+						if (event.request.method === 'GET' && !event.request.url.includes('api')) {
+							cache.put(event.request, responseToCache);
+						}
 					} catch (error) {}
 				});
 
