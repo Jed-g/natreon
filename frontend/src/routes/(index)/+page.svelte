@@ -39,16 +39,16 @@
 			<div class="snap-start relative h-full w-full overflow-hidden" id="home-desktop">
 				<HomeSlide />
 			</div>
-			<div class="snap-start relative h-full w-full overflow-hidden" id="solution-desktop">
+			<div class="snap-start relative h-full w-full overflow-x-hidden" id="solution-desktop">
 				<SolutionDesktopSlide />
 			</div>
-			<div class="snap-start relative h-full w-full overflow-hidden" id="features-desktop">
+			<div class="snap-start relative h-full w-full overflow-x-hidden" id="features-desktop">
 				<FeaturesDesktopSlide />
 			</div>
-			<div class="snap-start relative h-full w-full overflow-hidden" id="pricing-desktop">
+			<div class="snap-start relative h-full w-full overflow-x-hidden" id="pricing-desktop">
 				<PricingDesktopSlide />
 			</div>
-			<div class="snap-start relative h-full w-full overflow-hidden" id="signup-desktop">
+			<div class="snap-start relative h-full w-full overflow-x-hidden" id="signup-desktop">
 				<SignupDesktopSlide />
 			</div>
 		</div>
@@ -56,16 +56,16 @@
 			<div class="snap-start relative h-full w-full overflow-hidden" id="home-mobile">
 				<HomeSlide />
 			</div>
-			<div class="snap-start relative h-full w-full overflow-hidden" id="solution-mobile">
+			<div class="snap-start relative h-full w-full overflow-x-hidden" id="solution-mobile">
 				<SolutionMobileSlide />
 			</div>
-			<div class="snap-start relative h-full w-full overflow-hidden" id="features-mobile">
+			<div class="snap-start relative h-full w-full overflow-x-hidden" id="features-mobile">
 				<FeaturesMobileSlide />
 			</div>
-			<div class="snap-start relative h-full w-full overflow-hidden" id="pricing-mobile">
+			<div class="snap-start relative h-full w-full overflow-x-hidden" id="pricing-mobile">
 				<PricingMobileSlide />
 			</div>
-			<div class="snap-start relative h-full w-full overflow-hidden" id="signup-mobile">
+			<div class="snap-start relative h-full w-full overflow-x-hidden" id="signup-mobile">
 				<SignupMobileSlide />
 			</div>
 		</div>
