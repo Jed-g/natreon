@@ -16,6 +16,7 @@
 		{height}
 		viewBox="0 0 1024 1024"
 		data-testid="animated-logo"
+		class="shrink-0"
 	>
 		<path
 			in:draw={{ duration }}

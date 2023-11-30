@@ -13,9 +13,9 @@
 
 <IntersectionObserver {element} bind:intersecting threshold={0.1}>
 	<div class="h-full w-full relative background-image" id="home" bind:this={element}>
-		<div class="h-full w-full relative overflow-y-auto">
+		<div class="h-full w-full relative overflow-y-auto overflow-x-hidden">
 			<div class="h-full w-full relative flex flex-col items-center justify-center min-height">
-				<div class="relative -mt-24">
+				<div class="relative -mt-24 w-72 overflow-hidden flex justify-center">
 					<AnimatedLogo
 						height={400}
 						strokeColour1="#2c9296"
