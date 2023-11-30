@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Fullpage, FullpageSection, FullpageSlide } from 'svelte-fullpage';
 	import HomeSlide from '$lib/components/landing/home/Slide.svelte';
 	import SolutionDesktopSlide from '$lib/components/landing/solution/DesktopSlide.svelte';
 	import SolutionMobileSlide from '$lib/components/landing/solution/MobileSlide.svelte';
@@ -36,45 +35,39 @@
 		on:mousemove={updateCursorPosition}
 		bind:this={container}
 	>
-		<!-- Mobile Slides -->
-		<div class="grow relative sm:hidden">
-			<Fullpage>
-				<FullpageSection disableCentering title="Home">
-					<HomeSlide />
-				</FullpageSection>
-				<FullpageSection disableCentering title="Solution">
-					<SolutionMobileSlide />
-				</FullpageSection>
-				<FullpageSection disableCentering title="Features">
-					<FeaturesMobileSlide />
-				</FullpageSection>
-				<FullpageSection disableCentering title="Pricing">
-					<PricingMobileSlide />
-				</FullpageSection>
-				<FullpageSection disableCentering title="Signup">
-					<SignupMobileSlide />
-				</FullpageSection>
-			</Fullpage>
+		<div class="grow relative overflow-y-auto snap-y snap-mandatory hidden sm:block">
+			<div class="snap-start relative h-full w-full overflow-hidden" id="home-desktop">
+				<HomeSlide />
+			</div>
+			<div class="snap-start relative h-full w-full overflow-hidden" id="solution-desktop">
+				<SolutionDesktopSlide />
+			</div>
+			<div class="snap-start relative h-full w-full overflow-hidden" id="features-desktop">
+				<FeaturesDesktopSlide />
+			</div>
+			<div class="snap-start relative h-full w-full overflow-hidden" id="pricing-desktop">
+				<PricingDesktopSlide />
+			</div>
+			<div class="snap-start relative h-full w-full overflow-hidden" id="signup-desktop">
+				<SignupDesktopSlide />
+			</div>
 		</div>
-		<!-- Desktop Slides -->
-		<div class="grow relative hidden sm:block">
-			<Fullpage>
-				<FullpageSection disableCentering title="Home">
-					<HomeSlide />
-				</FullpageSection>
-				<FullpageSection disableCentering title="Solution">
-					<SolutionDesktopSlide />
-				</FullpageSection>
-				<FullpageSection disableCentering title="Features">
-					<FeaturesDesktopSlide />
-				</FullpageSection>
-				<FullpageSection disableCentering title="Pricing">
-					<PricingDesktopSlide />
-				</FullpageSection>
-				<FullpageSection disableCentering title="Signup">
-					<SignupDesktopSlide />
-				</FullpageSection>
-			</Fullpage>
+		<div class="grow relative overflow-y-auto snap-y snap-mandatory sm:hidden">
+			<div class="snap-start relative h-full w-full overflow-hidden" id="home-mobile">
+				<HomeSlide />
+			</div>
+			<div class="snap-start relative h-full w-full overflow-hidden" id="solution-mobile">
+				<SolutionMobileSlide />
+			</div>
+			<div class="snap-start relative h-full w-full overflow-hidden" id="features-mobile">
+				<FeaturesMobileSlide />
+			</div>
+			<div class="snap-start relative h-full w-full overflow-hidden" id="pricing-mobile">
+				<PricingMobileSlide />
+			</div>
+			<div class="snap-start relative h-full w-full overflow-hidden" id="signup-mobile">
+				<SignupMobileSlide />
+			</div>
 		</div>
 	</div>
 	{#if showCircle}
