@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { Fullpage, FullpageSection, FullpageSlide } from 'svelte-fullpage';
-	import HomeFirstSlide from '$lib/components/landing/home/FirstSlide.svelte';
-	import FeaturesFirstSlide from '$lib/components/landing/features/FirstSlide.svelte';
-	import FeaturesSecondSlide from '$lib/components/landing/features/SecondSlide.svelte';
-	import PricingFirstSlide from '$lib/components/landing/pricing/FirstSlide.svelte';
-	import SolutionFirstSlide from '$lib/components/landing/solution/FirstSlide.svelte';
-	import SignupFirstSlide from '$lib/components/landing/signup/FirstSlide.svelte';
+	import HomeSlide from '$lib/components/landing/home/Slide.svelte';
+	import SolutionDesktopSlide from '$lib/components/landing/solution/DesktopSlide.svelte';
+	import SolutionMobileSlide from '$lib/components/landing/solution/MobileSlide.svelte';
+	import FeaturesDesktopSlide from '$lib/components/landing/features/DesktopSlide.svelte';
+	import FeaturesMobileSlide from '$lib/components/landing/features/MobileSlide.svelte';
+	import PricingDesktopSlide from '$lib/components/landing/pricing/DesktopSlide.svelte';
+	import PricingMobileSlide from '$lib/components/landing/pricing/MobileSlide.svelte';
+	import SignupDesktopSlide from '$lib/components/landing/signup/DesktopSlide.svelte';
+	import SignupMobileSlide from '$lib/components/landing/signup/MobileSlide.svelte';
 
 	let isMobileDevice = false;
 	let showCircle = false;
@@ -27,29 +30,52 @@
 <div class="overflow-hidden grow flex relative">
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		class="grow"
+		class="flex grow"
 		on:mouseenter={() => (showCircle = !isMobileDevice)}
 		on:mouseleave={() => (showCircle = false)}
 		on:mousemove={updateCursorPosition}
 		bind:this={container}
 	>
-		<Fullpage>
-			<FullpageSection disableCentering title="Home">
-				<HomeFirstSlide />
-			</FullpageSection>
-			<FullpageSection disableCentering title="Solution">
-				<SolutionFirstSlide />
-			</FullpageSection>
-			<FullpageSection disableCentering title="Features">
-				<FeaturesFirstSlide />
-			</FullpageSection>
-			<FullpageSection disableCentering title="Pricing">
-				<PricingFirstSlide />
-			</FullpageSection>
-			<FullpageSection disableCentering title="Signup">
-				<SignupFirstSlide />
-			</FullpageSection>
-		</Fullpage>
+		<!-- Mobile Slides -->
+		<div class="grow relative sm:hidden">
+			<Fullpage>
+				<FullpageSection disableCentering title="Home">
+					<HomeSlide />
+				</FullpageSection>
+				<FullpageSection disableCentering title="Solution">
+					<SolutionMobileSlide />
+				</FullpageSection>
+				<FullpageSection disableCentering title="Features">
+					<FeaturesMobileSlide />
+				</FullpageSection>
+				<FullpageSection disableCentering title="Pricing">
+					<PricingMobileSlide />
+				</FullpageSection>
+				<FullpageSection disableCentering title="Signup">
+					<SignupMobileSlide />
+				</FullpageSection>
+			</Fullpage>
+		</div>
+		<!-- Desktop Slides -->
+		<div class="grow relative hidden sm:block">
+			<Fullpage>
+				<FullpageSection disableCentering title="Home">
+					<HomeSlide />
+				</FullpageSection>
+				<FullpageSection disableCentering title="Solution">
+					<SolutionDesktopSlide />
+				</FullpageSection>
+				<FullpageSection disableCentering title="Features">
+					<FeaturesDesktopSlide />
+				</FullpageSection>
+				<FullpageSection disableCentering title="Pricing">
+					<PricingDesktopSlide />
+				</FullpageSection>
+				<FullpageSection disableCentering title="Signup">
+					<SignupDesktopSlide />
+				</FullpageSection>
+			</Fullpage>
+		</div>
 	</div>
 	{#if showCircle}
 		<div
