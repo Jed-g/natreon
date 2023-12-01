@@ -1,41 +1,48 @@
 const s = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), f = [
-  s + "/_app/immutable/entry/app.81588f10.js",
-  s + "/_app/immutable/nodes/0.cb028b83.js",
-  s + "/_app/immutable/nodes/1.2269105a.js",
-  s + "/_app/immutable/assets/10.bb44c373.css",
-  s + "/_app/immutable/nodes/10.175f780e.js",
-  s + "/_app/immutable/assets/11.6a477bc9.css",
-  s + "/_app/immutable/nodes/11.ab124836.js",
+  s + "/_app/immutable/entry/app.fccd205a.js",
+  s + "/_app/immutable/nodes/0.93054d95.js",
+  s + "/_app/immutable/nodes/1.a092f91f.js",
+  s + "/_app/immutable/assets/10.508e6eab.css",
+  s + "/_app/immutable/nodes/10.7d96b2a8.js",
+  s + "/_app/immutable/assets/11.c2f3ab49.css",
+  s + "/_app/immutable/nodes/11.1fef882d.js",
   s + "/_app/immutable/assets/12.d5b5701a.css",
-  s + "/_app/immutable/nodes/12.c276f6d9.js",
-  s + "/_app/immutable/nodes/13.3a311eea.js",
+  s + "/_app/immutable/nodes/12.c561d243.js",
+  s + "/_app/immutable/nodes/13.5ea15b39.js",
   s + "/_app/immutable/assets/2.19a11ec7.css",
-  s + "/_app/immutable/nodes/2.cb000a0b.js",
-  s + "/_app/immutable/assets/global.763249ad.css",
+  s + "/_app/immutable/nodes/2.a7bba47f.js",
+  s + "/_app/immutable/assets/global.d0b6e5cd.css",
   s + "/_app/immutable/assets/3.76f3e416.css",
-  s + "/_app/immutable/nodes/3.99004f57.js",
-  s + "/_app/immutable/nodes/4.ce2673af.js",
-  s + "/_app/immutable/nodes/5.a4fcc054.js",
-  s + "/_app/immutable/assets/6.19a63dc8.css",
-  s + "/_app/immutable/nodes/6.8556579a.js",
-  s + "/_app/immutable/assets/7.9a21b2e6.css",
-  s + "/_app/immutable/nodes/7.81bb2332.js",
-  s + "/_app/immutable/nodes/8.3a311eea.js",
-  s + "/_app/immutable/assets/9.f2d2ca72.css",
-  s + "/_app/immutable/nodes/9.cfa08738.js",
-  s + "/_app/immutable/chunks/Icon.f5e83453.js",
-  s + "/_app/immutable/chunks/LogoutButton.cb0b4036.js",
+  s + "/_app/immutable/nodes/3.960e87f5.js",
+  s + "/_app/immutable/nodes/4.9f25a2d5.js",
+  s + "/_app/immutable/nodes/5.10d55701.js",
+  s + "/_app/immutable/assets/6.ec0f808b.css",
+  s + "/_app/immutable/nodes/6.7b21d067.js",
+  s + "/_app/immutable/assets/map-feature.c61775dc.png",
+  s + "/_app/immutable/assets/poi-feature.2a422878.png",
+  s + "/_app/immutable/assets/social-feature.47dc0514.png",
+  s + "/_app/immutable/assets/marketplace-pricing.62b69f41.png",
+  s + "/_app/immutable/assets/poi-pricing.be64e46f.png",
+  s + "/_app/immutable/assets/trust-pricing.52b2371c.png",
+  s + "/_app/immutable/assets/7.043ab828.css",
+  s + "/_app/immutable/nodes/7.6e4dac68.js",
+  s + "/_app/immutable/assets/8.951c79e2.css",
+  s + "/_app/immutable/nodes/8.5ca7e339.js",
+  s + "/_app/immutable/assets/9.22c2da5f.css",
+  s + "/_app/immutable/nodes/9.1c29e1d3.js",
+  s + "/_app/immutable/chunks/Icon.44f8d748.js",
+  s + "/_app/immutable/chunks/LogoutButton.ecf43c46.js",
   s + "/_app/immutable/chunks/close-box.75461ac6.js",
-  s + "/_app/immutable/chunks/each.8eb97166.js",
-  s + "/_app/immutable/chunks/index.7fe2b75d.js",
-  s + "/_app/immutable/chunks/index.aaf978d9.js",
-  s + "/_app/immutable/chunks/index.b510b619.js",
-  s + "/_app/immutable/chunks/index.ef04b1b2.js",
-  s + "/_app/immutable/chunks/scheduler.89cb64c0.js",
-  s + "/_app/immutable/chunks/singletons.f36f1d8d.js",
-  s + "/_app/immutable/chunks/spread.84d39b6c.js",
-  s + "/_app/immutable/entry/start.8c0ff830.js"
-], p = [
+  s + "/_app/immutable/chunks/each.059d6c2e.js",
+  s + "/_app/immutable/chunks/index.6e9468b6.js",
+  s + "/_app/immutable/chunks/index.721af5cc.js",
+  s + "/_app/immutable/chunks/index.bb3f0d86.js",
+  s + "/_app/immutable/chunks/index.c1397403.js",
+  s + "/_app/immutable/chunks/scheduler.e7e8979b.js",
+  s + "/_app/immutable/chunks/singletons.b2aec56b.js",
+  s + "/_app/immutable/chunks/window-close.fe4b2900.js",
+  s + "/_app/immutable/entry/start.c915b101.js"
+], c = [
   s + "/apple-store.png",
   s + "/favicon.png",
   s + "/fonts/Geist/Geist-Black.ttf",
@@ -86,10 +93,9 @@ const s = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), f
   s + "/iphone.png",
   s + "/logo.svg",
   s + "/manifest.json",
-  s + "/map-style.json",
   s + "/nature.jpg",
   s + "/play-store.png"
-], c = [
+], m = [
   s + "/",
   s + "/app",
   s + "/login",
@@ -100,26 +106,27 @@ const s = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), f
   s + "/admin",
   s + "/admin/users",
   s + "/admin/reviews",
-  s + "/admin/qa",
+  s + "/admin/questions",
   s + "/admin/mailing-list"
-], l = "1700440778560", o = self, i = `cache${l}`, m = [...f, ...p, ...c];
-o.addEventListener("install", (e) => {
-  e.waitUntil(
-    caches.open(i).then((t) => t.addAll(m)).then(() => o.skipWaiting())
+], l = "1701406095556", o = self, i = `cache${l}`, u = [...f, ...c, ...m];
+o.addEventListener("install", (t) => {
+  t.waitUntil(
+    caches.open(i).then((e) => e.addAll(u)).then(() => o.skipWaiting())
   );
 });
-o.addEventListener("fetch", (e) => {
-  e.request.url.startsWith("http") && e.respondWith(
-    fetch(e.request).then((t) => {
-      if (!t || t.status !== 200 || t.type !== "basic")
-        return t;
-      const n = t.clone();
+o.addEventListener("fetch", (t) => {
+  t.request.url.startsWith("http") && t.respondWith(
+    fetch(t.request).then((e) => {
+      if (!e || e.status !== 200 || e.type !== "basic")
+        return e;
+      const n = e.clone();
       return caches.open(i).then((a) => {
         try {
-          a.put(e.request, n);
-        } catch {
+          t.request.method === "GET" && !t.request.url.includes("api") && a.put(t.request, n);
+        } catch (p) {
+          console.error(p);
         }
-      }), t;
-    }).catch(async () => await caches.match(e.request) ?? new Response())
+      }), e;
+    }).catch(async () => await caches.match(t.request) ?? new Response())
   );
 });
