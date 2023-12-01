@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Map from '$lib/components/app/map/Map.svelte';
-	import LogoutButton from '$lib/components/app/LogoutButton.svelte';
+	import LogoutButton from '$lib/components/LogoutButton.svelte';
 </script>
 
 <Map />

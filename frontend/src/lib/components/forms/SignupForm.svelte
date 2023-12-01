@@ -137,40 +137,40 @@
 		{/if}
 		{#if formValidation.emailValid === false}
 			<div class="flex">
-				<Icon icon={errorIcon} height={24} class="scale-125" color="hsl(var(--er))" />
+				<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
 				<p class="ml-3">Email Not Valid</p>
 			</div>
 		{:else if formValidation.emailValid === true}
 			<div class="flex">
-				<Icon icon={validIcon} height={24} class="scale-125" color="hsl(var(--su))" />
+				<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
 				<p class="ml-3">Email Valid</p>
 			</div>
 		{/if}
 		{#if formValidation.emailNotTaken === false}
 			<div class="flex">
-				<Icon icon={errorIcon} height={24} class="scale-125" color="hsl(var(--er))" />
+				<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
 				<p class="ml-3">Email Belongs To Another User</p>
 			</div>
 		{/if}
 		{#if formValidation.passwordMin8 === false}
 			<div class="flex">
-				<Icon icon={errorIcon} height={24} class="scale-125" color="hsl(var(--er))" />
+				<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
 				<p class="ml-3">Password Too Short (min. 8 characters)</p>
 			</div>
 		{:else if formValidation.passwordMin8 === true}
 			<div class="flex">
-				<Icon icon={validIcon} height={24} class="scale-125" color="hsl(var(--su))" />
+				<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
 				<p class="ml-3">Password Length Ok</p>
 			</div>
 		{/if}
 		{#if formValidation.passwordsMatch === false}
 			<div class="flex">
-				<Icon icon={errorIcon} height={24} class="scale-125" color="hsl(var(--er))" />
+				<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
 				<p class="ml-3">Passwords Do Not Match</p>
 			</div>
 		{:else if formValidation.passwordsMatch === true}
 			<div class="flex">
-				<Icon icon={validIcon} height={24} class="scale-125" color="hsl(var(--su))" />
+				<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
 				<p class="ml-3">Passwords Match</p>
 			</div>
 		{/if}

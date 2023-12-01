@@ -1,15 +1,33 @@
 <script lang="ts">
 	import '$lib/global.css';
 	import { authenticated } from '$lib/stores';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
+	import UserType from '$lib/enums/userType';
 
 	onMount(() => authenticated.verify());
 
 	$: loading = $authenticated === null;
-	$: $authenticated === false && goto('/login');
+	$: {
+		switch ($authenticated) {
+			case false:
+				window.location.href = '/login';
+				break;
+			case UserType.ADMIN:
+				window.location.href = '/admin';
+				break;
+			case UserType.REPORTER:
+				window.location.href = '/metrics';
+				break;
+			default:
+				break;
+		}
+	}
 </script>
+
+<svelte:head>
+	<title>App</title>
+</svelte:head>
 
 <main class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex">
 	{#if loading}

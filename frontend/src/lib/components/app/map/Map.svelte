@@ -21,11 +21,13 @@
 				parseFloat(ipToGeoCoords.latitude)
 			];
 			foundLocationByIP = true;
-		} catch (error) {}
+		} catch (error) {
+			console.error(error);
+		}
 
 		const map = new maplibregl.Map({
 			container: 'map',
-			style: '/map-style.json',
+			style: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key=w6bcFm6b0jnIQQPCXazJ',
 			center: [defaultCoords.lon, defaultCoords.lat], // starting position [lng, lat]
 			zoom: foundLocationByIP ? 6 : 1, // starting zoom
 			attributionControl: false
