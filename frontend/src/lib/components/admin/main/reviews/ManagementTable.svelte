@@ -161,12 +161,16 @@
 					<tr>
 						<td>{item.rating}</td>
 						<td
-							>{item.content.length > 30
+							>{item.content.length === 0
+								? 'EMPTY'
+								: item.content.length > 30
 								? Array.from(item.content).slice(0, 30).join('') + '...'
 								: item.content}</td
 						>
 						<td
-							>{item.author.length > 10
+							>{item.author.length === 0
+								? 'EMPTY'
+								: item.author.length > 10
 								? Array.from(item.author).slice(0, 10).join('') + '...'
 								: item.author}</td
 						>

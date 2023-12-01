@@ -4,12 +4,11 @@ class QuestionsController < ApplicationController
   before_action :assign_defaults_to_session
 
   def all_questions
-    awaiting_approval = Question.where(answer: nil).select do |question|
-      session[:questions_submitted].include?(question.id)
-    end
     render json: {
-      questions: Question.where.not(answer: nil).order(created_at: :desc).select(:id, :question, :answer, :upvotes,
-                                                                                 :downvotes), awaiting_approval:
+      questions: Question.where.not(answer: nil).order(created_at: :desc).select(:id, :question, :answer,
+                                                                                 :upvotes, :downvotes),
+                    awaiting_approval:, upvoted: session[:questions_upvoted], downvoted: session[:questions_downvoted],
+                    total_number_of_questions: Question.count
     }
   end
 
@@ -118,5 +117,11 @@ class QuestionsController < ApplicationController
       session[:questions_upvoted].delete(@id)
     end
     @question.downvotes += 1
+  end
+
+  def awaiting_approval
+    Question.where(answer: nil).select(:id, :question).select do |question|
+      session[:questions_submitted].include?(question.id)
+    end
   end
 end

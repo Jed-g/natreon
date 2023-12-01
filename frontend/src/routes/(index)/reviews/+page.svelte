@@ -177,7 +177,7 @@
 			{:else}
 				<div class="flex justify-between items-center">
 					<div class="flex">
-						<div class="stat md:hidden py-0">
+						<div class="stat md:hidden py-0 pl-0">
 							<div class="stat-figure text-primary hidden sm:block">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -194,9 +194,9 @@
 							</div>
 							<div class="stat-title">Average Review</div>
 							<div class="stat-value text-primary">{averageRating.toFixed(1)}</div>
-							<div class="stat-desc">Out of {reviews.length} reviews</div>
+							<div class="stat-desc">Out of {reviews.length} Reviews</div>
 						</div>
-						<div class="stat hidden md:inline-grid py-0">
+						<div class="stat hidden md:inline-grid py-0 pl-0">
 							<div class="stat-figure text-primary">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -262,7 +262,7 @@
 						</select>
 					</div>
 				</div>
-				<div class="divider" />
+				<div class="divider my-2 sm:my-3 h-3" />
 				<div class="flex grow flex-col relative overflow-y-auto">
 					{#if reviews.length > 0}
 						{#each reviews as { id, author, content, rating, upvotes, downvotes }, index (id)}
@@ -276,38 +276,40 @@
 										<input type="radio" class="mask mask-star" disabled checked={rating === 5} />
 									</div>
 								</div>
-								<p class="sm:hidden w-7 ml-2 text-lg">{rating}/5</p>
-								<div class="divider divider-horizontal" />
+								<p class="sm:hidden w-7 text-sm">{rating}/5</p>
+								<div class="divider divider-horizontal max-sm:mx-0 mx-1" />
 								<div class="flex flex-col grow overflow-x-auto">
 									<p>
 										{content.length > 600
 											? Array.from(content).slice(0, 600).join('') + '...'
 											: content}
 									</p>
-									<div class="flex justify-between items-center pt-4">
+									<div class="flex justify-between items-center pt-4 max-sm:pt-2">
 										<div class="flex items-center">
 											<button
-												class="btn btn-sm btn-circle"
+												class="btn sm:btn-sm btn-circle btn-xs"
 												on:click={() => (upvoted.includes(id) ? cancelUpvote(id) : upvote(id))}
 												><Icon
 													icon={thumbUpIcon}
 													height={18}
+													class="max-sm:scale-75"
 													color={upvoted.includes(id) ? 'oklch(var(--su))' : undefined}
 												/></button
 											>
-											<p class="mx-2">{upvotes - downvotes}</p>
+											<p class="mx-2 max-sm:text-xs">{upvotes - downvotes}</p>
 											<button
-												class="btn btn-sm btn-circle"
+												class="btn sm:btn-sm btn-circle btn-xs"
 												on:click={() =>
 													downvoted.includes(id) ? cancelDownvote(id) : downvote(id)}
 												><Icon
 													icon={thumbDownIcon}
 													height={18}
+													class="max-sm:scale-75"
 													color={downvoted.includes(id) ? 'oklch(var(--er))' : undefined}
 												/></button
 											>
 										</div>
-										<p class="my-0 font-semibold">
+										<p class="my-0 ml-2 font-semibold text-xs sm:text-sm">
 											{author.length > 40
 												? Array.from(author).slice(0, 40).join('') + '...'
 												: author}
@@ -344,27 +346,4 @@
 		background-color: rgba(0, 0, 0, 0.3);
 		backdrop-filter: blur(2px);
 	}
-
-	/* .container {
-		background-image: url('/nature.jpg');
-		background-attachment: fixed;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
-	}
-
-	.container::before {
-		content: '';
-		position: absolute;
-		height: 100%;
-		width: 100%;
-		background-color: rgba(0, 0, 0, 0.3);
-		backdrop-filter: blur(2px);
-	} */
-
-	/* @media only screen and (max-device-width: 1366px) {
-		.container {
-			background-attachment: scroll;
-		}
-	} */
 </style>

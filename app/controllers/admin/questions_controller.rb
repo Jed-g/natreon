@@ -11,39 +11,34 @@ module Admin
 
     def answer_edit_create_question
       read_id_param
-      question_object = find_question
+      @question_object = Question.find(@id)
+      return render_bad_request if @question_object.nil?
 
-      update_question_and_answer(question_object)
-      return render_internal_server_error unless question_object.valid?
+      update_question_and_answer
+      return render_internal_server_error unless @question_object.valid?
 
-      question_object.save
+      @question_object.save
       render json: {message: "Question answered/edited successfully"}
     end
 
     def delete_question
       read_id_param
-      find_question
+      question_object = Question.find(@id)
+      return render_bad_request if question_object.nil?
 
-      question.destroy
+      question_object.destroy
       render json: {message: "Question deleted successfully"}
     end
 
     private
 
-    def find_question
-      question = Question.find(@id)
-      return render_bad_request if question_object.nil?
-
-      question
-    end
-
-    def update_question_and_answer(question_object)
+    def update_question_and_answer
       question = params[:question]
       answer = params[:answer]
-      question = question_object.question if question.blank?
+      question = @question_object.question if question.blank?
       answer = nil if !answer.nil? && answer.empty?
-      question_object.question = question
-      question_object.answer = answer
+      @question_object.question = question
+      @question_object.answer = answer
     end
 
     def read_id_param

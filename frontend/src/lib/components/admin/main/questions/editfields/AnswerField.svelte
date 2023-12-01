@@ -6,11 +6,10 @@
 <div class="form-control w-full">
 	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<label class="label">
-		<span class="label-text">Email</span>
+		<span class="label-text">Answer</span>
 	</label>
 	<input
-		type="email"
-		placeholder="Enter email..."
+		placeholder="Enter answer..."
 		class="input input-bordered w-full"
 		{value}
 		on:input={(e) => onValueChange(e.currentTarget.value)}
