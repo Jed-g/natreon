@@ -1,11 +1,15 @@
-class Users::AuthenticationStatusController < ApplicationController
-  include ApplicationHelper
+# frozen_string_literal: true
 
-  def index
-    if is_authenticated
-      render json: { message: 'Authenticated' }
-    else
-      render json: { message: 'Not Authenticated' }, status: 401
+module Users
+  class AuthenticationStatusController < ApplicationController
+    def index
+      user_type = authenticated?
+
+      if authenticated?
+        render json: {userType: user_type}
+      else
+        render json: {userType: "Not Authenticated"}, status: :unauthorized
+      end
     end
   end
 end

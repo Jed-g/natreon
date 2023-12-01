@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -9,6 +11,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  user_type              :integer          default("customer"), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -18,8 +21,8 @@
 #  index_users_on_jti                   (jti) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
   pending "add some examples to (or delete) #{__FILE__}"
 end

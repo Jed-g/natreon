@@ -1,1 +1,3 @@
-APP_VERSION = '11'
+# frozen_string_literal: true
+
+APP_VERSION = "3"

@@ -1,16 +1,30 @@
 <script lang="ts">
 	import '$lib/global.css';
 	import { authenticated } from '$lib/stores';
-	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import HeaderDesktop from '$lib/components/landing/header/HeaderDesktop.svelte';
 	import HeaderMobile from '$lib/components/landing/header/HeaderMobile.svelte';
 	import { scale } from 'svelte/transition';
+	import UserType from '$lib/enums/userType';
 
 	onMount(() => authenticated.verify());
 
 	$: loading = $authenticated === null;
-	$: $authenticated === true && goto('/app');
+	$: {
+		switch ($authenticated) {
+			case UserType.CUSTOMER:
+				window.location.href = '/app';
+				break;
+			case UserType.ADMIN:
+				window.location.href = '/admin';
+				break;
+			case UserType.REPORTER:
+				window.location.href = '/metrics';
+				break;
+			default:
+				break;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -24,17 +38,24 @@
 		</div>
 	{:else}
 		<div
-			class="flex flex-col grow overflow-x-hidden"
+			class="flex flex-col grow overflow-x-hidden relative"
 			in:scale={{ start: 0.9, duration: 500, opacity: 0 }}
 		>
 			<HeaderDesktop />
 			<HeaderMobile />
-			<slot />
+			<div class="height flex flex-col">
+				<slot />
+			</div>
 		</div>
 	{/if}
 </main>
 
 <style>
+	.height {
+		height: calc(100% - 64px);
+		margin-top: 64px;
+	}
+
 	@supports (height: 100dvh) {
 		.full-dynamic-viewport-height {
 			height: 100dvh;

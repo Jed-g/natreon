@@ -1,19 +1,13 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-
-	const clickButtonByTitleProperty = (title: string) => {
-		const button = document.querySelector(`button[title="${title}"]`) as HTMLButtonElement;
-		button?.click();
-
-		const button2 = document.querySelector(`button[title="${title} Slide 1"]`) as HTMLButtonElement;
-		button2?.click();
-	};
 </script>
 
-<div class="navbar bg-base-100 justify-between sm:hidden">
+<div class="navbar bg-base-100 justify-between sm:hidden fixed z-10">
 	<div>
-		<div class="dropdown">
-			<button class="btn btn-ghost">
+		<div class="dropdown dropdown-hover">
+			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+			<!-- svelte-ignore a11y-label-has-associated-control -->
+			<label tabindex="0" class="btn btn-ghost">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-5 w-5"
@@ -27,39 +21,64 @@
 						d="M4 6h16M4 12h8m-8 6h16"
 					/></svg
 				>
-			</button>
-			<ul class="menu dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+			</label>
+			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+			<ul tabindex="0" class="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-48">
 				<li>
-					<button
-						on:click={async () => {
-							await goto('/');
-							clickButtonByTitleProperty('Home');
-						}}>Home</button
-					>
+					<p class="menu-title">Home</p>
+					<ul>
+						<li>
+							<button
+								on:click={async () => {
+									await goto('/');
+									const element = document.getElementById('home-mobile');
+									element?.scrollIntoView({ behavior: 'smooth' });
+								}}>Home</button
+							>
+						</li>
+						<li>
+							<button
+								on:click={async () => {
+									await goto('/');
+									const element = document.getElementById('solution-mobile');
+									element?.scrollIntoView({ behavior: 'smooth' });
+								}}>Our Solution</button
+							>
+						</li>
+						<li>
+							<button
+								on:click={async () => {
+									await goto('/');
+									const element = document.getElementById('features-mobile');
+									element?.scrollIntoView({ behavior: 'smooth' });
+								}}>Features</button
+							>
+						</li>
+						<li>
+							<button
+								on:click={async () => {
+									await goto('/');
+									const element = document.getElementById('pricing-mobile');
+									element?.scrollIntoView({ behavior: 'smooth' });
+								}}>Pricing</button
+							>
+						</li>
+						<li>
+							<button
+								on:click={async () => {
+									await goto('/');
+									const element = document.getElementById('signup-mobile');
+									element?.scrollIntoView({ behavior: 'smooth' });
+								}}>Register Interest</button
+							>
+						</li>
+					</ul>
 				</li>
 				<li>
-					<button
-						on:click={async () => {
-							await goto('/');
-							clickButtonByTitleProperty('Features');
-						}}>Features</button
-					>
+					<button on:click={() => goto('/reviews')}>Reviews</button>
 				</li>
 				<li>
-					<button
-						on:click={async () => {
-							await goto('/');
-							clickButtonByTitleProperty('Pricing');
-						}}>Pricing</button
-					>
-				</li>
-				<li>
-					<button
-						on:click={async () => {
-							await goto('/');
-							clickButtonByTitleProperty('About Us');
-						}}>About Us</button
-					>
+					<button on:click={() => goto('/questions')}>Questions</button>
 				</li>
 			</ul>
 		</div>

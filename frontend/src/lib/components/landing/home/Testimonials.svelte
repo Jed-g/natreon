@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition';
+	import { fly, fade } from 'svelte/transition';
 	import { cubicOut, cubicIn } from 'svelte/easing';
 	import { onMount } from 'svelte';
 
@@ -21,7 +21,7 @@
 
 <figure
 	class="max-w-screen-md text-center relative mx-8"
-	in:fly={{ duration: 1600, delay: 400, y: 200, opacity: 0, easing: cubicOut }}
+	in:fade={{ duration: 1600, delay: 200, easing: cubicOut }}
 >
 	<svg
 		class="h-6 mx-auto mb-4 text-white"

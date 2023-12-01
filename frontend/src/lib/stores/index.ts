@@ -1,12 +1,13 @@
 import { writable } from 'svelte/store';
-import { isAuthenticated } from '$lib/auth';
+import { authenticationStatus } from '$lib/auth';
+import type UserType from '$lib/enums/userType';
 
 const createAuthenticatedStore = () => {
-	const { subscribe, set } = writable<null | boolean>(null);
+	const { subscribe, set } = writable<null | boolean | UserType>(null);
 
 	return {
 		subscribe,
-		verify: async () => set(await isAuthenticated())
+		verify: async () => set(await authenticationStatus())
 	};
 };
 export const authenticated = createAuthenticatedStore();

@@ -34,13 +34,20 @@ sw.addEventListener('fetch', (event) => {
 				const responseToCache = response.clone();
 
 				caches.open(cacheId).then((cache) => {
-					cache.put(event.request, responseToCache);
+					try {
+						if (event.request.method === 'GET' && !event.request.url.includes('api')) {
+							cache.put(event.request, responseToCache);
+						}
+					} catch (error) {
+						console.error(error);
+					}
 				});
 
 				return response;
 			})
-			.catch(() => {
-				return caches.match(event.request).then((response) => response ?? new Response());
+			.catch(async () => {
+				const response = await caches.match(event.request);
+				return response ?? new Response();
 			})
 	);
 });

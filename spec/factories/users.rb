@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -9,6 +11,7 @@
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
+#  user_type              :integer          default("customer"), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -20,5 +23,6 @@
 #
 FactoryBot.define do
   factory :user do
+    email { "example@example.com" } # Placeholder attribute
   end
 end
