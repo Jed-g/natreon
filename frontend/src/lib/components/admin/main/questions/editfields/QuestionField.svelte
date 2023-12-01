@@ -8,9 +8,9 @@
 	<label class="label">
 		<span class="label-text">Question</span>
 	</label>
-	<input
+	<textarea
 		placeholder="Enter question..."
-		class="input input-bordered w-full"
+		class="textarea textarea-bordered h-24"
 		{value}
 		on:input={(e) => onValueChange(e.currentTarget.value)}
 	/>
