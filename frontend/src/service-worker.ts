@@ -8,19 +8,24 @@ const DB_VERSION = 1;
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
-import { build, files, prerendered, version } from '$service-worker';
+// import { build, files, prerendered, version } from '$service-worker';
 
-const cacheId = `cache${version}`;
+// const cacheId = `cache${version}`;
 
-const cachePayloadArr = [...build, ...files, ...prerendered];
+// const cachePayloadArr = [...build, ...files, ...prerendered];
 
-sw.addEventListener('install', (event) => {
-	event.waitUntil(
-		caches
-			.open(cacheId)
-			.then((cache) => cache.addAll(cachePayloadArr))
-			.then(() => sw.skipWaiting())
-	);
+sw.addEventListener('install', () => {
+	// event.waitUntil(
+	// 	caches
+	// 		.open(cacheId)
+	// 		.then((cache) => cache.addAll(cachePayloadArr))
+	// 		.then(() => sw.skipWaiting())
+	// );
+	sw.skipWaiting();
+});
+
+sw.addEventListener('activate', (event) => {
+	event.waitUntil(sw.clients.claim());
 });
 
 sw.addEventListener('fetch', (event) => {
@@ -39,7 +44,7 @@ sw.addEventListener('fetch', (event) => {
 
 		openRequest.onsuccess = (openDBRequestEvent) => {
 			const db = (openDBRequestEvent.target as IDBOpenDBRequest).result;
-			console.log('test');
+
 			const fetchRequest = event.request.clone();
 			if (fetchRequest.headers.has('Authorization')) {
 				fetch(event.request).then((response) => {
