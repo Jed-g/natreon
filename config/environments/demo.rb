@@ -27,9 +27,9 @@ Rails.application.configure do
   # config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
   config.public_file_server.enabled = true
 
-  config.public_file_server.headers = {
-      "Cache-Control" => 'no-cache, no-cache="set-cookie", private, proxy-revalidate'
-    }
+  # config.public_file_server.headers = {
+  #     "Cache-Control" => 'no-cache, no-cache="set-cookie", private, proxy-revalidate'
+  #   }
   # Compress CSS using a preprocessor.
   # config.assets.css_compressor = :sass
 
