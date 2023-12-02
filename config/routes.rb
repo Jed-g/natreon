@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   scope "api" do
     get "/auth/status", to: "users/authentication_status#index"
 
+    get "/utils/geolocation", to: "utils#geolocation_frontend"
+
     get "/admin/users", to: "admin/users#all_users"
     post "/admin/users", to: "admin/users#update_user"
     delete "/admin/users", to: "admin/users#delete_user"

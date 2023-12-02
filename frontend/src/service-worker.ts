@@ -3,51 +3,51 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
-const sw = self as unknown as ServiceWorkerGlobalScope;
+// const sw = self as unknown as ServiceWorkerGlobalScope;
 
-import { build, files, prerendered, version } from '$service-worker';
+// import { build, files, prerendered, version } from '$service-worker';
 
-const cacheId = `cache${version}`;
+// const cacheId = `cache${version}`;
 
-const cachePayloadArr = [...build, ...files, ...prerendered];
+// const cachePayloadArr = [...build, ...files, ...prerendered];
 
-sw.addEventListener('install', (event) => {
-	event.waitUntil(
-		caches
-			.open(cacheId)
-			.then((cache) => cache.addAll(cachePayloadArr))
-			.then(() => sw.skipWaiting())
-	);
-});
+// sw.addEventListener('install', (event) => {
+// 	event.waitUntil(
+// 		caches
+// 			.open(cacheId)
+// 			.then((cache) => cache.addAll(cachePayloadArr))
+// 			.then(() => sw.skipWaiting())
+// 	);
+// });
 
-sw.addEventListener('fetch', (event) => {
-	if (!event.request.url.startsWith('http')) {
-		return;
-	}
-	event.respondWith(
-		fetch(event.request)
-			.then((response) => {
-				if (!response || response.status !== 200 || response.type !== 'basic') {
-					return response;
-				}
+// sw.addEventListener('fetch', (event) => {
+// 	if (!event.request.url.startsWith('http')) {
+// 		return;
+// 	}
+// 	event.respondWith(
+// 		fetch(event.request)
+// 			.then((response) => {
+// 				if (!response || response.status !== 200 || response.type !== 'basic') {
+// 					return response;
+// 				}
 
-				const responseToCache = response.clone();
+// 				const responseToCache = response.clone();
 
-				caches.open(cacheId).then((cache) => {
-					try {
-						if (event.request.method === 'GET' && !event.request.url.includes('api')) {
-							cache.put(event.request, responseToCache);
-						}
-					} catch (error) {
-						console.error(error);
-					}
-				});
+// 				caches.open(cacheId).then((cache) => {
+// 					try {
+// 						if (event.request.method === 'GET' && !event.request.url.includes('api')) {
+// 							cache.put(event.request, responseToCache);
+// 						}
+// 					} catch (error) {
+// 						console.error(error);
+// 					}
+// 				});
 
-				return response;
-			})
-			.catch(async () => {
-				const response = await caches.match(event.request);
-				return response ?? new Response();
-			})
-	);
-});
+// 				return response;
+// 			})
+// 			.catch(async () => {
+// 				const response = await caches.match(event.request);
+// 				return response ?? new Response();
+// 			})
+// 	);
+// });
