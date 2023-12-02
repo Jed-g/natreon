@@ -1,16 +1,16 @@
 const t = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), g = [
-  t + "/_app/immutable/entry/app.e9453ae5.js",
+  t + "/_app/immutable/entry/app.5e4616ee.js",
   t + "/_app/immutable/nodes/0.93054d95.js",
-  t + "/_app/immutable/nodes/1.da582ffa.js",
-  t + "/_app/immutable/assets/10.7ecef861.css",
-  t + "/_app/immutable/nodes/10.0ff1f50b.js",
+  t + "/_app/immutable/nodes/1.8048b2f6.js",
+  t + "/_app/immutable/assets/10.b84cd1ea.css",
+  t + "/_app/immutable/nodes/10.5b3a51f9.js",
   t + "/_app/immutable/assets/11.c2f3ab49.css",
   t + "/_app/immutable/nodes/11.1fef882d.js",
   t + "/_app/immutable/assets/12.d5b5701a.css",
   t + "/_app/immutable/nodes/12.742041e3.js",
   t + "/_app/immutable/nodes/13.5ea15b39.js",
   t + "/_app/immutable/assets/2.19a11ec7.css",
-  t + "/_app/immutable/nodes/2.185e636c.js",
+  t + "/_app/immutable/nodes/2.c4d377a8.js",
   t + "/_app/immutable/assets/global.d0b6e5cd.css",
   t + "/_app/immutable/assets/3.76f3e416.css",
   t + "/_app/immutable/nodes/3.960e87f5.js",
@@ -24,8 +24,8 @@ const t = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), g
   t + "/_app/immutable/assets/marketplace-pricing.62b69f41.png",
   t + "/_app/immutable/assets/poi-pricing.be64e46f.png",
   t + "/_app/immutable/assets/trust-pricing.52b2371c.png",
-  t + "/_app/immutable/assets/7.02922bbb.css",
-  t + "/_app/immutable/nodes/7.e6ffe1b7.js",
+  t + "/_app/immutable/assets/7.28cb9c31.css",
+  t + "/_app/immutable/nodes/7.30acf712.js",
   t + "/_app/immutable/assets/8.951c79e2.css",
   t + "/_app/immutable/nodes/8.5ca7e339.js",
   t + "/_app/immutable/assets/9.22c2da5f.css",
@@ -39,9 +39,9 @@ const t = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), g
   t + "/_app/immutable/chunks/index.bb3f0d86.js",
   t + "/_app/immutable/chunks/index.c1397403.js",
   t + "/_app/immutable/chunks/scheduler.e7e8979b.js",
-  t + "/_app/immutable/chunks/singletons.dbc5695c.js",
+  t + "/_app/immutable/chunks/singletons.f16dbdc8.js",
   t + "/_app/immutable/chunks/window-close.fe4b2900.js",
-  t + "/_app/immutable/entry/start.003b7651.js"
+  t + "/_app/immutable/entry/start.633c36fa.js"
 ], _ = [
   t + "/apple-store.png",
   t + "/favicon.png",
@@ -108,30 +108,30 @@ const t = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), g
   t + "/admin/reviews",
   t + "/admin/questions",
   t + "/admin/mailing-list"
-], j = "1701555217138", l = self, w = `cache${j}`, k = [...g, ..._, ...M];
-l.addEventListener("install", (c) => {
-  c.waitUntil(
-    caches.open(w).then((f) => f.addAll(k)).then(() => l.skipWaiting())
+], j = "1701558025661", w = "db", k = 1, d = self, B = `cache${j}`, x = [...g, ..._, ...M];
+d.addEventListener("install", (e) => {
+  e.waitUntil(
+    caches.open(B).then((p) => p.addAll(x)).then(() => d.skipWaiting())
   );
 });
-const B = "db", x = 1, d = indexedDB.open(B, x);
-d.onupgradeneeded = (c) => {
-  c.target.result.createObjectStore("auth", { keyPath: "id" }).createIndex("id", "id", { unique: !0 });
-};
-d.onsuccess = (c) => {
-  const f = c.target.result;
-  l.addEventListener("fetch", (e) => {
-    if (!e.request.url.startsWith("http"))
-      return;
-    const b = new Promise((s) => {
+d.addEventListener("fetch", (e) => {
+  if (!e.request.url.startsWith("http"))
+    return;
+  const p = new Promise((s) => {
+    const r = indexedDB.open(w, k);
+    r.onupgradeneeded = (c) => {
+      c.target.result.createObjectStore("auth", { keyPath: "id" }).createIndex("id", "id", { unique: !0 });
+    }, r.onsuccess = (c) => {
+      const f = c.target.result;
+      console.log("test");
       const o = e.request.clone();
       if (o.headers.has("Authorization"))
         fetch(e.request).then((n) => {
           if (n.ok) {
-            const p = o.headers.get("Authorization");
-            if (p === null)
+            const u = o.headers.get("Authorization");
+            if (u === null)
               return s(n);
-            const i = f.transaction("auth", "readwrite").objectStore("auth").put({ id: 0, header: p });
+            const i = f.transaction("auth", "readwrite").objectStore("auth").put({ id: 0, header: u });
             i.onsuccess = () => s(n), i.onerror = (a) => {
               console.error(a.target.error), s(n);
             };
@@ -139,15 +139,15 @@ d.onsuccess = (c) => {
             s(n);
         });
       else {
-        const u = f.transaction("auth", "readonly").objectStore("auth").index("id").get(0);
-        u.onsuccess = async (i) => {
+        const l = f.transaction("auth", "readonly").objectStore("auth").index("id").get(0);
+        l.onsuccess = async (i) => {
           const a = i.target.result;
           if (a) {
             const m = a.header;
             o.headers.set("Authorization", m);
-            const r = await fetch(o);
-            if (r.ok)
-              s(r);
+            const b = await fetch(o);
+            if (b.ok)
+              s(b);
             else {
               const h = await fetch(e.request);
               s(h);
@@ -156,13 +156,17 @@ d.onsuccess = (c) => {
             const m = await fetch(o);
             s(m);
           }
-        }, u.onerror = async (i) => {
+        }, l.onerror = async (i) => {
           console.error(i.target.error);
           const a = await fetch(o);
           s(a);
         };
       }
-    });
-    e.respondWith(b);
+    }, r.onerror = async (c) => {
+      console.error(c.target.error);
+      const f = await fetch(e.request);
+      s(f);
+    };
   });
-};
+  e.respondWith(p);
+});

@@ -3,6 +3,9 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
+const DB_NAME = 'db';
+const DB_VERSION = 1;
+
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
 import { build, files, prerendered, version } from '$service-worker';
@@ -20,26 +23,23 @@ sw.addEventListener('install', (event) => {
 	);
 });
 
-const DB_NAME = 'db';
-const DB_VERSION = 1;
+sw.addEventListener('fetch', (event) => {
+	if (!event.request.url.startsWith('http')) {
+		return;
+	}
 
-const openRequest = indexedDB.open(DB_NAME, DB_VERSION);
+	const promise = new Promise((resolve: (value: Response) => void) => {
+		const openRequest = indexedDB.open(DB_NAME, DB_VERSION);
 
-openRequest.onupgradeneeded = (event) => {
-	const db = (event.target as IDBOpenDBRequest).result;
-	const objectStore = db.createObjectStore('auth', { keyPath: 'id' });
-	objectStore.createIndex('id', 'id', { unique: true });
-};
+		openRequest.onupgradeneeded = (event) => {
+			const db = (event.target as IDBOpenDBRequest).result;
+			const objectStore = db.createObjectStore('auth', { keyPath: 'id' });
+			objectStore.createIndex('id', 'id', { unique: true });
+		};
 
-openRequest.onsuccess = (event) => {
-	const db = (event.target as IDBOpenDBRequest).result;
-
-	sw.addEventListener('fetch', (event) => {
-		if (!event.request.url.startsWith('http')) {
-			return;
-		}
-
-		const promise = new Promise((resolve: (value: Response) => void) => {
+		openRequest.onsuccess = (openDBRequestEvent) => {
+			const db = (openDBRequestEvent.target as IDBOpenDBRequest).result;
+			console.log('test');
 			const fetchRequest = event.request.clone();
 			if (fetchRequest.headers.has('Authorization')) {
 				fetch(event.request).then((response) => {
@@ -95,35 +95,41 @@ openRequest.onsuccess = (event) => {
 					resolve(response);
 				};
 			}
-		});
+		};
 
-		event.respondWith(promise);
-
-		// event.respondWith(
-		// 	fetch(event.request)
-		// 		.then((response) => {
-		// 			if (!response || response.status !== 200 || response.type !== 'basic') {
-		// 				return response;
-		// 			}
-
-		// 			const responseToCache = response.clone();
-
-		// 			caches.open(cacheId).then((cache) => {
-		// 				try {
-		// 					if (event.request.method === 'GET' && !event.request.url.includes('api')) {
-		// 						cache.put(event.request, responseToCache);
-		// 					}
-		// 				} catch (error) {
-		// 					console.error(error);
-		// 				}
-		// 			});
-
-		// 			return response;
-		// 		})
-		// 		.catch(async () => {
-		// 			const response = await caches.match(event.request);
-		// 			return response ?? new Response();
-		// 		})
-		// );
+		openRequest.onerror = async (e) => {
+			console.error((e.target as IDBOpenDBRequest).error);
+			const response = await fetch(event.request);
+			resolve(response);
+		};
 	});
-};
+
+	event.respondWith(promise);
+
+	// event.respondWith(
+	// 	fetch(event.request)
+	// 		.then((response) => {
+	// 			if (!response || response.status !== 200 || response.type !== 'basic') {
+	// 				return response;
+	// 			}
+
+	// 			const responseToCache = response.clone();
+
+	// 			caches.open(cacheId).then((cache) => {
+	// 				try {
+	// 					if (event.request.method === 'GET' && !event.request.url.includes('api')) {
+	// 						cache.put(event.request, responseToCache);
+	// 					}
+	// 				} catch (error) {
+	// 					console.error(error);
+	// 				}
+	// 			});
+
+	// 			return response;
+	// 		})
+	// 		.catch(async () => {
+	// 			const response = await caches.match(event.request);
+	// 			return response ?? new Response();
+	// 		})
+	// );
+});
