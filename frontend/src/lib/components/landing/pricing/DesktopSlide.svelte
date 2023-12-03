@@ -37,8 +37,8 @@
 					<div class="collapse-title text-xl font-medium">Affiliate Marketplace</div>
 					<div class="collapse-content">
 						<p>
-							A Marketplace for affliate companies to sell their products. We will prioritise
-							companies which are pro-environmental.
+							A Marketplace for affiliate companies to sell their products. We will prioritize
+				            companies which are pro-environmental. For every product sold on our platform, we will take a percentage of the sale.
 						</p>
 					</div>
 				</div>
@@ -73,8 +73,8 @@
 					<div class="collapse-content">
 						<p>
 							Activities will appear on our in-app map, sponsored by local companies. This will
-							provide an opportunity for local companies to attract pro-environment minded
-							customers.
+				            provide an opportunity for local companies to attract pro-environment-minded
+				            customers, as well as creating a revenue stream for our product.
 						</p>
 					</div>
 				</div>
