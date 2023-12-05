@@ -31,6 +31,8 @@
 			alert(responsedata.message);
 			return;
 		}
+
+		alert("Success! Your email has been recorded")
 	};
 </script>
 
@@ -49,7 +51,7 @@
 				<input
 					bind:value={email}
 					type="text"
-					placeholder="Your email Here"
+					placeholder="Your Email Here"
 					class="input input-bordered w-full mb-3"
 				/>
 				<button on:click={handleSubmit} class="btn btn-primary">Register My Interest!</button>

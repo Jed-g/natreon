@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     get "/admin/questions", to: "admin/questions#all_questions"
     post "/admin/questions", to: "admin/questions#answer_edit_create_question"
     delete "/admin/questions", to: "admin/questions#delete_question"
+    get "/admin/mailinglist", to: "admin/mailing_list#all_emails"
 
     get "/questions", to: "questions#all_questions"
     post "/questions", to: "questions#submit_question"
