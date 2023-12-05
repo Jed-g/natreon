@@ -79,8 +79,10 @@ sw.addEventListener('fetch', (event) => {
 					const result = (e.target as IDBRequest).result;
 					if (result) {
 						const authHeader = result.header;
-						fetchRequest.headers.set('Authorization', authHeader);
-						const response = await fetch(fetchRequest);
+						const headers = new Headers(fetchRequest.headers);
+						headers.set('Authorization', authHeader);
+						const fetchRequestModified = new Request(fetchRequest, { headers });
+						const response = await fetch(fetchRequestModified);
 
 						if (response.ok) {
 							resolve(response);
