@@ -3,14 +3,13 @@
 	const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
 
 	const validateEmail = (): boolean => {
-		return EMAIL_REGEX.test(email)
+		return EMAIL_REGEX.test(email);
 	};
 
 	let isError = false;
 	const handleSubmit = async () => {
-
 		if (!validateEmail()) {
-			alert("Please enter a valid email address")
+			alert('Please enter a valid email address');
 			isError = true;
 			return;
 		}
@@ -32,7 +31,7 @@
 			return;
 		}
 
-		alert("Success! Your email has been recorded")
+		alert('Success! Your email has been recorded');
 	};
 </script>
 
@@ -42,7 +41,7 @@
 >
 	<div class="hero">
 		<div class="hero-content text-center">
-			<div class="max-w-2xl">
+			<form class="max-w-2xl" on:submit|preventDefault={handleSubmit}>
 				<h1 class="text-5xl font-bold">Register your interest here!</h1>
 				<p class="py-6">
 					Be among the first to experience our solution and keep up to date with our progress by
@@ -54,8 +53,8 @@
 					placeholder="Your Email Here"
 					class="input input-bordered w-full mb-3"
 				/>
-				<button on:click={handleSubmit} class="btn btn-primary">Register My Interest!</button>
-			</div>
+				<button class="btn btn-primary">Register My Interest!</button>
+			</form>
 		</div>
 	</div>
 </div>
