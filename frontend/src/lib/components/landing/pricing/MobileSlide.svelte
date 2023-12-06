@@ -14,9 +14,8 @@
 	import MarketplaceImg from '$lib/components/landing/pricing/marketplace-pricing.png';
 	import POIPricingImg from '$lib/components/landing/pricing/poi-pricing.png';
 	import TrustPricingImg from '$lib/components/landing/pricing/trust-pricing.png';
-	function handleDonateClick() {
-    window.alert("We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.");
-  }
+	import { notifyAction } from 'svelte-legos';
+	let notificationAcknowledgeButton: HTMLButtonElement;
   </script>
   
   <div class="flex flex-col items-center relative select-none background-image" id="home">
@@ -45,8 +44,13 @@
 			</div>
 		  </div>
 		  <form>
-			<button class="btn btn-primary" on:click={handleDonateClick}>Donate £5</button>
-		  </form>
+			<button class="btn btn-primary" bind:this={notificationAcknowledgeButton}
+			use:notifyAction={{
+				title: 'We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.',
+				type: 'error',
+				duration: 4000
+			}}  >Donate £5</button>
+		</form>
 		</div>
 
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -65,8 +69,13 @@
 			</div>
 		  </div>
 		  <form>
-			<button class="btn btn-primary" on:click={handleDonateClick}>Donate £10</button>
-		  </form>
+			<button class="btn btn-primary" bind:this={notificationAcknowledgeButton}
+			use:notifyAction={{
+				title: 'We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.',
+				type: 'error',
+				duration: 4000
+			}}  >Donate £10</button>
+		</form>
 		</div>
 		
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -84,8 +93,13 @@
 			</div>
 		  </div>
 		  <form>
-			<button class="btn btn-primary" on:click={handleDonateClick}>Donate £15</button>
-		  </form>
+			<button class="btn btn-primary" bind:this={notificationAcknowledgeButton}
+			use:notifyAction={{
+				title: 'We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.',
+				type: 'error',
+				duration: 4000
+			}}  >Donate £15</button>
+		</form>
 		</div>
 	  </div>
 	</div>
