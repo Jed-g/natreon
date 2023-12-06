@@ -14,6 +14,8 @@
 	import MarketplaceImg from '$lib/components/landing/pricing/marketplace-pricing.png';
 	import POIPricingImg from '$lib/components/landing/pricing/poi-pricing.png';
 	import TrustPricingImg from '$lib/components/landing/pricing/trust-pricing.png';
+	import { notifyAction } from 'svelte-legos';
+	let notificationAcknowledgeButton: HTMLButtonElement;
 </script>
 
 <div class="flex flex-col items-center relative select-none background-image h-full w-full overflow-hidden" id="home">
@@ -44,19 +46,12 @@
 				</div>
 				<div>
 					<form>
-						<label for="donation" class="text-white mb-2">Donate:</label>
-						<div class="flex items-center space-x-1 mb-2">
-							<span class="text-white">£</span>
-							<input
-								type="number"
-								id="donationAmount"
-								name="donationAmount"
-								class="border rounded-md p-2 w-20"
-								readonly
-								value="5"
-							/>
-						</div>
-						<button class="btn btn-primary">Donate</button>
+						<button class="btn btn-primary" bind:this={notificationAcknowledgeButton}
+						use:notifyAction={{
+							title: 'We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.',
+							type: 'error',
+							duration: 4000
+						}}  >Donate £5</button>
 					</form>
 				</div>
 			</div>
@@ -80,19 +75,12 @@
 				</div>
 				<div>
 					<form>
-						<label for="donation" class="text-white mb-2">Donate:</label>
-						<div class="flex items-center space-x-1 mb-2">
-							<span class="text-white">£</span>
-							<input
-								type="number"
-								id="donationAmount"
-								name="donationAmount"
-								class="border rounded-md p-2 w-20"
-								readonly
-								value="10"
-							/>
-						</div>
-						<button class="btn btn-primary">Donate</button>
+						<button class="btn btn-primary" bind:this={notificationAcknowledgeButton}
+						use:notifyAction={{
+							title: 'We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.',
+							type: 'error',
+							duration: 4000
+						}}  >Donate £10</button>
 					</form>
 				</div>
 			</div>
@@ -112,19 +100,12 @@
 				</div>
 				<div>
 					<form>
-						<label for="donation" class="text-white mb-2">Donate:</label>
-						<div class="flex items-center space-x-1 mb-2">
-							<span class="text-white">£</span>
-							<input
-								type="number"
-								id="donationAmount"
-								name="donationAmount"
-								class="border rounded-md p-2 w-20"
-								readonly
-								value="15"
-							/>
-						</div>
-						<button class="btn btn-primary">Donate</button>
+						<button class="btn btn-primary" bind:this={notificationAcknowledgeButton}
+						use:notifyAction={{
+							title: 'We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.',
+							type: 'error',
+							duration: 4000
+						}}  >Donate £15</button>
 					</form>
 				</div>
 			</div>
@@ -137,4 +118,13 @@
 		background-image: url('/nature.jpg');
 		background-size: cover;
 	}
+	.btn {
+	margin: 1rem auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    max-width: 100%;
+    width: auto;
+    box-sizing: border-box;
+    display: block; 
+  }
 </style>
