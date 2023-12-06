@@ -42,19 +42,7 @@
 			</div>
 		  </div>
 		  <form>
-			<label for="donation" class="text-white mb-2">Donate:</label>
-			<div class="flex items-center space-x-1 mb-2">
-			  <span class="text-white">£</span>
-			  <input
-				type="number"
-				id="donationAmount"
-				name="donationAmount"
-				class="border rounded-md p-2 w-20"
-				readonly
-				value="5"
-			  />
-			</div>
-			<button class="btn btn-primary">Donate</button>
+			<button class="btn btn-primary">Donate £5</button>
 		  </form>
 		</div>
 
@@ -74,19 +62,7 @@
 			</div>
 		  </div>
 		  <form>
-			<label for="donation" class="text-white mb-2">Donate:</label>
-			<div class="flex items-center space-x-1 mb-2">
-			  <span class="text-white">£</span>
-			  <input
-				type="number"
-				id="donationAmount"
-				name="donationAmount"
-				class="border rounded-md p-2 w-20"
-				readonly
-				value="10"
-			  />
-			</div>
-			<button class="btn btn-primary">Donate</button>
+			<button class="btn btn-primary">Donate £10</button>
 		  </form>
 		</div>
 		
@@ -105,19 +81,7 @@
 			</div>
 		  </div>
 		  <form>
-			<label for="donation" class="text-white mb-2">Donate:</label>
-			<div class="flex items-center space-x-1 mb-2">
-			  <span class="text-white">£</span>
-			  <input
-				type="number"
-				id="donationAmount"
-				name="donationAmount"
-				class="border rounded-md p-2 w-20"
-				readonly
-				value="15"
-			  />
-			</div>
-			<button class="btn btn-primary">Donate</button>
+			<button class="btn btn-primary">Donate £15</button>
 		  </form>
 		</div>
 	  </div>
@@ -129,4 +93,10 @@
 	  background-image: url('/nature.jpg');
 	  background-size: cover;
 	}
+	.btn {
+    display: block;
+    margin: auto;
+    padding: 10px 20px auto;
+    font-size: 16px;
+  }
   </style>
