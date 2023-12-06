@@ -3,13 +3,9 @@
 	
 </script>
 
-<div
-	class="flex flex-col h-full items-center justify-center relative select-none background-image"
-	id="home">
+<div class="flex flex-col h-full items-center justify-center relative select-none background-image" id="home">
 	<Problem />
-
 </div>
-
 
 <style>
 	.background-image {
