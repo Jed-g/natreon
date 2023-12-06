@@ -94,9 +94,12 @@
 	  background-size: cover;
 	}
 	.btn {
-    display: block;
-    margin: auto;
-    padding: 10px 20px auto;
+	margin: 1rem auto; /* Center the button horizontally with auto margin on left and right */
+    padding: 10px 20px;
     font-size: 16px;
+    max-width: 100%;
+    width: auto;
+    box-sizing: border-box;
+    display: block; 
   }
   </style>
