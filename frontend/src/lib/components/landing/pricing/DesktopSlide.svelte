@@ -16,7 +16,7 @@
 	import TrustPricingImg from '$lib/components/landing/pricing/trust-pricing.png';
 </script>
 
-<div class="flex flex-col items-center relative select-none background-image" id="home">
+<div class="flex flex-col items-center relative select-none background-image h-full w-full overflow-hidden" id="home">
 	<div class="w-5/6 py-4">
 		<h2 class="text-3xl font-bold mb-2 text-grey text-center">How will we fund our operations?</h2>
 		<p class="text-lg text-white text-center mb-4">
@@ -24,7 +24,7 @@
 			this stage are greatly appreciated but not necessary.
 		</p>
 
-		<div class="grid grid-rows-4 grid-cols-3 gap-2">
+		<div class="grid grid-rows-2 grid-cols-3 gap-2">
 			<img src={MarketplaceImg} alt="download icon" class="rounded-3xl" />
 			<img src={POIPricingImg} alt="download icon" class="rounded-3xl" />
 			<img src={TrustPricingImg} alt="download icon" class="rounded-3xl" />
