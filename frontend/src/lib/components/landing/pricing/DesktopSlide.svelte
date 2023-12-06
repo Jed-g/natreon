@@ -14,6 +14,9 @@
 	import MarketplaceImg from '$lib/components/landing/pricing/marketplace-pricing.png';
 	import POIPricingImg from '$lib/components/landing/pricing/poi-pricing.png';
 	import TrustPricingImg from '$lib/components/landing/pricing/trust-pricing.png';
+	function handleDonateClick() {
+    window.alert("We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.");
+  }
 </script>
 
 <div class="flex flex-col items-center relative select-none background-image h-full w-full overflow-hidden" id="home">
@@ -44,7 +47,7 @@
 				</div>
 				<div>
 					<form>
-						<button class="btn btn-primary">Donate £5</button>
+						<button class="btn btn-primary" on:click={handleDonateClick}  >Donate £5</button>
 					</form>
 				</div>
 			</div>
@@ -68,7 +71,7 @@
 				</div>
 				<div>
 					<form>
-						<button class="btn btn-primary">Donate £10</button>
+						<button class="btn btn-primary" on:click={handleDonateClick}>Donate £10</button>
 					</form>
 				</div>
 			</div>
@@ -88,7 +91,7 @@
 				</div>
 				<div>
 					<form>
-						<button class="btn btn-primary">Donate £15</button>
+						<button class="btn btn-primary" on:click={handleDonateClick}>Donate £15</button>
 					</form>
 				</div>
 			</div>
@@ -109,5 +112,16 @@
     width: auto;
     box-sizing: border-box;
     display: block; 
+  }
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
   }
 </style>

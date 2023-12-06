@@ -14,6 +14,9 @@
 	import MarketplaceImg from '$lib/components/landing/pricing/marketplace-pricing.png';
 	import POIPricingImg from '$lib/components/landing/pricing/poi-pricing.png';
 	import TrustPricingImg from '$lib/components/landing/pricing/trust-pricing.png';
+	function handleDonateClick() {
+    window.alert("We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.");
+  }
   </script>
   
   <div class="flex flex-col items-center relative select-none background-image" id="home">
@@ -42,7 +45,7 @@
 			</div>
 		  </div>
 		  <form>
-			<button class="btn btn-primary">Donate £5</button>
+			<button class="btn btn-primary" on:click={handleDonateClick}>Donate £5</button>
 		  </form>
 		</div>
 
@@ -62,7 +65,7 @@
 			</div>
 		  </div>
 		  <form>
-			<button class="btn btn-primary">Donate £10</button>
+			<button class="btn btn-primary" on:click={handleDonateClick}>Donate £10</button>
 		  </form>
 		</div>
 		
@@ -81,7 +84,7 @@
 			</div>
 		  </div>
 		  <form>
-			<button class="btn btn-primary">Donate £15</button>
+			<button class="btn btn-primary" on:click={handleDonateClick}>Donate £15</button>
 		  </form>
 		</div>
 	  </div>
@@ -94,12 +97,12 @@
 	  background-size: cover;
 	}
 	.btn {
-	margin: 1rem auto; /* Center the button horizontally with auto margin on left and right */
+	margin: 1rem auto;
     padding: 10px 20px;
     font-size: 16px;
     max-width: 100%;
     width: auto;
     box-sizing: border-box;
     display: block; 
-  }
+	}
   </style>
