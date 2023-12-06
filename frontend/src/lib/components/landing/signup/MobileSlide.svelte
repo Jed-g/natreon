@@ -1,17 +1,19 @@
 <script lang="ts">
+	import { confettiAction, messageAction } from 'svelte-legos';
+
+	let notificationSuccessButton: HTMLButtonElement;
+	let notificationInvalidEmailButton: HTMLButtonElement;
+	let notificationEmailAlreadySubmittedButton: HTMLButtonElement;
 	let email = '';
 	const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
 
 	const validateEmail = (): boolean => {
-		return EMAIL_REGEX.test(email)
+		return EMAIL_REGEX.test(email);
 	};
 
-	let isError = false;
 	const handleSubmit = async () => {
-
 		if (!validateEmail()) {
-			alert("Please enter a valid email address")
-			isError = true;
+			notificationInvalidEmailButton.click();
 			return;
 		}
 
@@ -26,13 +28,12 @@
 		});
 
 		if (!response.ok) {
-			isError = true;
-			const responsedata = await response.json();
-			alert(responsedata.message);
+			//const responsedata = await response.json();
+			notificationEmailAlreadySubmittedButton.click();
 			return;
 		}
 
-		alert("Success! Your email has been recorded")
+		notificationSuccessButton.click();
 	};
 </script>
 
@@ -58,6 +59,31 @@
 			</form>
 		</div>
 	</div>
+	<button
+		class="hidden"
+		bind:this={notificationSuccessButton}
+		use:messageAction={{
+			message: 'Success! Your email has been recorded',
+			type: 'success'
+		}}
+		use:confettiAction={{ type: 'school-pride' }}
+	/>
+	<button
+		class="hidden"
+		bind:this={notificationInvalidEmailButton}
+		use:messageAction={{
+			message: 'Please enter a valid email address',
+			type: 'error'
+		}}
+	/>
+	<button
+		class="hidden"
+		bind:this={notificationEmailAlreadySubmittedButton}
+		use:messageAction={{
+			message: 'Email has already been recorded',
+			type: 'error'
+		}}
+	/>
 </div>
 
 <style>
