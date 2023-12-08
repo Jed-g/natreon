@@ -19,11 +19,10 @@
 </script>
 
 <div class="flex flex-col items-center relative select-none background-image h-full w-full overflow-hidden" id="home">
-	<div class="w-5/6 py-4">
+	<div class="max-w-screen-xl mx-auto py-4 flex flex-col justify-between h-full">
 		<h2 class="text-3xl font-bold mb-2 text-grey text-center">How will we fund our operations?</h2>
 		<p class="text-lg text-white text-center mb-4">
-			Explore our funding sources below and consider supporting us through donations. Donations at
-			this stage are greatly appreciated but not necessary.
+			Explore our funding sources below and consider supporting us through donations.
 		</p>
 
 		<div class="grid grid-rows-2 grid-cols-3 gap-2">
@@ -44,6 +43,7 @@
 						</p>
 					</div>
 				</div>
+				
 				<div>
 					<form>
 						<button class="btn btn-primary" bind:this={notificationAcknowledgeButton}
@@ -73,6 +73,7 @@
 						</p>
 					</div>
 				</div>
+				
 				<div>
 					<form>
 						<button class="btn btn-primary" bind:this={notificationAcknowledgeButton}
@@ -109,6 +110,13 @@
 					</form>
 				</div>
 			</div>
+			
+			
+		</div>
+		<div>
+			<p class="text-lg text-white text-center">
+			  Donations will help to support us to produce the application that we feel so passionately about. Donations at this stage are greatly appreciated, but please only do so if you are financially stable.
+			</p>
 		</div>
 	</div>
 </div>

@@ -102,6 +102,11 @@
 		</form>
 		</div>
 	  </div>
+	  <div>
+		<p class="text-lg text-white text-center">
+		  Donations will help to support us to produce the application that we feel so passionately about. Donations at this stage are greatly appreciated, but please only do so if you are financially stable.
+		</p>
+	</div>
 	</div>
   </div>
   
