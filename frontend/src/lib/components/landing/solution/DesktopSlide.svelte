@@ -1,7 +1,15 @@
+<script lang="ts">
+	import Problem from './problem.svelte';
+	
+</script>
+
 <div
 	class="flex flex-col h-full items-center justify-center relative select-none background-image"
-	id="home"
-/>
+	id="home">
+	<Problem />
+
+</div>
+
 
 <style>
 	.background-image {

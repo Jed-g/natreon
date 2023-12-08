@@ -23,11 +23,9 @@ module Project
   class Application < Rails::Application
     config.api_only = true
     config.load_defaults 7.0
-    config.middleware.use ActionDispatch::RemoteIp
     config.middleware.use ActionDispatch::Cookies
     config.session_store :active_record_store
     config.middleware.use config.session_store, config.session_options
-    # config.action_dispatch.default_headers['Cache-Control'] = 'no-cache, no-cache="set-cookie", private, proxy-revalidate'
 
     config.active_job.queue_adapter = :delayed_job
 

@@ -1,10 +1,16 @@
 # frozen_string_literal: true
 
+# frozen_string_literal: true
+
 ## Application configuration
+set :application,             "Project"
 set :application,             "Project"
 set :branch,                  -> { fetch(:stage) }
 set :repo_url,                "git@git.shefcompsci.org.uk:com4525-2023-24/team02/project.git"
+set :repo_url,                "git@git.shefcompsci.org.uk:com4525-2023-24/team02/project.git"
 set :linked_files,
+    fetch(:linked_files, fetch(:env_links, [])).push("config/database.yml", "config/secrets.yml")
+set :linked_dirs, fetch(:linked_dirs, []).push("log", "tmp/pids", "public/packs", "node_modules", "storage")
     fetch(:linked_files, fetch(:env_links, [])).push("config/database.yml", "config/secrets.yml")
 set :linked_dirs, fetch(:linked_dirs, []).push("log", "tmp/pids", "public/packs", "node_modules", "storage")
 
@@ -12,9 +18,12 @@ set :linked_dirs, fetch(:linked_dirs, []).push("log", "tmp/pids", "public/packs"
 set :rvm_type,                    :system
 set :rvm_ruby_version,            "ruby-3.1"
 set :rvm_path,                    "/usr/local/rvm"
+set :rvm_ruby_version,            "ruby-3.1"
+set :rvm_path,                    "/usr/local/rvm"
 
 # Currently Passenger is installed against the 'default' Ruby version
 # This may change in future, but can be customised here
+set :passenger_rvm_ruby_version,  "default"
 set :passenger_rvm_ruby_version,  "default"
 
 ## Capistrano configuration
@@ -29,12 +38,16 @@ namespace :monit do
   task :config do
     on roles(fetch(:monit_roles, :db)) do
       execute :mkdir, "-p", shared_path.join("monit")
+      execute :mkdir, "-p", shared_path.join("monit")
       fetch(:monit_processes).each do |process_name|
         filename = File.expand_path("../deploy/monit_templates/#{process_name}.monitrc.erb", __FILE__)
         erb = File.read(filename)
         upload! StringIO.new(ERB.new(erb, trim_mode: "-").result(binding)),
                 File.join(shared_path, "monit", "#{process_name}.monitrc")
+        upload! StringIO.new(ERB.new(erb, trim_mode: "-").result(binding)),
+                File.join(shared_path, "monit", "#{process_name}.monitrc")
       end
+      sudo "monit", "reload"
       sudo "monit", "reload"
     end
   end
@@ -42,11 +55,13 @@ namespace :monit do
   task :monitor do
     on roles(fetch(:monit_roles, :db)) do
       sudo "monit", "-g", fetch(:user), "monitor"
+      sudo "monit", "-g", fetch(:user), "monitor"
     end
   end
 
   task :unmonitor do
     on roles(fetch(:monit_roles, :db)) do
+      sudo "monit", "-g", fetch(:user), "unmonitor"
       sudo "monit", "-g", fetch(:user), "unmonitor"
     rescue StandardError
     end
@@ -54,6 +69,9 @@ namespace :monit do
 end
 
 ## Update monit configuration during deployment
+before "deploy:updating", "monit:unmonitor"
+after  "deploy:updated", "monit:config"
+after "deploy:finished", "monit:monitor"
 before "deploy:updating", "monit:unmonitor"
 after  "deploy:updated", "monit:config"
 after "deploy:finished", "monit:monitor"
@@ -72,10 +90,12 @@ set :delayed_job_roles,       [:db]
 set :delayed_job_environment, -> { (fetch(:rails_env) || fetch(:stage)) }
 set :delayed_job_identifier,  -> { "#{fetch(:application)}-#{fetch(:delayed_job_environment)}" }
 set :delayed_job_workers,     -> { (fetch(:dj_workers) || "1") }
+set :delayed_job_workers,     -> { (fetch(:dj_workers) || "1") }
 set :delayed_job_args,        -> { "-p #{fetch(:delayed_job_identifier)} -n #{fetch(:delayed_job_workers)}" }
 
 namespace :delayed_job do
   def args
+    fetch(:delayed_job_args, "")
     fetch(:delayed_job_args, "")
   end
 
@@ -84,10 +104,12 @@ namespace :delayed_job do
   end
 
   desc "Stop the delayed_job process"
+  desc "Stop the delayed_job process"
   task :stop do
     on roles(delayed_job_roles) do
       within release_path do
         with rails_env: fetch(:rails_env) do
+          execute :bundle, :exec, :"bin/delayed_job", :stop
           execute :bundle, :exec, :"bin/delayed_job", :stop
         end
       end
@@ -95,16 +117,19 @@ namespace :delayed_job do
   end
 
   desc "Start the delayed_job process"
+  desc "Start the delayed_job process"
   task :start do
     on roles(delayed_job_roles) do
       within release_path do
         with rails_env: fetch(:rails_env) do
+          execute :bundle, :exec, :"bin/delayed_job", args, :start
           execute :bundle, :exec, :"bin/delayed_job", args, :start
         end
       end
     end
   end
 
+  desc "Restart the delayed_job process"
   desc "Restart the delayed_job process"
   task :restart do
     on roles(delayed_job_roles) do
@@ -121,9 +146,11 @@ namespace :deploy do
   ## Capistrano has removed the task deploy:migrations which epiDeploy calls
   task :migrations do
     invoke "deploy"
+    invoke "deploy"
   end
 end
 
+Rake::Task["deploy:assets:backup_manifest"].clear_actions
 Rake::Task["deploy:assets:backup_manifest"].clear_actions
 
 ## Restart delayed_job during the deployment process

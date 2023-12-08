@@ -16,4 +16,4 @@ frontend:
     - yarn check --integrity || yarn install
     - yarn playwright install
     - yarn deploy
-    - (RAILS_ENV=test bundle exec rails s &) | grep -q "Listening on http://0.0.0.0:3000" && yarn test
+    - (RAILS_ENV=test bundle exec rails s &) | grep -q "3000" && yarn test:gitlab-ci

@@ -1,20 +1,92 @@
+<script lang="ts">
+	import { confettiAction, notifyAction } from 'svelte-legos';
+
+	let notificationSuccessButton: HTMLButtonElement;
+	let notificationInvalidEmailButton: HTMLButtonElement;
+	let notificationEmailAlreadySubmittedButton: HTMLButtonElement;
+	let email = '';
+	const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+
+	const validateEmail = (): boolean => {
+		return EMAIL_REGEX.test(email);
+	};
+
+	const handleSubmit = async () => {
+		if (!validateEmail()) {
+			notificationInvalidEmailButton.click();
+			return;
+		}
+
+		const response = await fetch('/api/mailinglist', {
+			method: 'POST',
+			body: JSON.stringify({
+				email: email
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			//const responsedata = await response.json();
+			notificationEmailAlreadySubmittedButton.click();
+			return;
+		}
+
+		notificationSuccessButton.click();
+	};
+</script>
+
 <div
 	class="flex flex-col h-full items-center justify-center relative select-none background-image"
 	id="home"
 >
 	<div class="hero">
 		<div class="hero-content text-center">
-			<div class="max-w-2xl">
+			<form class="max-w-2xl" on:submit|preventDefault={handleSubmit}>
 				<h1 class="text-5xl font-bold">Register your interest here!</h1>
 				<p class="py-6">
 					Be among the first to experience our solution and keep up to date with our progress by
 					filling in your email below!
 				</p>
-				<input type="text" placeholder="Your email Here" class="input input-bordered w-full mb-3" />
+				<input
+					bind:value={email}
+					type="text"
+					placeholder="Your Email Here"
+					class="input input-bordered w-full mb-3"
+				/>
 				<button class="btn btn-primary">Register My Interest!</button>
-			</div>
+			</form>
 		</div>
 	</div>
+	<button
+		class="hidden"
+		bind:this={notificationSuccessButton}
+		use:notifyAction={{
+			title: 'Success! Your email has been recorded',
+			type: 'success',
+			duration: 4000
+		}}
+		use:confettiAction={{ type: 'school-pride' }}
+	/>
+	<button
+		class="hidden"
+		bind:this={notificationInvalidEmailButton}
+		use:notifyAction={{
+			title: 'Please enter a valid email address',
+			type: 'error',
+			duration: 4000
+		}}
+	/>
+	<button
+		class="hidden"
+		bind:this={notificationEmailAlreadySubmittedButton}
+		use:notifyAction={{
+			title: 'Email has already been recorded',
+			type: 'error',
+			duration: 4000
+		}}
+	/>
 </div>
 
 <style>

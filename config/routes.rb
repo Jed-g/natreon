@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   devise_for :users, path: "api/auth", path_names: {
                                          sign_in:      "login",
@@ -10,6 +12,7 @@ Rails.application.routes.draw do
                        sessions:      "users/sessions",
                        registrations: "users/registrations"
                      }
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -26,6 +29,7 @@ Rails.application.routes.draw do
     get "/admin/questions", to: "admin/questions#all_questions"
     post "/admin/questions", to: "admin/questions#answer_edit_create_question"
     delete "/admin/questions", to: "admin/questions#delete_question"
+    get "/admin/mailinglist", to: "admin/mailing_list#all_emails"
 
     get "/questions", to: "questions#all_questions"
     post "/questions", to: "questions#submit_question"
@@ -40,5 +44,7 @@ Rails.application.routes.draw do
     post "/reviews/downvote", to: "reviews#downvote_review"
     delete "/reviews/upvote", to: "reviews#cancel_upvote_review"
     delete "/reviews/downvote", to: "reviews#cancel_downvote_review"
+
+    post "/mailinglist", to: "mailing_list#submit_email"
   end
 end
