@@ -10,24 +10,31 @@
 		let defaultCoords = { lon: 0, lat: 0 };
 
 		try {
-			const ip = await (await fetch('https://api64.ipify.org?format=json')).json();
+			// const ip = await (await fetch('https://api64.ipify.org?format=json')).json();
+			// console.log(ip)
+			// const ipToGeoCoords = await (
+			// 	await fetch(`https://get.geojs.io/v1/ip/geo/${ip.ip}.json`)
+			// ).json();
 
-			const ipToGeoCoords = await (
-				await fetch(`https://get.geojs.io/v1/ip/geo/${ip.ip}.json`)
-			).json();
+			// [defaultCoords.lon, defaultCoords.lat] = [
+			// 	parseFloat(ipToGeoCoords.longitude),
+			// 	parseFloat(ipToGeoCoords.latitude)
+			// ];
+			// foundLocationByIP = true;
+			const response = await fetch('/api/utils/geolocation');
 
-			[defaultCoords.lon, defaultCoords.lat] = [
-				parseFloat(ipToGeoCoords.longitude),
-				parseFloat(ipToGeoCoords.latitude)
-			];
-			foundLocationByIP = true;
+			if (response.ok) {
+				const data = await response.json();
+				[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
+				foundLocationByIP = true;
+			}
 		} catch (error) {
 			console.error(error);
 		}
 
 		const map = new maplibregl.Map({
 			container: 'map',
-			style: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key=w6bcFm6b0jnIQQPCXazJ',
+			style: 'https://api.maptiler.com/maps/outdoor-v2/style.json?key=TXpGz6EEUuCZtdUb72gw',
 			center: [defaultCoords.lon, defaultCoords.lat], // starting position [lng, lat]
 			zoom: foundLocationByIP ? 6 : 1, // starting zoom
 			attributionControl: false

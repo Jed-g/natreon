@@ -69,7 +69,7 @@ class ReviewsController < ApplicationController
       return render json: {message: "Nothing to cancel, review hasn't been downvoted"}, status: :bad_request
     end
 
-    ion[:reviews_downvoted].delete(@id)
+    session[:reviews_downvoted].delete(@id)
     review.downvotes -= 1
     return render_bad_request unless review.valid?
 

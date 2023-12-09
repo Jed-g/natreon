@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const s = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), f = [
   s + "/_app/immutable/entry/app.fccd205a.js",
   s + "/_app/immutable/nodes/0.93054d95.js",
@@ -129,4 +130,9 @@ o.addEventListener("fetch", (t) => {
       }), e;
     }).catch(async () => await caches.match(t.request) ?? new Response())
   );
+=======
+const s = self;
+s.addEventListener("install", () => {
+  s.skipWaiting();
+>>>>>>> main
 });
