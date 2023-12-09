@@ -39,4 +39,12 @@ module ApplicationHelper
   def render_internal_server_error
     render json: {message: "Internal server error"}, status: :internal_server_error
   end
+
+  def geolocation_from_ip(ip)
+    results = Geocoder.search(ip)
+    coords = results.first.coordinates
+    return {lat: coords[0], lon: coords[1]} unless coords.empty?
+
+    nil
+  end
 end

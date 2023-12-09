@@ -10,9 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_231_129_110_500) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_09_045757) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "admin_page_visits", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.string "ip_address", null: false
+    t.integer "time_spent_seconds", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "app_visits", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.string "ip_address", null: false
+    t.integer "time_spent_seconds", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -26,7 +42,15 @@ ActiveRecord::Schema[7.0].define(version: 20_231_129_110_500) do
     t.string "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index %w[priority run_at], name: "delayed_jobs_priority"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "landing_page_visits", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.string "ip_address", null: false
+    t.integer "time_spent_seconds", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "mailing_list", force: :cascade do |t|
@@ -40,6 +64,14 @@ ActiveRecord::Schema[7.0].define(version: 20_231_129_110_500) do
     t.text "answer"
     t.integer "upvotes", default: 0, null: false
     t.integer "downvotes", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reporter_page_visits", force: :cascade do |t|
+    t.string "session_id", null: false
+    t.string "ip_address", null: false
+    t.integer "time_spent_seconds", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -77,4 +109,5 @@ ActiveRecord::Schema[7.0].define(version: 20_231_129_110_500) do
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
 end

@@ -17,7 +17,24 @@ Rails.application.routes.draw do
   scope "api" do
     get "/auth/status", to: "users/authentication_status#index"
 
-    get "/utils/geolocation", to: "utils#geolocation_frontend"
+    get "/utils/geolocation", to: "utils#geolocation"
+    post "/utils/geolocation-with-ip-param", to: "utils#geolocation_with_ip_param"
+
+    get "/stats/landing/register-new-page-visit", to: "stats/landing_page#register_new_page_visit"
+    post "/stats/landing/register-new-page-visit-with-ip-param", to: "stats/landing_page#register_new_page_visit_with_ip_param"
+    post "/stats/landing/update-page-visit", to: "stats/landing_page#update_page_visit"
+
+    get "/stats/admin/register-new-page-visit", to: "stats/admin_page#register_new_page_visit"
+    post "/stats/admin/register-new-page-visit-with-ip-param", to: "stats/admin_page#register_new_page_visit_with_ip_param"
+    post "/stats/admin/update-page-visit", to: "stats/admin_page#update_page_visit"
+
+    get "/stats/reporter/register-new-page-visit", to: "stats/reporter_page#register_new_page_visit"
+    post "/stats/reporter/register-new-page-visit-with-ip-param", to: "stats/reporter_page#register_new_page_visit_with_ip_param"
+    post "/stats/reporter/update-page-visit", to: "stats/reporter_page#update_page_visit"
+
+    get "/stats/app/register-new-page-visit", to: "stats/app#register_new_page_visit"
+    post "/stats/app/register-new-page-visit-with-ip-param", to: "stats/app#register_new_page_visit_with_ip_param"
+    post "/stats/app/update-page-visit", to: "stats/app#update_page_visit"
 
     get "/admin/users", to: "admin/users#all_users"
     post "/admin/users", to: "admin/users#update_user"
