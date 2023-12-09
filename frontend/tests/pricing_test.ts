@@ -1,7 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-test('Pricing page content visible', async ({ page }) => {
+test.beforeEach('Prevent user data modal from showing & navigate to index', async ({ page }) => {
 	await page.goto('/');
+	await page.evaluate(() => localStorage.setItem('userDataModalAccepted', 'true'));
+});
+
+test('Pricing page content visible', async ({ page }) => {
 	await page.locator('label').filter({ hasText: 'Home' }).locator('svg').click();
 	await page.getByRole('button', { name: 'Pricing' }).click();
 	await page.locator('#pricing-desktop #home').click();
@@ -11,7 +15,6 @@ test('Pricing page content visible', async ({ page }) => {
 test('Donation button on pricing page can be clicked with an appropriate response', async ({
 	page
 }) => {
-	await page.goto('/');
 	await page.locator('label').filter({ hasText: 'Home' }).locator('svg').click();
 	await page.getByRole('button', { name: 'Pricing' }).click();
 	await page.getByRole('button', { name: 'Donate £10' }).click();
@@ -25,7 +28,6 @@ test('Donation button on pricing page can be clicked with an appropriate respons
 test('Content of the funding options can be viewed by clicking on the checkbox', async ({
 	page
 }) => {
-	await page.goto('/');
 	await page.locator('label').filter({ hasText: 'Home' }).locator('svg').click();
 	await page.getByRole('button', { name: 'Pricing' }).click();
 	await page.locator('#pricing-desktop').getByRole('checkbox').first().check();

@@ -1,7 +1,11 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeEach('Prevent user data modal from showing & navigate to index', async ({ page }) => {
+	await page.goto('/');
+	await page.evaluate(() => localStorage.setItem('userDataModalAccepted', 'true'));
+});
+
 test('Register new Email', async ({ page }) => {
-	await page.goto('http://localhost:3000/');
 	//await page.getByRole('button', { name: 'Register Interest' }).click();
 	await page.getByRole('textbox', { name: 'Your Email Here' }).click();
 	await page.getByRole('textbox', { name: 'Your Email Here' }).fill('test@test.com');
@@ -11,7 +15,6 @@ test('Register new Email', async ({ page }) => {
 });
 
 test('Register recorded email', async ({ page }) => {
-	await page.goto('http://localhost:3000/');
 	//await page.getByRole('button', { name: 'Register Interest' }).click();
 	await page.getByRole('textbox', { name: 'Your Email Here' }).click();
 	await page.getByRole('textbox', { name: 'Your Email Here' }).fill('testrecorded@test.com');
@@ -22,7 +25,6 @@ test('Register recorded email', async ({ page }) => {
 });
 
 test('Reject invalid email', async ({ page }) => {
-	await page.goto('http://localhost:3000/');
 	//await page.getByRole('button', { name: 'Register Interest' }).click();
 	await page.getByRole('textbox', { name: 'Your Email Here' }).click();
 	await page.getByRole('textbox', { name: 'Your Email Here' }).fill('testrecorded@test.com');
