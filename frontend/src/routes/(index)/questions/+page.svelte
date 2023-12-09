@@ -6,6 +6,18 @@
 	import AddQuestion from '$lib/components/landing/questions/AddQuestion.svelte';
 	import { fade } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
+	import { pathToRegistrationAppend } from '$lib/utils';
+	import { MINIMUM_TIME_ON_REVIEWS_QUESTIONS_LOGIN_SIGNUP_PAGES_FOR_PATH_REGISTRATION_MS } from '$lib/config';
+
+	let timeout: ReturnType<typeof setTimeout>;
+
+	onMount(() => {
+		timeout = setTimeout(
+			() => pathToRegistrationAppend('/questions'),
+			MINIMUM_TIME_ON_REVIEWS_QUESTIONS_LOGIN_SIGNUP_PAGES_FOR_PATH_REGISTRATION_MS
+		);
+		return () => clearTimeout(timeout);
+	});
 
 	const enum Order {
 		RECENCY,

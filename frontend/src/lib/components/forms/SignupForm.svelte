@@ -4,6 +4,19 @@
 	import validIcon from '@iconify-icons/mdi/checkbox-marked';
 	import errorIcon from '@iconify-icons/mdi/close-box';
 	import { authenticated } from '$lib/stores';
+	import { onMount } from 'svelte';
+	import { pathToRegistrationAppend } from '$lib/utils';
+	import { MINIMUM_TIME_ON_REVIEWS_QUESTIONS_LOGIN_SIGNUP_PAGES_FOR_PATH_REGISTRATION_MS } from '$lib/config';
+
+	let timeout: ReturnType<typeof setTimeout>;
+
+	onMount(() => {
+		timeout = setTimeout(
+			() => pathToRegistrationAppend('/signup'),
+			MINIMUM_TIME_ON_REVIEWS_QUESTIONS_LOGIN_SIGNUP_PAGES_FOR_PATH_REGISTRATION_MS
+		);
+		return () => clearTimeout(timeout);
+	});
 
 	const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
 
@@ -52,6 +65,13 @@
 		const signupSuccessful = await signUp(formData.email, formData.password);
 
 		if (signupSuccessful) {
+			fetch('/api/stats/landing/registration-completed', {
+				method: 'POST',
+				body: JSON.stringify({ email: formData.email }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
 			authenticated.verify();
 		} else {
 			formValidation.emailNotTaken = false;

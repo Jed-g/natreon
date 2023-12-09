@@ -1,42 +1,35 @@
 <script lang="ts">
 	import '$lib/global.css';
-	import { authenticated } from '$lib/stores';
+	import {
+		authenticated,
+		newLandingPageVisitRegisteredPromise,
+		pathToRegistrationAppendCurrentCallStack
+	} from '$lib/stores';
 	import { onDestroy, onMount } from 'svelte';
 	import HeaderDesktop from '$lib/components/landing/header/HeaderDesktop.svelte';
 	import HeaderMobile from '$lib/components/landing/header/HeaderMobile.svelte';
 	import { scale } from 'svelte/transition';
 	import UserType from '$lib/enums/userType';
+	import { registerNewLandingPageVisit } from '$lib/utils';
 
 	const timeOnPageMountInMs = Date.now();
 	let timeSpentInMs = 0;
-	let interval: NodeJS.Timeout;
+	let interval: ReturnType<typeof setTimeout>;
+	let newLandingPageVisitRegisteredPromiseAssigned = false;
+
+	$newLandingPageVisitRegisteredPromise;
+	$pathToRegistrationAppendCurrentCallStack;
 
 	onMount(async () => {
 		await authenticated.verify();
 
-		// Register new visit if time spent is above 5 seconds
-		await new Promise((resolve) => setTimeout(resolve, 5000));
-		const response = await fetch('/api/stats/landing/register-new-page-visit');
-		if (!response.ok) {
-			const response = await fetch('https://api.ipify.org?format=json');
-			const data = await response.json();
-			const ip = data.ip;
+		$newLandingPageVisitRegisteredPromise = new Promise((resolve) =>
+			registerNewLandingPageVisit().then(() => resolve())
+		);
 
-			if (!response.ok) return;
+		newLandingPageVisitRegisteredPromiseAssigned = true;
 
-			const secondResponse = await fetch(
-				'/api/stats/landing/register-new-page-visit-with-ip-param',
-				{
-					method: 'POST',
-					body: JSON.stringify({ ip }),
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}
-			);
-
-			if (!secondResponse.ok) return;
-		}
+		await $newLandingPageVisitRegisteredPromise;
 
 		interval = setInterval(async () => {
 			timeSpentInMs = Date.now() - timeOnPageMountInMs;
@@ -57,7 +50,7 @@
 
 	onDestroy(() => clearInterval(interval));
 
-	$: loading = $authenticated === null;
+	$: loading = $authenticated === null || !newLandingPageVisitRegisteredPromiseAssigned;
 	$: {
 		switch ($authenticated) {
 			case UserType.CUSTOMER:

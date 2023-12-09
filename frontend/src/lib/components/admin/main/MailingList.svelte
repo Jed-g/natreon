@@ -4,12 +4,12 @@
 
 	import { onMount } from 'svelte';
 
-	let emails: any[] = [];
+	let emails: { email: string }[] = [];
 
 	const getAllEmails = async () => {
 		const response = await fetch('/api/admin/mailinglist');
 		const data = await response.json();
-		console.log(data.emails);
+		//console.log(data.emails);
 		return data.emails;
 	};
 
@@ -44,7 +44,7 @@
 			<tbody>
 				{#each emails as email (email)}
 					<tr>
-						<td class ="text-center text-lg">{email.email}</td>
+						<td class="text-center text-lg">{email.email}</td>
 					</tr>
 				{/each}
 			</tbody>

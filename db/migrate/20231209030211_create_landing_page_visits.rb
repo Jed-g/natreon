@@ -4,6 +4,8 @@ class CreateLandingPageVisits < ActiveRecord::Migration[7.0]
       t.string :session_id, null: false
       t.string :ip_address, null: false
       t.integer :time_spent_seconds, null: false, default: 0
+      t.text :path_to_registration, null: false, default: ""
+      t.string :email_of_registered_user
 
       t.timestamps
     end

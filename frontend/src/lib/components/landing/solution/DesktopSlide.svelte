@@ -1,15 +1,36 @@
 <script lang="ts">
 	import Problem from './problem.svelte';
-	
+	import IntersectionObserver from 'svelte-intersection-observer';
+	import { MINIMUM_TIME_ON_SLIDE_FOR_PATH_REGISTRATION_MS } from '$lib/config';
+	import { pathToRegistrationAppend } from '$lib/utils';
+
+	let timeout: ReturnType<typeof setTimeout>;
+
+	$: {
+		if (intersecting) {
+			timeout = setTimeout(() => {
+				if (intersecting) {
+					pathToRegistrationAppend('/solution');
+				}
+			}, MINIMUM_TIME_ON_SLIDE_FOR_PATH_REGISTRATION_MS);
+		} else {
+			clearTimeout(timeout);
+		}
+	}
+
+	let element: HTMLDivElement;
+	let intersecting: boolean;
 </script>
 
-<div
-	class="flex flex-col h-full items-center justify-center relative select-none background-image"
-	id="home">
-	<Problem />
-
-</div>
-
+<IntersectionObserver {element} bind:intersecting threshold={0.1}>
+	<div
+		class="flex flex-col h-full items-center justify-center relative select-none background-image"
+		id="home"
+		bind:this={element}
+	>
+		<Problem />
+	</div>
+</IntersectionObserver>
 
 <style>
 	.background-image {

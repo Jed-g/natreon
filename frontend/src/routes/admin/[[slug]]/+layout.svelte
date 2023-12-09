@@ -4,16 +4,17 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import UserType from '$lib/enums/userType';
+	import { sleep } from '$lib/utils';
 
 	const timeOnPageMountInMs = Date.now();
 	let timeSpentInMs = 0;
-	let interval: NodeJS.Timeout;
+	let interval: ReturnType<typeof setTimeout>;
 
 	onMount(async () => {
 		await authenticated.verify();
 
 		// Register new visit if time spent is above 5 seconds
-		await new Promise((resolve) => setTimeout(resolve, 5000));
+		await sleep(5000);
 		const response = await fetch('/api/stats/admin/register-new-page-visit');
 		if (!response.ok) {
 			const response = await fetch('https://api.ipify.org?format=json');

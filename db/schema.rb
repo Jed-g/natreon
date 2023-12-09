@@ -49,6 +49,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_09_045757) do
     t.string "session_id", null: false
     t.string "ip_address", null: false
     t.integer "time_spent_seconds", default: 0, null: false
+    t.text "path_to_registration", default: "", null: false
+    t.string "email_of_registered_user"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

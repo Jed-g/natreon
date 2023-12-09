@@ -4,6 +4,18 @@
 	import thumbUpIcon from '@iconify-icons/mdi/thumb-up';
 	import thumbDownIcon from '@iconify-icons/mdi/thumb-down';
 	import AddReview from '$lib/components/landing/reviews/AddReview.svelte';
+	import { pathToRegistrationAppend } from '$lib/utils';
+	import { MINIMUM_TIME_ON_REVIEWS_QUESTIONS_LOGIN_SIGNUP_PAGES_FOR_PATH_REGISTRATION_MS } from '$lib/config';
+
+	let timeout: ReturnType<typeof setTimeout>;
+
+	onMount(() => {
+		timeout = setTimeout(
+			() => pathToRegistrationAppend('/reviews'),
+			MINIMUM_TIME_ON_REVIEWS_QUESTIONS_LOGIN_SIGNUP_PAGES_FOR_PATH_REGISTRATION_MS
+		);
+		return () => clearTimeout(timeout);
+	});
 
 	const enum Order {
 		RECENCY,

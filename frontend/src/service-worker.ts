@@ -3,8 +3,8 @@
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
-const DB_NAME = 'db';
-const DB_VERSION = 1;
+// const DB_NAME = 'db';
+// const DB_VERSION = 1;
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 

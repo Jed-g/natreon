@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     get "/stats/landing/register-new-page-visit", to: "stats/landing_page#register_new_page_visit"
     post "/stats/landing/register-new-page-visit-with-ip-param", to: "stats/landing_page#register_new_page_visit_with_ip_param"
     post "/stats/landing/update-page-visit", to: "stats/landing_page#update_page_visit"
+    post "/stats/landing/path-to-registration-append", to: "stats/landing_page#path_to_registration_append"
+    post "/stats/landing/registration-completed", to: "stats/landing_page#registration_completed"
 
     get "/stats/admin/register-new-page-visit", to: "stats/admin_page#register_new_page_visit"
     post "/stats/admin/register-new-page-visit-with-ip-param", to: "stats/admin_page#register_new_page_visit_with_ip_param"
