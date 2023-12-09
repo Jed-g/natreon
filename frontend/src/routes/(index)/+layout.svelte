@@ -16,6 +16,7 @@
 	let timeSpentInMs = 0;
 	let interval: ReturnType<typeof setTimeout>;
 	let newLandingPageVisitRegisteredPromiseAssigned = false;
+	let userDataModal: HTMLDialogElement;
 
 	$newLandingPageVisitRegisteredPromise;
 	$pathToRegistrationAppendCurrentCallStack;
@@ -51,6 +52,7 @@
 	onDestroy(() => clearInterval(interval));
 
 	$: loading = $authenticated === null || !newLandingPageVisitRegisteredPromiseAssigned;
+	$: if (userDataModal) localStorage.getItem('userDataModalAccepted') ?? userDataModal.showModal();
 	$: {
 		switch ($authenticated) {
 			case UserType.CUSTOMER:
@@ -87,6 +89,31 @@
 			<div class="height flex flex-col">
 				<slot />
 			</div>
+			<dialog bind:this={userDataModal} class="modal modal-bottom sm:modal-middle">
+				<div class="modal-box">
+					<h3 class="font-bold text-lg">Welcome!</h3>
+					<p class="py-4">
+						This app collects user metrics to improve user experience and make data-driven
+						decisions. By using the app, you agree to the collection and analysis of your usage data
+						for these purposes.
+					</p>
+					<div class="modal-action">
+						<form
+							method="dialog"
+							on:submit={() => localStorage.setItem('userDataModalAccepted', 'true')}
+						>
+							<button class="btn">I Understand</button>
+						</form>
+					</div>
+				</div>
+				<form
+					method="dialog"
+					class="modal-backdrop"
+					on:submit={() => localStorage.setItem('userDataModalAccepted', 'true')}
+				>
+					<button>Close</button>
+				</form>
+			</dialog>
 		</div>
 	{/if}
 </main>
