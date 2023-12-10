@@ -48,6 +48,8 @@ Rails.application.routes.draw do
     delete "/admin/questions", to: "admin/questions#delete_question"
     get "/admin/mailinglist", to: "admin/mailing_list#all_emails"
 
+    get "/admin/stats/globe", to: "admin/stats#globe"
+
     get "/questions", to: "questions#all_questions"
     post "/questions", to: "questions#submit_question"
     post "/questions/upvote", to: "questions#upvote_question"

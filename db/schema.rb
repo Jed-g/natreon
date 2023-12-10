@@ -48,6 +48,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_09_045757) do
   create_table "landing_page_visits", force: :cascade do |t|
     t.string "session_id", null: false
     t.string "ip_address", null: false
+    t.decimal "latitude", null: false
+    t.decimal "longitude", null: false
+    t.string "country", null: false
     t.integer "time_spent_seconds", default: 0, null: false
     t.text "path_to_registration", default: "", null: false
     t.string "email_of_registered_user"

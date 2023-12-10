@@ -47,4 +47,12 @@ module ApplicationHelper
 
     nil
   end
+
+  def country_from_ip(ip)
+    results = Geocoder.search(ip)
+    country = results.first.country
+    return country unless country.empty?
+
+    nil
+  end
 end
