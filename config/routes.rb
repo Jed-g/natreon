@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     get "/admin/mailinglist", to: "admin/mailing_list#all_emails"
 
     get "/admin/stats/globe", to: "admin/stats#globe"
+    get "/admin/stats/all-visits", to: "admin/stats#all_visits"
 
     get "/questions", to: "questions#all_questions"
     post "/questions", to: "questions#submit_question"
