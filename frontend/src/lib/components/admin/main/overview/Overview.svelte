@@ -22,6 +22,10 @@
 	];
 
 	$: mobileView = checkValueInRange(screenWidth, RANGES);
+
+	const RANGES_VISIT_DETAILS: [number, number][] = [[0, 1140]];
+
+	$: mobileViewVisitDetails = checkValueInRange(screenWidth, RANGES_VISIT_DETAILS);
 </script>
 
 <svelte:window on:resize={() => (screenWidth = screen.width)} />
@@ -51,8 +55,20 @@
 				</div>
 			{/if}
 			<div class="flex">
-				<div class="h-96 grow flex"><VisitDetails /></div>
+				<div class="height-details grow flex" class:height-details-mobile={mobileViewVisitDetails}>
+					<VisitDetails mobileView={mobileViewVisitDetails} />
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+	.height-details {
+		height: 36rem;
+	}
+
+	.height-details-mobile {
+		height: 80rem;
+	}
+</style>

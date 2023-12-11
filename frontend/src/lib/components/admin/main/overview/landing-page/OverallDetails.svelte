@@ -112,7 +112,7 @@
 			</div>
 			<div class="stat card bg-base-300">
 				<div class="stat-title">Average Review</div>
-				<div class="stat-value text-primary">{averageReviewRating.toFixed(1)}</div>
+				<div class="stat-value">{averageReviewRating.toFixed(1)}</div>
 				<div class="stat-figure text-secondary">
 					<Icon icon={starIcon} height={24} class="scale-125" />
 				</div>
@@ -160,7 +160,7 @@
 				</div>
 				<div class="stat card bg-base-300">
 					<div class="stat-title">Average Review</div>
-					<div class="stat-value text-primary">{averageReviewRating.toFixed(1)}</div>
+					<div class="stat-value">{averageReviewRating.toFixed(1)}</div>
 					<div class="stat-figure text-secondary">
 						<Icon icon={starIcon} height={24} class="scale-125" />
 					</div>

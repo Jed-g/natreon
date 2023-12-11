@@ -9,6 +9,7 @@
 		renderer?: EChartsRenderer;
 		options: EChartsOptions;
 	};
+	export const graphic = echarts.graphic;
 
 	const DEFAULT_OPTIONS: Partial<ChartOptions> = {
 		theme: undefined,

@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import Plot3D from './visitdetails/Plot3D.svelte';
+	import Chart from './visitdetails/Chart.svelte';
 
 	let showUnique = false;
+	export let mobileView = false;
 
 	let loading = true;
 	let totalVisits: [string, string, number][];
@@ -43,8 +45,8 @@
 	});
 </script>
 
-<div class="w-full h-full relative card overflow-hidden bg-base-300">
-	<div class="flex justify-between items-center p-4">
+<div class="grow flex flex-col">
+	<div class="flex bg-base-300 justify-between items-center p-4 card flex-row">
 		<p>Landing Page Visits</p>
 		<div>
 			<select
@@ -56,14 +58,21 @@
 			</select>
 		</div>
 	</div>
-
-	<div class="flex grow">
+	<div class="flex grow gap-6 mt-6 max-sm:flex-col" class:flex-col={mobileView}>
 		{#if loading}
-			<div class="grow flex items-center justify-center">
+			<div class="grow flex items-center justify-center bg-base-300 basis-1/2">
+				<span class="loading loading-ring loading-lg" />
+			</div>
+			<div class="grow flex items-center justify-center bg-base-300 basis-1/2">
 				<span class="loading loading-ring loading-lg" />
 			</div>
 		{:else}
-			<Plot3D data={showUnique ? uniqueVisits : totalVisits} />
+			<div class="grow flex card overflow-hidden bg-base-300 basis-1/2">
+				<Plot3D data={showUnique ? uniqueVisits : totalVisits} />
+			</div>
+			<div class="grow flex card overflow-hidden bg-base-300 basis-1/2">
+				<Chart data={showUnique ? uniqueVisits : totalVisits} />
+			</div>
 		{/if}
 	</div>
 </div>

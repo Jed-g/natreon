@@ -78,7 +78,13 @@
 		},
 
 		dataset: {
-			dimensions: ['Country', 'Date', 'Time spent (s)', 'Signed Up'],
+			dimensions: [
+				'Country',
+				'Date',
+				'Time spent (s)',
+				'Signed Up',
+				{ name: 'Time spent (s)', type: 'ordinal' }
+			],
 			source: data
 		},
 		series: [
@@ -91,7 +97,11 @@
 					y: 'Country',
 					z: 'Time spent (s)'
 				},
-				itemStyle: { color: '#00b3f0' }
+				itemStyle: {
+					color: (params: any) => {
+						return params.data[3] ? '#FF4683' : '#00b3f0';
+					}
+				}
 			}
 		]
 	};
@@ -112,6 +122,6 @@
 
 <svelte:window on:resize={() => chart && chart.resize()} />
 
-<div class="flex grow bg-base-300 relative overflow-hidden">
+<div class="flex grow relative overflow-hidden card">
 	<div class="w-full h-full absolute" bind:this={container} />
 </div>

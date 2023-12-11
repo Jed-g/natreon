@@ -14,7 +14,8 @@ module Admin
 
     def all_visits
       unique = LandingPageVisit.all.group_by(&:session_id).map {|_, visits|
-                 visits.first
+      visits.first.email_of_registered_user = visits.any? { |visit| !visit.email_of_registered_user.nil? }
+      visits.first
                }.map {|visit|
         [visit.country, visit.created_at, visit.time_spent_seconds,
          !visit.email_of_registered_user.nil?]
@@ -34,6 +35,9 @@ module Admin
         10.times.map { [element[0], (rand(1..15)).days.ago, element[2] * rand(1..15), element[3]] }
       end
 
+      unique.sort_by! {|visit| visit[1] }
+      all.sort_by! {|visit| visit[1] }
+
       # header = ['Country', 'Time spent (s)', 'Date']
       # unique.unshift(header)
       # all.unshift(header)
@@ -47,8 +51,7 @@ module Admin
       counts = Hash.new(0)
       entries.each do |session_id, visits|
         paths = visits.pluck(:path_to_registration).map { |path| path.split("/") }
-        unique_paths = paths.map { |path| path.uniq }
-        unique_paths = unique_paths.flatten.reject { |path| path.empty? }
+        unique_paths = paths.flatten(1).reject { |path| path.empty? }.uniq
         unique_paths.each { |path| counts[path] += 1 }
       end
       number_of_registrations = LandingPageVisit.where.not(email_of_registered_user: nil).count

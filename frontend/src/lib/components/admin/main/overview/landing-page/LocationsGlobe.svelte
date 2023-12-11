@@ -150,7 +150,7 @@
 			</div>
 			<div class="absolute bottom-2 right-2 card flex flex-row">
 				<p class="mr-2">Autorotate</p>
-				<input type="checkbox" class="toggle toggle-success" bind:checked={autoRotate} />
+				<input type="checkbox" class="toggle toggle-info" bind:checked={autoRotate} />
 			</div>
 		{/if}
 	</div>
