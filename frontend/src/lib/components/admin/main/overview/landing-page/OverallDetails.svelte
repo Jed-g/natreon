@@ -30,7 +30,7 @@
 		mailingListSignups = data.mailing_list_signups;
 		customerUsersInSystem = data.customer_users_in_system;
 		totalReviews = data.total_reviews;
-		averageReviewRating = data.average_review_rating;
+		averageReviewRating = parseFloat(data.average_review_rating);
 
 		loading = false;
 	});
