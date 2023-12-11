@@ -29,4 +29,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
 
   enum user_type: {customer: 0, admin: 1, reporter: 2}
+  validates :user_type, presence: true, inclusion: {in: User.user_types.keys}
+
+  EMAIL_REGEX = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
+  validates :email, presence: true, format: {with: EMAIL_REGEX}
 end
