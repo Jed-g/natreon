@@ -26,15 +26,17 @@
 		const total = data.all;
 		const unique = data.unique;
 
-		totalVisits = total.map((visit: [string, string, number]) => [
+		totalVisits = total.map((visit: [string, string, number, boolean]) => [
 			visit[0],
 			formatDate(visit[1]),
-			visit[2]
+			visit[2],
+			visit[3]
 		]);
-		uniqueVisits = unique.map((visit: [string, string, number]) => [
+		uniqueVisits = unique.map((visit: [string, string, number, boolean]) => [
 			visit[0],
 			formatDate(visit[1]),
-			visit[2]
+			visit[2],
+			visit[3]
 		]);
 
 		loading = false;
@@ -45,14 +47,17 @@
 	<div class="flex justify-between items-center p-4">
 		<p>Landing Page Visits</p>
 		<div>
-			<select class="select max-sm:select-xs select-info w-full max-w-xs" bind:value={showUnique}>
+			<select
+				class="select select-sm max-sm:select-xs select-info w-full max-w-xs"
+				bind:value={showUnique}
+			>
 				<option value={false}>All Visits</option>
 				<option value={true}>Unique Visits</option>
 			</select>
 		</div>
 	</div>
 
-	<div class="w-full h-full relative flex">
+	<div class="flex grow">
 		{#if loading}
 			<div class="grow flex items-center justify-center">
 				<span class="loading loading-ring loading-lg" />

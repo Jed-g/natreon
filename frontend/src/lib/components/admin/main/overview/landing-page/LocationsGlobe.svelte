@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { EChartsType } from 'echarts';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	let showUnique = false;
 	let autoRotate = true;
@@ -124,21 +124,26 @@
 			initializeGlobe();
 		}
 	}
+
+	onDestroy(() => globe && globe.dispose());
 </script>
 
 <svelte:window on:resize={() => globe && globe.resize()} />
 
-<div class="w-full h-full relative card overflow-hidden bg-base-300">
+<div class="flex grow card overflow-hidden bg-base-300">
 	<p class="p-4">Visits By Location</p>
-	<div class="w-full h-full relative flex">
+	<div class="flex grow relative overflow-hidden">
 		{#if loading}
 			<div class="grow flex items-center justify-center">
 				<span class="loading loading-ring loading-lg" />
 			</div>
 		{:else}
-			<div class="grow" bind:this={container} />
+			<div class="absolute w-full h-full" bind:this={container} />
 			<div class="absolute top-2 left-2">
-				<select class="select max-sm:select-xs select-info w-full max-w-xs" bind:value={showUnique}>
+				<select
+					class="select select-sm max-sm:select-xs select-info w-full max-w-xs"
+					bind:value={showUnique}
+				>
 					<option value={false}>All Visits</option>
 					<option value={true}>Unique Visits</option>
 				</select>

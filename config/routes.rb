@@ -50,6 +50,8 @@ Rails.application.routes.draw do
 
     get "/admin/stats/globe", to: "admin/stats#globe"
     get "/admin/stats/all-visits", to: "admin/stats#all_visits"
+    get "/admin/stats/route-visits", to: "admin/stats#route_visits"
+    get "/admin/stats/overall-details", to: "admin/stats#overall_details"
 
     get "/questions", to: "questions#all_questions"
     post "/questions", to: "questions#submit_question"

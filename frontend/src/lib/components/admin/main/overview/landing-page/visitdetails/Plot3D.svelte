@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { EChartsType } from 'echarts';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	export let data: any[];
 
@@ -15,7 +15,8 @@
 				<b>${params.seriesName}</b><br />
 				Time spent (s): ${params.data[2]}<br />
 				Date: ${params.data[1]}<br />
-				Country: ${params.data[0]}<br />
+				Country: ${params.data[0]}<br /><br />
+				Signed Up: <b>${params.data[3] ? 'YES' : 'NO'}</b><br />
 				`;
 			}
 		},
@@ -77,7 +78,7 @@
 		},
 
 		dataset: {
-			dimensions: ['Country', 'Date', 'Time spent (s)'],
+			dimensions: ['Country', 'Date', 'Time spent (s)', 'Signed Up'],
 			source: data
 		},
 		series: [
@@ -106,10 +107,11 @@
 	};
 
 	onMount(initialize3dChart);
+	onDestroy(() => chart && chart.dispose());
 </script>
 
 <svelte:window on:resize={() => chart && chart.resize()} />
 
-<div class="w-full h-full relative flex overflow-hidden bg-base-300">
-	<div class="grow" bind:this={container} />
+<div class="flex grow bg-base-300 relative overflow-hidden">
+	<div class="w-full h-full absolute" bind:this={container} />
 </div>
