@@ -5,6 +5,7 @@
 	import { scale } from 'svelte/transition';
 	import UserType from '$lib/enums/userType';
 	import { sleep } from '$lib/utils';
+	import { POLLING_INTERVAL_FOR_TIME_SPENT_ON_PAGE } from '$lib/config';
 
 	const timeOnPageMountInMs = Date.now();
 	let timeSpentInMs = 0;
@@ -48,7 +49,7 @@
 			if (!response.ok) {
 				clearInterval(interval);
 			}
-		}, 1000);
+		}, POLLING_INTERVAL_FOR_TIME_SPENT_ON_PAGE);
 	});
 
 	onDestroy(() => clearInterval(interval));
