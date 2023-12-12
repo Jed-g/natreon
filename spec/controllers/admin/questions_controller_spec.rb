@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Admin::QuestionsController do
   let(:admin) { create(:user, user_type: "admin") }
   let(:user) { create(:user, user_type: "customer") }
-  let(:question) { create(:question)}
+  let(:question) { create(:question) }
 
   before do
     allow(controller).to receive(:current_user).and_return(current_user)
@@ -38,7 +38,7 @@ RSpec.describe Admin::QuestionsController do
   end
 
   describe "POST #answer_edit_create_question" do
-    let(:question_params) { {id: question.id, answer:"this is a test answer", question:"this is a test question"} }
+    let(:question_params) { {id: question.id, answer: "this is a test answer", question: "this is a test question"} }
 
     context "when the user is an admin" do
       let(:current_user) { admin }
@@ -102,5 +102,4 @@ RSpec.describe Admin::QuestionsController do
       end
     end
   end
-  
 end
