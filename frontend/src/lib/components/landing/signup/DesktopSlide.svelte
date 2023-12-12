@@ -25,7 +25,8 @@
 	let notificationInvalidEmailButton: HTMLButtonElement;
 	let notificationEmailAlreadySubmittedButton: HTMLButtonElement;
 	let email = '';
-	const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+	//const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+	const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 	const validateEmail = (): boolean => {
 		return EMAIL_REGEX.test(email);
