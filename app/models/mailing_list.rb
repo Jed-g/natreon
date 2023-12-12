@@ -11,9 +11,14 @@
 #
 class MailingList < ApplicationRecord
   self.table_name = "mailing_list"
-  validates :email, presence: true, uniqueness: true, format: { with: /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i }
+  validates :email, presence: true, uniqueness: true,
+format: {with: /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/}
 
   def self.record_email(email)
-    create(email: email)
+    new_entry = new(email:)
+    return false unless new_entry.valid?
+
+    new_entry.save
+    true
   end
 end
