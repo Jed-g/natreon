@@ -1,12 +1,62 @@
 <script lang="ts">
 	import '$lib/global.css';
 	import { authenticated } from '$lib/stores';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import UserType from '$lib/enums/userType';
 	import Header from '$lib/components/metrics/header/Header.svelte';
+	import { sleep } from '$lib/utils';
+	import { POLLING_INTERVAL_FOR_TIME_SPENT_ON_PAGE } from '$lib/config';
 
-	onMount(() => authenticated.verify());
+	const timeOnPageMountInMs = Date.now();
+	let timeSpentInMs = 0;
+	let interval: ReturnType<typeof setTimeout>;
+
+	onMount(async () => {
+		await authenticated.verify();
+
+		// Register new visit if time spent is above 5 seconds
+		await sleep(5000);
+		const response = await fetch('/api/stats/reporter/register-new-page-visit');
+		if (!response.ok) {
+			const response = await fetch('https://api.ipify.org?format=json');
+			const data = await response.json();
+			const ip = data.ip;
+
+			if (!response.ok) return;
+
+			const secondResponse = await fetch(
+				'/api/stats/reporter/register-new-page-visit-with-ip-param',
+				{
+					method: 'POST',
+					body: JSON.stringify({ ip }),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			);
+
+			if (!secondResponse.ok) return;
+		}
+
+		interval = setInterval(async () => {
+			timeSpentInMs = Date.now() - timeOnPageMountInMs;
+
+			const response = await fetch('/api/stats/reporter/update-page-visit', {
+				method: 'POST',
+				body: JSON.stringify({ time_spent_seconds: Math.floor(timeSpentInMs / 1000) }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			if (!response.ok) {
+				clearInterval(interval);
+			}
+		}, POLLING_INTERVAL_FOR_TIME_SPENT_ON_PAGE);
+	});
+
+	onDestroy(() => clearInterval(interval));
 
 	$: loading = $authenticated === null;
 	$: {
@@ -27,7 +77,7 @@
 </script>
 
 <svelte:head>
-	<title>Metrics</title>
+	<title>Reporter Dashboard</title>
 </svelte:head>
 
 <main class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex">

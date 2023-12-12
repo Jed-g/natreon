@@ -27,6 +27,28 @@
 				const data = await response.json();
 				[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
 				foundLocationByIP = true;
+			} else {
+				const response = await fetch('https://api.ipify.org?format=json');
+				const data = await response.json();
+				const ip = data.ip;
+
+				if (!response.ok) return;
+
+				const secondResponse = await fetch('/api/utils/geolocation-with-ip-param', {
+					method: 'POST',
+					body: JSON.stringify({ ip }),
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				});
+
+				if (!secondResponse.ok) return;
+				const secondData = await secondResponse.json();
+				[defaultCoords.lon, defaultCoords.lat] = [
+					parseFloat(secondData.lon),
+					parseFloat(secondData.lat)
+				];
+				foundLocationByIP = true;
 			}
 		} catch (error) {
 			console.error(error);

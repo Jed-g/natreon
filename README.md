@@ -59,8 +59,16 @@ Make sure postgresql is installed and started
 bundle exec rspec spec/models/file_name.rb
 
 
-* How to run the test suite
+# How to run the test suite
+To run front-end feature tests, make sure that you have used the command 'bundle install' in the base directory, and 'yarn install' in the frontend directory.
 
+Commands to run frontend test suite:
+cd frontend
+yarn test
+
+Commands to run the back-end RSpec test suite:
+Make sure you are in the base directory
+rspec spec
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions

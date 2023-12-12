@@ -23,6 +23,50 @@
 #
 require "rails_helper"
 
+# RSpec.describe User do
+#   pending "add some examples to (or delete) #{__FILE__}"
+# end
+
 RSpec.describe User do
-  pending "add some examples to (or delete) #{__FILE__}"
+  subject { described_class.new(email: "test@example.com", password: "password", user_type: "customer") }
+
+  describe "validations" do
+    it "is valid with valid attributes" do
+      expect(subject).to be_valid
+    end
+
+    it "is not valid without an email" do
+      subject.email = nil
+      expect(subject).not_to be_valid
+    end
+
+    it "is not valid with a duplicate email" do
+      described_class.create!(email: "test@example.com", password: "password", user_type: "customer")
+      expect(subject).not_to be_valid
+    end
+
+    it "is not valid with an incorrectly formatted email" do
+      subject.email = "testexample.com"
+      expect(subject).not_to be_valid
+    end
+
+    it "is not valid without a password" do
+      subject.password = nil
+      expect(subject).not_to be_valid
+    end
+
+    it "is not valid with a short password" do
+      subject.password = "pass"
+      expect(subject).not_to be_valid
+    end
+
+    it "is not valid without a user_type" do
+      subject.user_type = nil
+      expect(subject).not_to be_valid
+    end
+
+    it "raises an error with an invalid user_type" do
+      expect { subject.user_type = "invalid" }.to raise_error(ArgumentError)
+    end
+  end
 end

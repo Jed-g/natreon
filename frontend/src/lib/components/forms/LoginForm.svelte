@@ -3,6 +3,19 @@
 	import { authenticated } from '$lib/stores';
 	import Icon from '@iconify/svelte';
 	import errorIcon from '@iconify-icons/mdi/close-box';
+	import { onMount } from 'svelte';
+	import { pathToRegistrationAppend } from '$lib/utils';
+	import { MINIMUM_TIME_ON_REVIEWS_QUESTIONS_LOGIN_SIGNUP_PAGES_FOR_PATH_REGISTRATION_MS } from '$lib/config';
+
+	let timeout: ReturnType<typeof setTimeout>;
+
+	onMount(() => {
+		timeout = setTimeout(
+			() => pathToRegistrationAppend('/login'),
+			MINIMUM_TIME_ON_REVIEWS_QUESTIONS_LOGIN_SIGNUP_PAGES_FOR_PATH_REGISTRATION_MS
+		);
+		return () => clearTimeout(timeout);
+	});
 
 	let formData = { email: '', password: '' };
 	let emailOrPasswordInvalid = false;

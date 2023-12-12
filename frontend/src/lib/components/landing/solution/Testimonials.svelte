@@ -54,7 +54,6 @@
 					</div>
 				</figcaption>
 			</div>
-
 		{/if}
 	</div>
 </figure>

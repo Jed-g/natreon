@@ -23,6 +23,7 @@
 #
 FactoryBot.define do
   factory :user do
-    email { "example@example.com" } # Placeholder attribute
+    sequence(:email) {|n| "user#{n}@example.com" }
+    password { "password123" }
   end
 end

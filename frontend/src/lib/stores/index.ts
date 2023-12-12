@@ -11,3 +11,9 @@ const createAuthenticatedStore = () => {
 	};
 };
 export const authenticated = createAuthenticatedStore();
+
+export const newLandingPageVisitRegisteredPromise = writable<Promise<void>>(new Promise(() => {}));
+
+export const pathToRegistrationAppendCurrentCallStack = writable<Promise<void>>(
+	new Promise((resolve) => resolve())
+);

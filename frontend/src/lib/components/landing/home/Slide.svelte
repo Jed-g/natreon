@@ -5,6 +5,22 @@
 	import AnimatedBusinessName from '$lib/components/landing/home/AnimatedBusinessName.svelte';
 	import AnimatedLogo from './AnimatedLogo.svelte';
 	import Testimonials from './Testimonials.svelte';
+	import { MINIMUM_TIME_ON_SLIDE_FOR_PATH_REGISTRATION_MS } from '$lib/config';
+	import { pathToRegistrationAppend } from '$lib/utils';
+
+	let timeout: ReturnType<typeof setTimeout>;
+
+	$: {
+		if (intersecting) {
+			timeout = setTimeout(() => {
+				if (intersecting) {
+					pathToRegistrationAppend('/home');
+				}
+			}, MINIMUM_TIME_ON_SLIDE_FOR_PATH_REGISTRATION_MS);
+		} else {
+			clearTimeout(timeout);
+		}
+	}
 
 	let element: HTMLDivElement;
 	let intersecting: boolean;

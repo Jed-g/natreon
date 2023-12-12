@@ -2,6 +2,8 @@
 
 class ReviewsController < ApplicationController
   before_action :assign_defaults_to_session
+  before_action :read_review_params, only: :submit_review
+  before_action :read_id_param, only: %i[upvote_review downvote_review cancel_upvote_review cancel_downvote_review]
 
   def all_reviews
     reviews = Review.order(created_at: :desc).select(:id, :content, :author, :upvotes, :downvotes, :rating)
@@ -19,7 +21,6 @@ class ReviewsController < ApplicationController
   end
 
   def upvote_review
-    read_id_param
     @review = find_review
 
     return render json: {message: "Already upvoted"}, status: :bad_request if session[:reviews_upvoted].include?(@id)
@@ -32,7 +33,6 @@ class ReviewsController < ApplicationController
   end
 
   def downvote_review
-    read_id_param
     @review = find_review
     if session[:reviews_downvoted].include?(@id)
       return render json:   {message: "Already downvoted"},
@@ -46,7 +46,6 @@ class ReviewsController < ApplicationController
   end
 
   def cancel_upvote_review
-    read_id_param
     review = find_review
 
     unless session[:reviews_upvoted].include?(@id)
@@ -62,7 +61,6 @@ class ReviewsController < ApplicationController
   end
 
   def cancel_downvote_review
-    read_id_param
     review = find_review
 
     unless session[:reviews_downvoted].include?(@id)
@@ -94,9 +92,9 @@ class ReviewsController < ApplicationController
   def read_review_params
     @content = params[:content]
     @author = params[:author].nil? ? "anonymous" : params[:author]
-    @rating = params[:rating]
+    @rating = params[:rating].to_i
 
-    if @content.nil? || @rating.nil? || !@rating.between?(
+    if @content.blank? || @rating.nil? || !@rating.between?(
       1, 5
     )
       render json:   {message: "Bad request"},

@@ -15,4 +15,6 @@
 #
 class Review < ApplicationRecord
   self.table_name = "reviews"
+
+  validates :content, :author, :rating, presence: true
 end
