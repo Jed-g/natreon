@@ -2,12 +2,77 @@
 	import type { EChartsType } from 'echarts';
 	import { onDestroy, onMount } from 'svelte';
 
+	const groupCoordinatesSimple = (data: [number, number, number][], squareSize: number) => {
+		const groupedData: Record<string, number> = {};
+		data.forEach(([longitude, latitude, count]) => {
+			const lonIndex = Math.floor(longitude / squareSize);
+			const latIndex = Math.floor(latitude / squareSize);
+
+			const key = `${lonIndex},${latIndex}`;
+
+			groupedData[key] = (groupedData[key] || 0) + count;
+		});
+
+		const result = Object.entries(groupedData).map(([key, count]) => {
+			const [lonIndex, latIndex] = key.split(',').map(Number);
+			const longitude = (lonIndex + 0.5) * squareSize;
+			const latitude = (latIndex + 0.5) * squareSize;
+			return [longitude.toFixed(4), latitude.toFixed(4), count];
+		});
+
+		return result;
+	};
+
+	const groupCoordinatesHaversine = (data: [number, number, number][], squareSize: number) => {
+		const EARTH_RADIUS = 6371;
+		const groupedData: Record<string, number> = {};
+
+		data.forEach(([longitude, latitude, count]) => {
+			const lonRad = (longitude * Math.PI) / 180;
+			const latRad = (latitude * Math.PI) / 180;
+
+			const lonIndex = Math.floor(lonRad / (squareSize / EARTH_RADIUS));
+			const latIndex = Math.floor(latRad / (squareSize / EARTH_RADIUS));
+
+			const key = `${lonIndex},${latIndex}`;
+
+			groupedData[key] = (groupedData[key] || 0) + count;
+		});
+
+		const maxCount = Math.max(...Object.values(groupedData));
+
+		const result = Object.entries(groupedData).map(([key, count]) => {
+			const [lonIndex, latIndex] = key.split(',').map(Number);
+
+			const longitude = (((lonIndex + 0.5) * squareSize) / EARTH_RADIUS) * (180 / Math.PI);
+			const latitude = (((latIndex + 0.5) * squareSize) / EARTH_RADIUS) * (180 / Math.PI);
+
+			const normalizedCount = count / maxCount;
+
+			// return [longitude, latitude, normalizedCount];
+			return [longitude, latitude, count];
+		});
+
+		return result;
+	};
+
 	let showUnique = false;
 	let autoRotate = true;
 
 	let loading = true;
-	let totalVisits: [number, number][];
-	let uniqueVisits: [number, number][];
+	let totalVisits: [number, number, number][];
+	let uniqueVisits: [number, number, number][];
+
+	$: data =
+		uniqueVisits &&
+		totalVisits &&
+		groupCoordinatesHaversine(showUnique ? uniqueVisits : totalVisits, 50).map(
+			([longitude, latitude, count]) => [
+				longitude.toFixed(4),
+				latitude.toFixed(4),
+				Math.log(count + 1)
+			]
+		);
 
 	$: options = {
 		darkMode: true,
@@ -65,11 +130,11 @@
 		},
 		visualMap: {
 			show: false,
-			max: 100,
+			max: data ? Math.max(...data.map((item) => item[2] as number)) : 1,
 			//calculable: true,
 			realtime: false,
 			inRange: {
-				colorLightness: [0.2, 0.9]
+				colorLightness: [0.2, 0.65]
 			},
 			// textStyle: {
 			// 	color: '#fff'
@@ -87,7 +152,7 @@
 			{
 				type: 'bar3D',
 				coordinateSystem: 'globe',
-				data: showUnique ? uniqueVisits : totalVisits,
+				data,
 				//barSize: 0.6,
 				barSize: 0.6,
 				minHeight: 0.2,
