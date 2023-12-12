@@ -21,7 +21,7 @@
 	let customerUsersInSystem: number;
 
 	onMount(async () => {
-		const response = await fetch('/api/admin/stats/overall-details');
+		const response = await fetch('/api/reporter/stats/overall-details');
 		if (!response.ok) return;
 		const data = await response.json();
 

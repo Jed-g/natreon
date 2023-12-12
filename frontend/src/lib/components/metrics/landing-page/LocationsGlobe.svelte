@@ -170,7 +170,7 @@
 	$: globe && globe.setOption(options);
 
 	onMount(async () => {
-		const response = await fetch('/api/admin/stats/globe');
+		const response = await fetch('/api/reporter/stats/globe');
 		if (!response.ok) return;
 		const data = await response.json();
 

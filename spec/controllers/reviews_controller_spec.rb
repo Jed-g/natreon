@@ -1,12 +1,14 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
-RSpec.describe ReviewsController, type: :controller do
+require "rails_helper"
+
+RSpec.describe ReviewsController do
   let(:valid_attributes) {
-    {content: 'Great product!', author: 'John Doe', rating: 5}
+    {content: "Great product!", author: "John Doe", rating: 5}
   }
 
   let(:invalid_attributes) {
-    {content: '', author: '', rating: nil}
+    {content: "", author: "", rating: nil}
   }
 
   describe "GET #all_reviews" do
@@ -28,7 +30,7 @@ RSpec.describe ReviewsController, type: :controller do
       it "renders a JSON response with the new review" do
         post :submit_review, params: valid_attributes
         expect(response).to have_http_status(:ok)
-        expect(response.content_type).to eq('application/json; charset=utf-8')
+        expect(response.content_type).to eq("application/json; charset=utf-8")
       end
     end
 
@@ -36,7 +38,7 @@ RSpec.describe ReviewsController, type: :controller do
       it "renders a JSON response with errors for the new review" do
         post :submit_review, params: invalid_attributes
         expect(response).to have_http_status(:bad_request)
-        expect(response.content_type).to eq('application/json; charset=utf-8')
+        expect(response.content_type).to eq("application/json; charset=utf-8")
       end
     end
   end

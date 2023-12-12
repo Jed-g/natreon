@@ -53,6 +53,11 @@ Rails.application.routes.draw do
     get "/admin/stats/route-visits", to: "admin/stats#route_visits"
     get "/admin/stats/overall-details", to: "admin/stats#overall_details"
 
+    get "/reporter/stats/globe", to: "reporter/stats#globe"
+    get "/reporter/stats/all-visits", to: "reporter/stats#all_visits"
+    get "/reporter/stats/route-visits", to: "reporter/stats#route_visits"
+    get "/reporter/stats/overall-details", to: "reporter/stats#overall_details"
+
     get "/questions", to: "questions#all_questions"
     post "/questions", to: "questions#submit_question"
     post "/questions/upvote", to: "questions#upvote_question"

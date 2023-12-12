@@ -77,7 +77,7 @@
 </script>
 
 <svelte:head>
-	<title>Metrics</title>
+	<title>Reporter Dashboard</title>
 </svelte:head>
 
 <main class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex">

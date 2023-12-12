@@ -3,7 +3,7 @@
 class ReviewsController < ApplicationController
   before_action :assign_defaults_to_session
   before_action :read_review_params, only: :submit_review
-  before_action :read_id_param, only: [:upvote_review, :downvote_review, :cancel_upvote_review, :cancel_downvote_review]
+  before_action :read_id_param, only: %i[upvote_review downvote_review cancel_upvote_review cancel_downvote_review]
 
   def all_reviews
     reviews = Review.order(created_at: :desc).select(:id, :content, :author, :upvotes, :downvotes, :rating)
@@ -94,7 +94,7 @@ class ReviewsController < ApplicationController
     @author = params[:author].nil? ? "anonymous" : params[:author]
     @rating = params[:rating].to_i
 
-    if @content.nil? || @content.empty? || @rating.nil? || !@rating.between?(
+    if @content.blank? || @rating.nil? || !@rating.between?(
       1, 5
     )
       render json:   {message: "Bad request"},

@@ -28,8 +28,20 @@ module ApplicationHelper
     true
   end
 
+  def reporter?
+    user = current_user
+
+    return false if !user || user.user_type != "reporter"
+
+    true
+  end
+
   def authorize_admin_controllers
     render json: {message: "Not Authorized"}, status: :unauthorized unless admin?
+  end
+
+  def authorize_reporter_controllers
+    render json: {message: "Not Authorized"}, status: :unauthorized unless reporter?
   end
 
   def render_bad_request
