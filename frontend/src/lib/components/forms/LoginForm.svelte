@@ -46,6 +46,7 @@
 				placeholder="email"
 				class="input input-bordered"
 				id="email"
+				data-testid="email"
 				bind:value={formData.email}
 				on:input={() => (emailOrPasswordInvalid = false)}
 			/>
@@ -59,6 +60,7 @@
 				placeholder="password"
 				class="input input-bordered"
 				id="password"
+				data-testid="password"
 				bind:value={formData.password}
 				on:input={() => (emailOrPasswordInvalid = false)}
 			/>
