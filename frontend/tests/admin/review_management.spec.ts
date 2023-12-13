@@ -14,7 +14,7 @@ test.beforeEach('Login using admin', async ({ page }) => {
 });
 
 test('Delete Review', async ({ page }) => {
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await page.goto('/admin/reviews');
     await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'Delete' }).nth(1).click();

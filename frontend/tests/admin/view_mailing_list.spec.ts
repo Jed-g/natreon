@@ -11,7 +11,7 @@ test('View Mailing List', async ({ page }) => {
 	await page.getByTestId('password').click();
 	await page.getByTestId('password').fill('password');
 	await page.getByTestId('login-button').click();
-	await page.waitForTimeout(500);
+	await page.waitForTimeout(1000);
 	await page.goto('/admin/mailing-list');
 	await page.waitForTimeout(500);
 	// await page.getByTestId('mailing-list-button').first().click();
