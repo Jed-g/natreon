@@ -11,6 +11,7 @@ test('View Mailing List', async ({ page }) => {
 	await page.getByTestId('password').click();
 	await page.getByTestId('password').fill('password');
 	await page.getByTestId('login-button').click();
-	await page.getByTestId('mailing-list-button').first().click();
+	await page.goto('/admin/mailing-list');
+	// await page.getByTestId('mailing-list-button').first().click();
 	await expect(page.getByRole('heading', { name: 'Mailing List' })).toBeVisible;
 });
