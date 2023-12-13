@@ -121,13 +121,18 @@ RSpec.describe Stats::AppController do
     end
     describe '#update_page_visit' do
         let(:valid_visit_id) { 1 }
+        let(:valid_coords) { { lat: 23.456, lon: 45.678 } }
 
+        before do
+            allow(controller).to receive(:geolocation_from_ip).with(request.remote_ip).and_return(valid_coords)
+        end
         context 'with valid parameters' do
             before do
                 session[:visit_id] = valid_visit_id
             end
 
             it 'updates the page visit and returns a success message' do
+                post :register_new_page_visit
                 post :update_page_visit, params: { time_spent_seconds: 120 }
 
                 expect(response).to have_http_status(:ok)
