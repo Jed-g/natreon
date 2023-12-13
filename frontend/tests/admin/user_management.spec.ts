@@ -16,7 +16,7 @@ test.beforeEach('Login using admin', async ({ page }) => {
 test('Change role to Reporter', async ({ page }) => {
   await page.waitForTimeout(500);
   await page.goto('/admin/users');
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(1000);
   await page.getByRole('button', { name: 'Edit' }).nth(1).click();
   await page.getByRole('combobox').selectOption('REPORTER');
   await page.getByRole('button', { name: 'Update' }).click();
@@ -26,7 +26,7 @@ test('Change role to Reporter', async ({ page }) => {
 test('Change role to Customer', async ({ page }) => {
   await page.waitForTimeout(500);
   await page.goto('/admin/users');
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(1000);
   await page.getByRole('button', { name: 'Edit' }).nth(1).click();
   await page.getByRole('combobox').selectOption('CUSTOMER');
   await page.getByRole('button', { name: 'Update' }).click();
@@ -36,7 +36,7 @@ test('Change role to Customer', async ({ page }) => {
 test('Change role to Admin', async ({ page }) => {
   await page.waitForTimeout(500);
   await page.goto('/admin/users');
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(1000);
   await page.getByRole('button', { name: 'Edit' }).nth(1).click();
   await page.getByRole('combobox').selectOption('ADMIN');
   await page.getByRole('button', { name: 'Update' }).click();
@@ -46,7 +46,7 @@ test('Change role to Admin', async ({ page }) => {
 test('Delete User', async ({ page }) => {
   await page.waitForTimeout(500);
   await page.goto('/admin/users');
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(1000);
   await page.getByRole('button', { name: 'Delete' }).nth(1).click();
   await expect(page.getByRole('cell', { name: 'test@user.com' })).toBeHidden;
 });

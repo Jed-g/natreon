@@ -16,7 +16,7 @@ test.beforeEach('Login using admin', async ({ page }) => {
 test('Answer Question', async ({ page }) => {
     await page.waitForTimeout(500);
     await page.goto('/admin/questions');
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'Answer' }).click();
     await page.getByPlaceholder('Enter answer...').click();
     await page.getByPlaceholder('Enter answer...').fill('test_answer_1');
@@ -28,7 +28,7 @@ test('Answer Question', async ({ page }) => {
 test('Edit Question', async ({ page }) => {
     await page.waitForTimeout(500);
     await page.goto('/admin/questions');
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'Edit' }).nth(1).click();
     await page.getByPlaceholder('Enter question...').click();
     await page.getByPlaceholder('Enter question...').fill('test_question_3');
@@ -39,7 +39,7 @@ test('Edit Question', async ({ page }) => {
 test('Edit Answer', async ({ page }) => {
     await page.waitForTimeout(500);
     await page.goto('/admin/questions');
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'Edit' }).nth(1).click();
     await page.getByPlaceholder('Enter answer...').click();
     await page.getByPlaceholder('Enter answer...').fill('test_answer_3');
@@ -49,7 +49,7 @@ test('Edit Answer', async ({ page }) => {
 test('Delete Question', async ({ page }) => {
     await page.waitForTimeout(500);
     await page.goto('/admin/questions');
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1000);
     await page.getByRole('button', { name: 'Delete' }).nth(1).click();
     await expect(page.getByRole('button', { name: 'Delete' }).nth(1)).toBeHidden
 });
