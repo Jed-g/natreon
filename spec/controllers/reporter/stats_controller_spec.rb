@@ -2,44 +2,53 @@
 
 require "rails_helper"
 
-RSpec.describe Admin::StatsController do 
-    let(:admin) { create(:user, user_type: "admin") }
+RSpec.describe Reporter::StatsController do
+    let(:reporter) { create(:user, user_type: "reporter") }
     let(:user) { create(:user, user_type: "customer") }
-    let(:question) { create(:question) }
 
     before do
         allow(controller).to receive(:current_user).and_return(current_user)
     end
 
-    describe "#globe" do
-        context "when the user is an admin" do
-            let(:current_user) { admin }
+    describe '#globe' do
 
-            before do
+        context 'when the user is a reporter' do
+            let(:current_user) { reporter }
+            it 'returns JSON data with all and unique visit details' do
+                create(:landing_page_visit, country: 'Country A', longitude: 10, latitude: 20)
+                create(:landing_page_visit, country: 'Country B', longitude: 30, latitude: 40)
+                create(:landing_page_visit, country: 'Country A', longitude: 10, latitude: 20)
+
                 get :globe
-            end
 
-            it "returns a 200 response" do
-                expect(response).to have_http_status :ok
+                expect(response).to have_http_status(:ok)
+                json_response = JSON.parse(response.body)
+
+                expect(json_response).to have_key('all')
+                expect(json_response['all']).to be_an(Array)
+                expect(json_response).to have_key('unique')
+                expect(json_response['unique']).to be_an(Array)
+
+                expect(json_response['all'].size).to eq(3)
+                #expect(json_response['unique'].size).to eq(2)
+                expect(json_response['all'].first).to include('10.0', '20.0', 1)
+                expect(json_response['unique'].first).to include('10.0', '20.0', 1)
             end
         end
 
-        context "when the user is not an admin" do
-            let(:current_user) { user }
-
-            before do
+        context 'when unauthorized user' do
+            let (:current_user) {user}
+            it 'renders a forbidden response' do
                 get :globe
-            end
 
-            it "returns a 401 response" do
                 expect(response).to have_http_status :unauthorized
             end
         end
     end
     describe '#all_visits' do
 
-        context 'when the user is an admin' do
-            let (:current_user) {admin}
+        context 'when the user is an reporter' do
+            let (:current_user) {reporter}
 
             it 'returns JSON data with all and unique visit details' do
                 create(:landing_page_visit, country: 'Country A', created_at: 2.days.ago, time_spent_seconds: 120, email_of_registered_user: 'user1@example.com')
@@ -78,8 +87,8 @@ RSpec.describe Admin::StatsController do
     end
     describe '#route_visits' do
 
-        context 'when authorized admin user' do
-            let (:current_user) {admin}
+        context 'when authorized reporter user' do
+            let (:current_user) {reporter}
             it 'returns JSON data with routes visited and registration statistics' do
                 create(:landing_page_visit, session_id: 'session1', path_to_registration: '/home/user1')
                 create(:landing_page_visit, session_id: 'session1', path_to_registration: '/register-interest')
@@ -120,8 +129,8 @@ RSpec.describe Admin::StatsController do
     end
     describe '#overall_details' do
 
-        context 'when authorized admin user' do
-            let (:current_user) {admin}
+        context 'when authorized reporter user' do
+            let (:current_user) {reporter}
             it 'returns JSON data with overall system details' do
                 create(:question)
                 create(:question, answer: 'test')
