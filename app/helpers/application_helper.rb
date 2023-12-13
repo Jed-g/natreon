@@ -67,4 +67,12 @@ module ApplicationHelper
 
     nil
   end
+
+  def get_remote_ip
+    if request.env['HTTP_X_FORWARDED_FOR']
+      request.env['HTTP_X_FORWARDED_FOR'].split(',').first
+    else
+      request.remote_ip
+    end
+  end
 end

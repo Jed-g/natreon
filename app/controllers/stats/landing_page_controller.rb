@@ -3,7 +3,7 @@
 module Stats
   class LandingPageController < ApplicationController
     def register_new_page_visit
-      return render json: {message: request.remote_ip}
+      return render json: {message: get_remote_ip}
       coords = geolocation_from_ip(request.remote_ip)
       return render_bad_request if coords.nil?
 
