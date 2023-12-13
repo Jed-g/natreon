@@ -54,6 +54,7 @@ module ApplicationHelper
 
   def geolocation_from_ip(ip)
     results = Geocoder.search(ip)
+    return nil if results.first.nil?
     coords = results.first.coordinates
     return {lat: coords[0], lon: coords[1]} unless coords.empty?
 
@@ -62,6 +63,7 @@ module ApplicationHelper
 
   def country_from_ip(ip)
     results = Geocoder.search(ip)
+    return nil if results.first.nil?
     country = results.first.country
     return country unless country.empty?
 

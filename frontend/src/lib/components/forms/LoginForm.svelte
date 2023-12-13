@@ -73,7 +73,7 @@
 		{/if}
 		<div class="divider my-1" />
 		<div class="form-control">
-			<button class="btn btn-neutral btn-sm">Login</button>
+			<button class="btn btn-neutral btn-sm" data-testid="login-button">Login</button>
 		</div>
 		<div class="form-control">
 			<a class="btn btn-primary btn-sm mt-2" href="/signup">Create An Account</a>

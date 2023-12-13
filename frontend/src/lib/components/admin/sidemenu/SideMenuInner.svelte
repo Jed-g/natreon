@@ -19,6 +19,7 @@
 			class:font-semibold={!slug}
 			class:active={!slug}
 			href={`/admin${AdminDashboardUrls.OVERVIEW ? '/' + AdminDashboardUrls.OVERVIEW : ''}`}
+			data-testid="overview-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			><Icon icon={homeIcon} height={24} class="scale-125 mr-2" />Overview</a
 		>
@@ -29,6 +30,7 @@
 			class:font-semibold={slug === AdminDashboardUrls.USERS}
 			class:active={slug === AdminDashboardUrls.USERS}
 			href={`/admin${AdminDashboardUrls.USERS ? '/' + AdminDashboardUrls.USERS : ''}`}
+			data-testid="users-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			><Icon icon={accountGroupIcon} height={24} class="scale-125 mr-2" />Users</a
 		>
@@ -39,6 +41,7 @@
 			class:font-semibold={slug === AdminDashboardUrls.REVIEWS}
 			class:active={slug === AdminDashboardUrls.REVIEWS}
 			href={`/admin${AdminDashboardUrls.REVIEWS ? '/' + AdminDashboardUrls.REVIEWS : ''}`}
+			data-testid="reviews-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			><Icon icon={messageDrawIcon} height={24} class="scale-125 mr-2" />Reviews</a
 		>
@@ -49,6 +52,7 @@
 			class:font-semibold={slug === AdminDashboardUrls.QA}
 			class:active={slug === AdminDashboardUrls.QA}
 			href={`/admin${AdminDashboardUrls.QA ? '/' + AdminDashboardUrls.QA : ''}`}
+			data-testid="qa-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			><Icon icon={commentQuestionIcon} height={24} class="scale-125 mr-2" />QA</a
 		>
@@ -59,6 +63,7 @@
 			class:font-semibold={slug === AdminDashboardUrls.MAILING_LIST}
 			class:active={slug === AdminDashboardUrls.MAILING_LIST}
 			href={`/admin${AdminDashboardUrls.MAILING_LIST ? '/' + AdminDashboardUrls.MAILING_LIST : ''}`}
+			data-testid="mailing-list-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			><Icon icon={cardAccountMailIcon} height={24} class="scale-125 mr-2" />Mailing List</a
 		>
