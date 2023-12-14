@@ -59,7 +59,6 @@ yarn install
 5. In terminal One
 
 ```
-
 rails db:create
 
 rails db:migrate
@@ -67,15 +66,12 @@ rails db:migrate
 rails db:seed
 
 rails s
-
 ```
 
 4. In terminal Two
 
 ```
-
 yarn dev
-
 ```
 
 The app will now be running on localhost:5173
