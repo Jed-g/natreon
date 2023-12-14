@@ -36,8 +36,6 @@ Error tracking : 'sentry-rails'
 git clone https://git.shefcompsci.org.uk/com4525-2023-24/team02/project.git
 ```
 
-
-
 2. Open two terminals
 
 3. In terminal One
@@ -112,7 +110,24 @@ Commands to run frontend test suite:
 cd frontend
 yarn test
 ```
+# Deployment instructions
+```
+cd frontend
+yarn deploy
+cd ..
+bundle exec epi_deploy release -d demo
+bundle exec cap demo deploy:seed
+```
+# Seeded User Details
 
-* Services (job queues, cache servers, search engines, etc.)
+Admin Details
+```
+username:test@admin.com
+password:password
+```
+Reporter Details
+```
+username:test@reporter.com
+password:password
+```
 
-* Deployment instructions
