@@ -33,8 +33,19 @@
 </IntersectionObserver>
 
 <style>
-	.background-image {
-		background-image: url('/nature.jpg');
-		background-size: cover;
-	}
+    .background-image {
+        position: relative;
+    }
+
+    .background-image::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: url('/nature.jpg');
+        background-size: cover;
+        opacity: 0.5; 
+    }
 </style>

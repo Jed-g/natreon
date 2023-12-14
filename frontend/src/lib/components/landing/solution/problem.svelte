@@ -37,6 +37,8 @@
 
 	.large-text {
 		font-size: 2.8em;
+		font-weight: bold; 
+
 	}
 
 	.small-text {
