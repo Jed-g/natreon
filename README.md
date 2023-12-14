@@ -111,6 +111,7 @@ cd frontend
 yarn test
 ```
 # Deployment instructions
+Run the following commands from the root directory of the project
 ```
 cd frontend
 yarn deploy
