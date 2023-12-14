@@ -48,9 +48,10 @@ cd project
 bundle install
 
 bin/setup
-```
+
 
 sudo service postgresql start
+```
 
 4. In terminal Two 
 
