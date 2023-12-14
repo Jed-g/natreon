@@ -39,20 +39,27 @@ git clone https://git.shefcompsci.org.uk/com4525-2023-24/team02/project.git
 3. In terminal One
 
 cd project
+
 bundle install
+
 bin/setup
+
 sudo service postgresql start
 
 4. In terminal Two 
 
 cd project/frontend 
+
 yarn install
 
 5. In terminal One
 
 rails db:create
+
 rails db:migrate
+
 rails db:seed
+
 rails s
 
 4. In terminal Two
