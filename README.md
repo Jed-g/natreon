@@ -29,46 +29,58 @@ Error tracking : 'sentry-rails'
 'devise', 'cancancan', 'devise-jwt'
 
 # Configuration 
-gem install bundler -v 2.4.19 
-gem install rails -v 7.0.8
 
-sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee/etc/apt/trusted.gpg.d/postgresql.asc
-sudo apt update
-sudo apt install postgresql-14 postgresql-client-14 libpq-dev
+1. Clone the repository
+
+git clone https://git.shefcompsci.org.uk/com4525-2023-24/team02/project.git
+
+2. Open two terminals
+
+3. In terminal One
+
+cd project
+bundle install
+bin/setup
 sudo service postgresql start
 
-sudo apt update
-sudo apt install nodejs
+4. In terminal Two 
 
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo gpg --dearmor -o/etc/apt/trusted.gpg.d/yarn.gpg
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee/etc/apt/sources.list.d/yarn.list
-sudo apt update
-sudo apt install yarn
+cd project/frontend 
+yarn install
+
+5. In terminal One
+
+rails db:create
+rails db:migrate
+rails db:seed
+rails s
+
+4. In terminal Two
+
+yarn dev
+
+The app will now be running on localhost:5173
+
 # Database creation 
 rails db:create
 
 # Database initialization
-*cp config/database-sample.yml config/database.yml
 rails db:migrate
 rails db:seed
-rails console
-Make sure postgresql is installed and started
 
-# Run the test files
+# Run the all the back-end RSpec test files
+bundle exec rspec 
+
+# Run the specific test file
 bundle exec rspec spec/models/file_name.rb
 
-
-# How to run the test suite
+# How to run the frontend test suite
 To run front-end feature tests, make sure that you have used the command 'bundle install' in the base directory, and 'yarn install' in the frontend directory.
 
 Commands to run frontend test suite:
 cd frontend
 yarn test
 
-Commands to run the back-end RSpec test suite:
-Make sure you are in the base directory
-rspec spec
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions
