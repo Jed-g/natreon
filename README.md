@@ -73,13 +73,7 @@ rails db:seed
 rails s
 ```
 
-4. In terminal Two
-
-```
-yarn dev
-```
-
-The app will now be running on localhost:5173
+The app will now be running on localhost:3000
 
 # Database creation 
 ```
