@@ -48,7 +48,9 @@ cd project
 bundle install
 
 bin/setup
-
+```
+make sure your postgresql service is started eg.
+```
 sudo service postgresql start
 ```
 
