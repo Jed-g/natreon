@@ -5,6 +5,7 @@
 	import IntersectionObserver from 'svelte-intersection-observer';
 	import { MINIMUM_TIME_ON_SLIDE_FOR_PATH_REGISTRATION_MS } from '$lib/config';
 	import { pathToRegistrationAppend } from '$lib/utils';
+	import { onDestroy, onMount } from 'svelte';
 
 	let timeout: ReturnType<typeof setTimeout>;
 
@@ -22,6 +23,44 @@
 
 	let element: HTMLDivElement;
 	let intersecting: boolean;
+
+	let carousel: HTMLDivElement;
+	let currentIndex = 0;
+	let interval: any;
+
+	const description = [
+		"Be guided by the interactive map to your new favourite chill out spot! 🧘‍♀️",
+		"Learn more about your local environment with hand-curated Points of Interest! 🗿",
+		"Share your favourite spots, plan events and see what's happening in your area with Natreon-𝕏. 🫶"
+	]
+
+	function next() {
+		currentIndex = (currentIndex + 1) % 3;
+		console.log('CLICK-NEXT', currentIndex);
+	}
+
+	function prev() {
+		currentIndex = (currentIndex - 1 + 3) % 3;
+		console.log('CLICK-PREV', currentIndex);
+	}
+
+	function startAutoScroll() {
+		interval = setInterval(() => {
+			next();
+		}, 5000);
+	}
+
+	function stopAutoScroll() {
+		clearInterval(interval);
+	}
+
+	onMount(() => {
+		startAutoScroll();
+	});
+
+	onDestroy(() => {
+		stopAutoScroll();
+	});
 </script>
 
 <IntersectionObserver {element} bind:intersecting threshold={0.1}>
@@ -30,62 +69,27 @@
 		id="home"
 		bind:this={element}
 	>
-		<div class="w-5/6 py-10">
-			<div class="grid grid-rows-2 grid-cols-3 gap-3">
-				<img src={MapFeatureImg} alt="download icon" class="rounded-3xl" />
-				<img src={POIFeatureImg} alt="download icon" class="rounded-3xl" />
-				<img src={SocialFeatureImg} alt="download icon" class="rounded-3xl" />
-				<div>
-					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<!-- svelte-ignore a11y-no-static-element-interactions -->
-					<div class="collapse bg-base-200" on:click={(e) => console.log('MapFeatureClick', e)}>
-						<input type="checkbox" />
-						<div class="collapse-title text-xl font-medium">Map</div>
-						<div class="collapse-content">
-							<p>Be guided by the interactive map to your new favourite chill out spot! 🧘‍♀️</p>
-							<div class="flex items-center justify-center space-x-4 py-5">
-								<button class="btn btn-primary">Email</button>
-								<button class="btn btn-secondary">Social Media</button>
-							</div>
-						</div>
-					</div>
+		<div class="carousel-container">
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<div
+				class="w-5/6 carousel rounded-box"
+				bind:this={carousel}
+				on:mouseenter={stopAutoScroll}
+				on:mouseleave={startAutoScroll}
+			>
+				<div class="carousel-item w-full">
+					<img src={MapFeatureImg} alt="Interactive Map!" />
 				</div>
-				<div>
-					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<!-- svelte-ignore a11y-no-static-element-interactions -->
-					<div class="collapse bg-base-200" on:click={(e) => console.log('POIFeatureClick', e)}>
-						<input type="checkbox" />
-						<div class="collapse-title text-xl font-medium">POI</div>
-						<div class="collapse-content">
-							<p>
-								Learn more about your local environment with hand-curated Points of Interest! 🗿
-							</p>
-							<div class="flex items-center justify-center space-x-4 py-5">
-								<button class="btn btn-primary">Email</button>
-								<button class="btn btn-secondary">Social Media</button>
-							</div>
-						</div>
-					</div>
+				<div class="carousel-item w-full">
+					<img src={POIFeatureImg} alt="Points of interest!" />
 				</div>
-				<div>
-					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<!-- svelte-ignore a11y-no-static-element-interactions -->
-					<div class="collapse bg-base-200" on:click={(e) => console.log('SocialFeatureClick', e)}>
-						<input type="checkbox" />
-						<div class="collapse-title text-xl font-medium">Social</div>
-						<div class="collapse-content">
-							<p>
-								Share your favourite spots, plan events and see what's happening in your area with
-								Natreon-𝕏. 🫶
-							</p>
-							<div class="flex items-center justify-center space-x-4 py-5">
-								<button class="btn btn-primary">Email</button>
-								<button class="btn btn-secondary">Social Media</button>
-							</div>
-						</div>
-					</div>
+				<div class="carousel-item w-full">
+					<img src={SocialFeatureImg} alt="Social Features!" />
 				</div>
 			</div>
+			<div id="feature-description" class="mt-4 text-lg font-bold">{description[currentIndex]}</div>
+			<button on:click={prev} class="nav-button nav-button-left">←</button>
+			<button on:click={next} class="nav-button nav-button-right">→</button>
 		</div>
 	</div>
 </IntersectionObserver>
