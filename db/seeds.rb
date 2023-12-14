@@ -7,6 +7,8 @@ when "test"
     Question.create(answer:nil , question:"test_question_1", upvotes:0, downvotes:0)
     Question.create(answer:"test_answer_2" , question:"test_question_2", upvotes:0, downvotes:0)
 when "development"
+    User.create(email: "test@admin.com", password: "password", user_type: "admin")
+    User.create(email: "test@reporter.com", password: "password", user_type: "reporter")
 
 when "production"
 
