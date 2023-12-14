@@ -38,21 +38,27 @@ git clone https://git.shefcompsci.org.uk/com4525-2023-24/team02/project.git
 
 3. In terminal One
 
+```
 cd project
 
 bundle install
 
 bin/setup
+```
 
 sudo service postgresql start
 
 4. In terminal Two 
 
+```
 cd project/frontend 
 
 yarn install
+```
 
 5. In terminal One
+
+```
 
 rails db:create
 
@@ -62,31 +68,48 @@ rails db:seed
 
 rails s
 
+```
+
 4. In terminal Two
 
+```
+
 yarn dev
+
+```
 
 The app will now be running on localhost:5173
 
 # Database creation 
+```
 rails db:create
+```
 
 # Database initialization
+```
 rails db:migrate
 rails db:seed
+```
 
 # Run the all the back-end RSpec test files
+```
 bundle exec rspec 
+```
 
 # Run the specific test file
-bundle exec rspec spec/models/file_name.rb
+
+```
+bundle exec rspec spec/folder/file_name.rb
+```
 
 # How to run the frontend test suite
 To run front-end feature tests, make sure that you have used the command 'bundle install' in the base directory, and 'yarn install' in the frontend directory.
 
 Commands to run frontend test suite:
+```
 cd frontend
 yarn test
+```
 
 * Services (job queues, cache servers, search engines, etc.)
 
