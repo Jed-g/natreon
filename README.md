@@ -105,6 +105,8 @@ bundle exec rspec spec/folder/file_name.rb
 # How to run the frontend test suite
 To run front-end feature tests, make sure that you have used the command 'bundle install' in the base directory, and 'yarn install' in the frontend directory.
 Also make sure that before you run the 'yarn test' command that your rails server is not running.
+
+NOTE: These tests fail on the pipeline but pass locally. This is probably because the 3d webgl components might be too much for epiGenesys' servers and the view lags out so you can't do some interactions.
 Commands to run frontend test suite:
 ```
 cd frontend
