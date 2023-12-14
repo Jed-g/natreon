@@ -49,7 +49,6 @@ bundle install
 
 bin/setup
 
-
 sudo service postgresql start
 ```
 
