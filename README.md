@@ -53,9 +53,10 @@ sudo service postgresql start
 ```
 
 4. In terminal Two 
+Assuming you are in the root directory of the cloned project
 
 ```
-cd project/frontend 
+cd frontend 
 
 yarn install
 ```
