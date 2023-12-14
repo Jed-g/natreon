@@ -32,7 +32,11 @@ Error tracking : 'sentry-rails'
 
 1. Clone the repository
 
+```
 git clone https://git.shefcompsci.org.uk/com4525-2023-24/team02/project.git
+```
+
+
 
 2. Open two terminals
 
