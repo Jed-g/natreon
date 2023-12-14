@@ -60,4 +60,27 @@ RSpec.describe ReviewsController do
       expect(review.downvotes).to eq(1)
     end
   end
+
+  describe "DELETE #cancel_downvote_review" do
+    it "cancels the downvote to a review" do
+      review = Review.create! valid_attributes
+      put :downvote_review, params: {id: review.to_param}
+      review.reload
+      delete :cancel_downvote_review, params: {id: review.id}
+      review.reload
+      expect(review.downvotes).to eq(0)
+    end
+  end
+
+  describe "DELETE #cancel_upvote_review" do
+    it "cancels the upvote to a review" do
+      review = Review.create! valid_attributes
+      put :upvote_review, params: {id: review.to_param}
+      review.reload
+      delete :cancel_upvote_review, params: {id: review.id}
+      review.reload
+      expect(review.upvotes).to eq(0)
+    end
+  end
+
 end
