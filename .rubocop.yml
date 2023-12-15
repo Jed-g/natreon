@@ -154,3 +154,7 @@ RSpec/ExampleLength:
 
 RSpec/MultipleExpectations:
   Enabled: false
+
+# Allow stubbing using any_instance
+RSpec/AnyInstance:
+  Enabled: false

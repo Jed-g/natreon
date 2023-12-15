@@ -26,7 +26,7 @@ require "rails_helper"
 # RSpec.describe User do
 #   pending "add some examples to (or delete) #{__FILE__}"
 # end
-
+# rubocop:disable RSpec/NamedSubject
 RSpec.describe User do
   subject { described_class.new(email: "test@example.com", password: "password", user_type: "customer") }
 
@@ -70,3 +70,4 @@ RSpec.describe User do
     end
   end
 end
+# rubocop:enable RSpec/NamedSubject
