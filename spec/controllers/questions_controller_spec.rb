@@ -85,6 +85,7 @@ RSpec.describe QuestionsController do
       session[:questions_upvoted] = []
     end
 
+    # rubocop:disable RSpec/InstanceVariable
     context "when question is upvoted successfully" do
       it "upvotes a question and returns a success message" do
         post :upvote_question, params: {id: @question.id}
@@ -109,7 +110,9 @@ RSpec.describe QuestionsController do
         }.to change { @question.upvotes }.by(1)
       end
     end
+    # rubocop:enable RSpec/InstanceVariable
 
+    # rubocop:disable RSpec/InstanceVariable
     context "when the question has already been upvoted" do
       before { session[:questions_upvoted] = [@question.id] }
 
@@ -139,8 +142,10 @@ RSpec.describe QuestionsController do
         }.not_to(change { @question.upvotes })
       end
     end
+    # rubocop:enable RSpec/InstanceVariable
   end
 
+  # rubocop:disable RSpec/InstanceVariable
   describe "#downvote_question" do
     before do
       @question = create(:question)
@@ -202,13 +207,17 @@ RSpec.describe QuestionsController do
       end
     end
   end
+  # rubocop:enable RSpec/InstanceVariable
 
   describe "#cancel_upvote_question" do
+    # rubocop:disable RSpec/InstanceVariable
     before do
       @question = create(:question)
       session[:questions_upvoted] = [@question.id.to_s]
     end
+    # rubocop:enable RSpec/InstanceVariable
 
+    # rubocop:disable RSpec/InstanceVariable
     context "when cancelling an upvote successfully" do
       it "cancels an upvote and returns a success message" do
         post :cancel_upvote_question, params: {id: @question.id}
@@ -233,10 +242,12 @@ RSpec.describe QuestionsController do
         }.to change { @question.upvotes }.by(-1)
       end
     end
+    # rubocop:enable RSpec/InstanceVariable
 
     context "when attempting to cancel an upvote for a question that has not been upvoted" do
       before { session[:questions_upvoted] = [] }
 
+      # rubocop:disable RSpec/InstanceVariable
       it "renders a bad request response with a message" do
         post :cancel_upvote_question, params: {id: @question.id}
 
@@ -246,28 +257,36 @@ RSpec.describe QuestionsController do
         expect(json_response).to have_key("message")
         expect(json_response["message"]).to eq("Nothing to cancel, question hasn't been upvoted")
       end
+      # rubocop:enable RSpec/InstanceVariable
 
+      # rubocop:disable RSpec/InstanceVariable
       it "does not change the session[:questions_upvoted]" do
         expect {
           post :cancel_upvote_question, params: {id: @question.id}
         }.not_to(change { session[:questions_upvoted] })
       end
+      # rubocop:enable RSpec/InstanceVariable
 
+      # rubocop:disable RSpec/InstanceVariable
       it "does not update the upvotes count in the database" do
         expect {
           post :cancel_upvote_question, params: {id: @question.id}
           @question.reload
         }.not_to(change { @question.upvotes })
       end
+      # rubocop:enable RSpec/InstanceVariable
     end
   end
 
   describe "#cancel_downvote_question" do
+    # rubocop:disable RSpec/InstanceVariable
     before do
       @question = create(:question)
       session[:questions_downvoted] = [@question.id.to_s]
     end
+    # rubocop:enable RSpec/InstanceVariable
 
+    # rubocop:disable RSpec/InstanceVariable
     context "when cancelling an downvote successfully" do
       it "cancels an downvote and returns a success message" do
         post :cancel_downvote_question, params: {id: @question.id}
@@ -292,10 +311,12 @@ RSpec.describe QuestionsController do
         }.to change { @question.downvotes }.by(-1)
       end
     end
+    # rubocop:enable RSpec/InstanceVariable
 
     context "when attempting to cancel an downvote for a question that has not been downvoted" do
       before { session[:questions_downvoted] = [] }
 
+      # rubocop:disable RSpec/InstanceVariable
       it "renders a bad request response with a message" do
         post :cancel_downvote_question, params: {id: @question.id}
 
@@ -305,19 +326,24 @@ RSpec.describe QuestionsController do
         expect(json_response).to have_key("message")
         expect(json_response["message"]).to eq("Nothing to cancel, question hasn't been downvoted")
       end
+      # rubocop:enable RSpec/InstanceVariable
 
+      # rubocop:disable RSpec/InstanceVariable
       it "does not change the session[:questions_downvoted]" do
         expect {
           post :cancel_downvote_question, params: {id: @question.id}
         }.not_to(change { session[:questions_downvoted] })
       end
+      # rubocop:enable RSpec/InstanceVariable
 
+      # rubocop:disable RSpec/InstanceVariable
       it "does not update the downvotes count in the database" do
         expect {
           post :cancel_downvote_question, params: {id: @question.id}
           @question.reload
         }.not_to(change { @question.downvotes })
       end
+      # rubocop:enable RSpec/InstanceVariable
     end
   end
 end
