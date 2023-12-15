@@ -148,3 +148,9 @@ Lint/Debugger:
 # Style preference
 Style/MethodDefParentheses:
   Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
