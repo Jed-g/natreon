@@ -26,6 +26,7 @@
 
 	let element: HTMLDivElement;
 	let intersecting: boolean;
+
 </script>
 
 <IntersectionObserver {element} bind:intersecting threshold={0.1}>
@@ -48,8 +49,8 @@
 						<div class="collapse-content">
 							<p>Be guided by the interactive map to your new favourite chill out spot! 🧘‍♀️</p>
 							<div class="flex items-center justify-center space-x-4 py-5">
-								<a href={`mailto:blank`} class="btn btn-primary">Email</a>
-								<a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("www.tripwizard.com")}`} class="btn btn-secondary">Social Media</a>
+								<a href="mailto:?subject=The%20Nateron%20Map%20Feature%20is%20Awesome!&body=Hi!%20Checkout%20natreon.com%20and%20their%20awesome%20interactive%20map!" class="btn btn-primary">Email</a>
+								<a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("www.natreon.com/map")}`} class="btn btn-secondary">Social Media</a>
 							</div>
 						</div>
 					</div>
@@ -65,8 +66,8 @@
 								Learn more about your local environment with hand-curated Points of Interest! 🗿
 							</p>
 							<div class="flex items-center justify-center space-x-4 py-5">
-								<a href={`mailto:blank`} class="btn btn-primary">Email</a>
-								<a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("www.tripwizard.com")}`} class="btn btn-secondary">Social Media</a>
+								<a href="mailto:?subject=The%20Nateron%20POI%20Feature%20is%20Awesome!&body=Hi!%20Checkout%20natreon.com%20and%20their%20awesome%20points%20of%20local%20interest!" class="btn btn-primary">Email</a>
+								<a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("www.natreon.com/poi")}`} class="btn btn-secondary">Social Media</a>
 							</div>
 						</div>
 					</div>
@@ -83,8 +84,8 @@
 								Natreon-𝕏. 🫶
 							</p>
 							<div class="flex items-center justify-center space-x-4 py-5">
-								<a href={`mailto:blank`} class="btn btn-primary">Email</a>
-								<a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("www.tripwizard.com")}`} class="btn btn-secondary">Social Media</a>
+								<a href="mailto:?subject=The%20Nateron%20Social%20Feature%20is%20Awesome!&body=Hi!%20Checkout%20natreon.com%20and%20their%20awesome%20social%20media%20features!" class="btn btn-primary">Email</a>
+								<a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent("www.natreon.com/social")}`} class="btn btn-secondary">Social Media</a>
 							</div>
 						</div>
 					</div>

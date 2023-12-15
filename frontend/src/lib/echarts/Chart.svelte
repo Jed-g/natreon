@@ -1,6 +1,5 @@
 <script lang="ts" context="module">
-	import * as echarts from 'echarts';
-
+	import { graphic as eChartsGraphic, init } from 'echarts';
 	export type EChartsOptions = echarts.EChartsOption;
 	export type EChartsTheme = string | object;
 	export type EChartsRenderer = 'canvas' | 'svg';
@@ -9,27 +8,22 @@
 		renderer?: EChartsRenderer;
 		options: EChartsOptions;
 	};
-	export const graphic = echarts.graphic;
-
+	export const graphic = eChartsGraphic;
 	const DEFAULT_OPTIONS: Partial<ChartOptions> = {
 		theme: undefined,
 		renderer: 'canvas'
 	};
-
 	export function chartable(element: HTMLElement, echartOptions: ChartOptions) {
 		const { theme, renderer, options } = {
 			...DEFAULT_OPTIONS,
 			...echartOptions
 		};
-		const echartsInstance = echarts.init(element, theme, { renderer });
+		const echartsInstance = init(element, theme, { renderer });
 		echartsInstance.setOption(options);
-
 		function handleResize() {
 			echartsInstance.resize();
 		}
-
 		window.addEventListener('resize', handleResize);
-
 		return {
 			destroy() {
 				echartsInstance.dispose();
