@@ -37,11 +37,10 @@
 
 	.large-text {
 		font-size: 2.8em;
-		font-weight: bold; 
-
+		font-weight: bold;
 	}
 
 	.small-text {
-		font-size: 0.5em;
+		font-size: 0.8em;
 	}
 </style>

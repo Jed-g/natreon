@@ -36,7 +36,7 @@
 	let element: HTMLDivElement;
 	let intersecting: boolean;
 
-	let notificationAcknowledgeButton: HTMLButtonElement;
+	//let notificationAcknowledgeButton: HTMLButtonElement;
 </script>
 
 <IntersectionObserver {element} bind:intersecting threshold={0.1}>
@@ -76,7 +76,6 @@
 					<form>
 						<button
 							class="btn btn-primary"
-							bind:this={notificationAcknowledgeButton}
 							use:notifyAction={{
 								title:
 									'We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.',
@@ -108,7 +107,6 @@
 					<form>
 						<button
 							class="btn btn-primary"
-							bind:this={notificationAcknowledgeButton}
 							use:notifyAction={{
 								title:
 									'We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.',
@@ -136,7 +134,6 @@
 					<form>
 						<button
 							class="btn btn-primary"
-							bind:this={notificationAcknowledgeButton}
 							use:notifyAction={{
 								title:
 									'We appreciate your willingness to donate! Unfortunately this feature is not yet implemented.',

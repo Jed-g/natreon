@@ -28,24 +28,24 @@
 		id="home"
 		bind:this={element}
 	>
-		<Problem />
+		<div class="h-full w-full relative flex flex-col items-center justify-center">
+			<Problem />
+		</div>
 	</div>
 </IntersectionObserver>
 
 <style>
-    .background-image {
-        position: relative;
-    }
+	.background-image {
+		background-image: url('/nature.jpg');
+		background-size: cover;
+	}
 
-    .background-image::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background-image: url('/nature.jpg');
-        background-size: cover;
-        opacity: 0.5; 
-    }
+	.background-image::before {
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		background-color: rgba(0, 0, 0, 0.3);
+		backdrop-filter: blur(2px);
+	}
 </style>

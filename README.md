@@ -8,10 +8,11 @@ PostgreSQL for Active Record using the pg gem
 2. Web Server
 Puma: 'puma' gem
 3. Asset Compilation
+SvelteKit with 'adapter-static', outputs compiled assets & front-end into 'build' directory which is then moved to the rails 'public' directory
 4. Development and Test Tools 
 Debugging: 'byebug' gem
 Console: 'web-console' gem
-Conde linting: 'rubocop' gem
+Code linting: 'rubocop' gem
 5. Job Processing
 background job processing and scheduling: 'daemons', 'delayed_job', and 'whenever'
 6. Security tools
@@ -19,13 +20,14 @@ background job processing and scheduling: 'daemons', 'delayed_job', and 'wheneve
 7. Deployment
 'capistrano' gem
 8. Testing tools
-'rspec-rails', 'capybara', and 'simplecov'
+Back-end: 'rspec-rails', 'capybara', and 'simplecov'  
+Front-end: 'playwright' and 'vitest'
 9. Utility and Middleware
 Reducing boot times : 'bootsnap'
 Asset packing : 'shakapacker'
 Email sanitization: 'sanitize_email'
 Error tracking : 'sentry-rails'
-11. Authentification Authorization 
+10. Authentification Authorization 
 'devise', 'cancancan', 'devise-jwt'
 
 # Configuration 
