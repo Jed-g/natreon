@@ -10,10 +10,10 @@
 #  updated_at :datetime         not null
 #
 FactoryBot.define do
-    factory :mailing_list do
-        #id { 1 }
-        email { 'test@example.com' }
-        created_at { '23/06/2013'}
-        updated_at { '24/06/2013'}
-    end
+  factory :mailing_list do
+    # id { 1 }
+    email { "test@example.com" }
+    created_at { "23/06/2013" }
+    updated_at { "24/06/2013" }
+  end
 end

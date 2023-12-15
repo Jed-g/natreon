@@ -17,14 +17,14 @@
 #  session_id               :string           not null
 #
 FactoryBot.define do
-    factory :landing_page_visit do
-        #id { 1 }
-        country { 'United Kingdom' }
-        ip_address { '192.168.1.1' }
-        latitude {23}
-        longitude {56}
-        created_at { '23/06/2013'}
-        updated_at { '24/06/2013'}
-        session_id { 23 }
-    end
+  factory :landing_page_visit do
+    # id { 1 }
+    country { "United Kingdom" }
+    ip_address { "192.168.1.1" }
+    latitude { 23 }
+    longitude { 56 }
+    created_at { "23/06/2013" }
+    updated_at { "24/06/2013" }
+    session_id { 23 }
+  end
 end

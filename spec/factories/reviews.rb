@@ -14,9 +14,9 @@
 #  updated_at :datetime         not null
 #
 FactoryBot.define do
-    factory :review do
-        #id { 1 }
-        created_at { '23/06/2013'}
-        updated_at { '24/06/2013'}
-    end
+  factory :review do
+    # id { 1 }
+    created_at { "23/06/2013" }
+    updated_at { "24/06/2013" }
+  end
 end

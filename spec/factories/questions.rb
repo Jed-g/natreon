@@ -14,7 +14,7 @@
 #
 FactoryBot.define do
   factory :question do
-    #id { 1 }
+    # id { 1 }
     question { "question123" }
     answer { "answer123" }
   end

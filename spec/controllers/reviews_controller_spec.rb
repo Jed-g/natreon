@@ -82,5 +82,4 @@ RSpec.describe ReviewsController do
       expect(review.upvotes).to eq(0)
     end
   end
-
 end
