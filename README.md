@@ -129,3 +129,10 @@ username:test@reporter.com
 password:password
 ```
 
+# MacOS fix
+
+There is a known issue on MacOS related to eCharts. This can be fixed by adding the following line to frontend/src/routes/+layout.ts
+
+```
+export const ssr = false;
+```
