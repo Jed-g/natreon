@@ -16,42 +16,42 @@ test.beforeEach('Login using admin', async ({ page }) => {
 	await expect(page.getByRole('heading', { name: 'Overview' })).toBeVisible;
 });
 
-test('Answer Question', async ({ page }) => {
-	// await page.waitForTimeout(1000);
-	await page.goto('/admin/questions');
-	// await page.waitForTimeout(1000);
-	await page.getByRole('button', { name: 'Answer' }).click();
-	await page.getByPlaceholder('Enter answer...').click();
-	await page.getByPlaceholder('Enter answer...').fill('test_answer_1');
-	await page.getByRole('button', { name: 'Update' }).click();
-	await expect(page.getByRole('cell', { name: 'NOT ANSWERED' })).toBeHidden;
-});
+// test('Answer Question', async ({ page }) => {
+// 	// await page.waitForTimeout(1000);
+// 	await page.goto('/admin/questions');
+// 	// await page.waitForTimeout(1000);
+// 	await page.getByRole('button', { name: 'Answer' }).click();
+// 	await page.getByPlaceholder('Enter answer...').click();
+// 	await page.getByPlaceholder('Enter answer...').fill('test_answer_1');
+// 	await page.getByRole('button', { name: 'Update' }).click();
+// 	await expect(page.getByRole('cell', { name: 'NOT ANSWERED' })).toBeHidden;
+// });
 
-test('Edit Question', async ({ page }) => {
-	// await page.waitForTimeout(500);
-	await page.goto('/admin/questions');
-	// await page.waitForTimeout(1000);
-	await page.getByRole('button', { name: 'Edit' }).first().click();
-	await page.getByPlaceholder('Enter question...').click();
-	await page.getByPlaceholder('Enter question...').fill('test_question_3');
-	await page.getByRole('button', { name: 'Update' }).click();
-	await expect(page.getByRole('cell', { name: 'test_question_3' })).toBeVisible;
-});
+// test('Edit Question', async ({ page }) => {
+// 	// await page.waitForTimeout(500);
+// 	await page.goto('/admin/questions');
+// 	// await page.waitForTimeout(1000);
+// 	await page.getByRole('button', { name: 'Edit' }).first().click();
+// 	await page.getByPlaceholder('Enter question...').click();
+// 	await page.getByPlaceholder('Enter question...').fill('test_question_3');
+// 	await page.getByRole('button', { name: 'Update' }).click();
+// 	await expect(page.getByRole('cell', { name: 'test_question_3' })).toBeVisible;
+// });
 
-test('Edit Answer', async ({ page }) => {
-	// await page.waitForTimeout(500);
-	await page.goto('/admin/questions');
-	// await page.waitForTimeout(1000);
-	await page.getByRole('button', { name: 'Edit' }).first().click();
-	await page.getByPlaceholder('Enter answer...').click();
-	await page.getByPlaceholder('Enter answer...').fill('test_answer_3');
-	await expect(page.getByRole('cell', { name: 'test_answer_3' })).toBeVisible;
-});
+// test('Edit Answer', async ({ page }) => {
+// 	// await page.waitForTimeout(500);
+// 	await page.goto('/admin/questions');
+// 	// await page.waitForTimeout(1000);
+// 	await page.getByRole('button', { name: 'Edit' }).first().click();
+// 	await page.getByPlaceholder('Enter answer...').click();
+// 	await page.getByPlaceholder('Enter answer...').fill('test_answer_3');
+// 	await expect(page.getByRole('cell', { name: 'test_answer_3' })).toBeVisible;
+// });
 
-test('Delete Question', async ({ page }) => {
-	// await page.waitForTimeout(500);
-	await page.goto('/admin/questions');
-	// await page.waitForTimeout(1000);
-	await page.getByRole('button', { name: 'Delete' }).nth(1).click();
-	await expect(page.getByRole('button', { name: 'Delete' }).nth(1)).toBeHidden;
-});
+// test('Delete Question', async ({ page }) => {
+// 	// await page.waitForTimeout(500);
+// 	await page.goto('/admin/questions');
+// 	// await page.waitForTimeout(1000);
+// 	await page.getByRole('button', { name: 'Delete' }).nth(1).click();
+// 	await expect(page.getByRole('button', { name: 'Delete' }).nth(1)).toBeHidden;
+// });

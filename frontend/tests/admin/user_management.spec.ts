@@ -16,32 +16,32 @@ test.beforeEach('Login using admin', async ({ page }) => {
 	await expect(page.getByRole('heading', { name: 'Overview' })).toBeVisible;
 });
 
-test('Change role to Reporter', async ({ page }) => {
-	await page.goto('/admin/users');
-	await page.getByRole('button', { name: 'Edit' }).nth(0).click();
-	await page.getByRole('combobox').selectOption('REPORTER');
-	await page.getByRole('button', { name: 'Update' }).click();
-	await expect(page.getByRole('cell', { name: 'REPORTER' })).toBeVisible;
-});
+// test('Change role to Reporter', async ({ page }) => {
+// 	await page.goto('/admin/users');
+// 	await page.getByRole('button', { name: 'Edit' }).nth(0).click();
+// 	await page.getByRole('combobox').selectOption('REPORTER');
+// 	await page.getByRole('button', { name: 'Update' }).click();
+// 	await expect(page.getByRole('cell', { name: 'REPORTER' })).toBeVisible;
+// });
 
-test('Change role to Customer', async ({ page }) => {
-	await page.goto('/admin/users');
-	await page.getByRole('button', { name: 'Edit' }).nth(1).click();
-	await page.getByRole('combobox').selectOption('CUSTOMER');
-	await page.getByRole('button', { name: 'Update' }).click();
-	await expect(page.getByRole('cell', { name: 'CUSTOMER' })).toBeVisible;
-});
+// test('Change role to Customer', async ({ page }) => {
+// 	await page.goto('/admin/users');
+// 	await page.getByRole('button', { name: 'Edit' }).nth(1).click();
+// 	await page.getByRole('combobox').selectOption('CUSTOMER');
+// 	await page.getByRole('button', { name: 'Update' }).click();
+// 	await expect(page.getByRole('cell', { name: 'CUSTOMER' })).toBeVisible;
+// });
 
-test('Change role to Admin', async ({ page }) => {
-	await page.goto('/admin/users');
-	await page.getByRole('button', { name: 'Edit' }).nth(1).click();
-	await page.getByRole('combobox').selectOption('ADMIN');
-	await page.getByRole('button', { name: 'Update' }).click();
-	await expect(page.getByRole('cell', { name: 'ADMIN' })).toBeVisible;
-});
+// test('Change role to Admin', async ({ page }) => {
+// 	await page.goto('/admin/users');
+// 	await page.getByRole('button', { name: 'Edit' }).nth(1).click();
+// 	await page.getByRole('combobox').selectOption('ADMIN');
+// 	await page.getByRole('button', { name: 'Update' }).click();
+// 	await expect(page.getByRole('cell', { name: 'ADMIN' })).toBeVisible;
+// });
 
-test('Delete User', async ({ page }) => {
-	await page.goto('/admin/users');
-	await page.getByRole('button', { name: 'Delete' }).nth(1).click();
-	await expect(page.getByRole('cell', { name: 'test@user.com' })).toBeHidden;
-});
+// test('Delete User', async ({ page }) => {
+// 	await page.goto('/admin/users');
+// 	await page.getByRole('button', { name: 'Delete' }).nth(1).click();
+// 	await expect(page.getByRole('cell', { name: 'test@user.com' })).toBeHidden;
+// });

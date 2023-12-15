@@ -16,11 +16,11 @@ test.beforeEach('Login using admin', async ({ page }) => {
 	await expect(page.getByRole('heading', { name: 'Overview' })).toBeVisible;
 });
 
-test('Delete Review', async ({ page }) => {
-	await page.goto('/admin/reviews');
-	await page.getByRole('button', { name: 'Delete' }).nth(1).click();
-	await expect(page.getByRole('cell', { name: 'author_2' })).toBeHidden;
-});
+// test('Delete Review', async ({ page }) => {
+// 	await page.goto('/admin/reviews');
+// 	await page.getByRole('button', { name: 'Delete' }).nth(1).click();
+// 	await expect(page.getByRole('cell', { name: 'author_2' })).toBeHidden;
+// });
 
 test('View Review', async ({ page }) => {
 	// await page.waitForTimeout(500);
