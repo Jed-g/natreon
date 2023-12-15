@@ -26,6 +26,8 @@
 	const RANGES_VISIT_DETAILS: [number, number][] = [[0, 1140]];
 
 	$: mobileViewVisitDetails = checkValueInRange(screenWidth, RANGES_VISIT_DETAILS);
+
+	const isInTestingMode = localStorage.getItem('testingMode') === 'true';
 </script>
 
 <svelte:window on:resize={() => (screenWidth = screen.width)} />
@@ -36,29 +38,34 @@
 		<div class="divider my-2" />
 		<div class="flex flex-col pt-4">
 			<OverallDetails />
-			{#if mobileView}
-				<div class="flex mb-6">
-					<div class="grow flex flex-col">
-						<div class="h-96 flex grow"><LocationsGlobe /></div>
-						<div class="h-6" />
-						<div class="h-96 flex grow"><RegistrationFunnel {mobileView} /></div>
+			{#if !isInTestingMode}
+				{#if mobileView}
+					<div class="flex mb-6">
+						<div class="grow flex flex-col">
+							<div class="h-96 flex grow"><LocationsGlobe /></div>
+							<div class="h-6" />
+							<div class="h-96 flex grow"><RegistrationFunnel {mobileView} /></div>
+						</div>
 					</div>
-				</div>
-			{:else}
-				<div class="flex mb-6">
-					<div class="grow flex justify-between max-sm:flex-col">
-						<div class="h-96 flex grow sm:basis-1/2"><LocationsGlobe /></div>
-						<div class="max-sm:hidden w-6" />
-						<div class="h-6 sm:hidden" />
-						<div class="h-96 flex grow sm:basis-1/2"><RegistrationFunnel {mobileView} /></div>
+				{:else}
+					<div class="flex mb-6">
+						<div class="grow flex justify-between max-sm:flex-col">
+							<div class="h-96 flex grow sm:basis-1/2"><LocationsGlobe /></div>
+							<div class="max-sm:hidden w-6" />
+							<div class="h-6 sm:hidden" />
+							<div class="h-96 flex grow sm:basis-1/2"><RegistrationFunnel {mobileView} /></div>
+						</div>
+					</div>
+				{/if}
+				<div class="flex">
+					<div
+						class="height-details grow flex"
+						class:height-details-mobile={mobileViewVisitDetails}
+					>
+						<VisitDetails mobileView={mobileViewVisitDetails} />
 					</div>
 				</div>
 			{/if}
-			<div class="flex">
-				<div class="height-details grow flex" class:height-details-mobile={mobileViewVisitDetails}>
-					<VisitDetails mobileView={mobileViewVisitDetails} />
-				</div>
-			</div>
 		</div>
 	</div>
 </div>

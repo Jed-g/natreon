@@ -13,6 +13,7 @@ import { test, expect } from '@playwright/test';
 
 test('View Overview of statistics', async ({ page }) => {
 	await page.goto('/');
+	await page.evaluate(() => localStorage.setItem('testingMode', 'true'));
 	await page.getByRole('button', { name: 'I Understand' }).click();
 	await page.getByRole('link', { name: 'Login' }).click();
 	await page.getByTestId('email').click();
@@ -20,5 +21,8 @@ test('View Overview of statistics', async ({ page }) => {
 	await page.getByTestId('password').click();
 	await page.getByTestId('password').fill('password');
 	await page.getByTestId('login-button').click();
+	// await page.waitForTimeout(5000);
+	// await page.screenshot({path: "test.png"})
+	await page.waitForTimeout(5000);
 	await expect(page.getByRole('heading', { name: 'Overview' })).toBeVisible;
 });
