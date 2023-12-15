@@ -37,6 +37,7 @@ RSpec.describe Admin::StatsController do
     end
   end
 
+  # rubocop:disable Layout/LineLength
   describe "#all_visits" do
     context "when the user is an admin" do
       let(:current_user) { admin }
@@ -79,6 +80,7 @@ email_of_registered_user: "user2@example.com")
       end
     end
   end
+  # rubocop:enable Layout/LineLength
 
   describe "#route_visits" do
     context "when authorized admin user" do

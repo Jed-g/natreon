@@ -4,6 +4,7 @@ module Admin
   class StatsController < ApplicationController
     before_action :authorize_admin_controllers
 
+    # rubocop:disable Style/MultilineBlockChain
     def globe
       unique = LandingPageVisit.all.group_by(&:session_id).map {|_, visits|
                  visits.first
@@ -12,6 +13,9 @@ module Admin
       render json: {all:, unique:}
     end
 
+    # rubocop:enable Style/MultilineBlockChain
+    # rubocop:disable Style/MultilineBlockChain
+    # rubocop:disable Metrics/AbcSize
     def all_visits
       unique = LandingPageVisit.all.group_by(&:session_id).map {|_, visits|
                  visits.first.email_of_registered_user = visits.any? {|visit| !visit.email_of_registered_user.nil? }
@@ -44,6 +48,10 @@ module Admin
       render json: {all:, unique:}
     end
 
+    # rubocop:enable Style/MultilineBlockChain
+    # rubocop:enable Metrics/AbcSize
+
+    # rubocop:disable Metrics/AbcSize
     def route_visits
       entries = LandingPageVisit.all.group_by(&:session_id)
 
@@ -58,6 +66,7 @@ module Admin
       render json: {routes_visited: counts, registrations: number_of_registrations,
 total_unique_visits:}
     end
+    # rubocop:enable Metrics/AbcSize
 
     def overall_details
       questions_asked = Question.count

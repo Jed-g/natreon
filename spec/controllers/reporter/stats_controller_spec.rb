@@ -69,9 +69,6 @@ email_of_registered_user: "user2@example.com")
         expect(json_response["unique"]).to be_an(Array)
 
         expect(json_response["all"].size).to eq(3)
-        # expect(json_response['unique'].size).to eq(2)
-        # expect(json_response['all'].first).to include('country', 'created_at', 'time_spent_seconds', 'email_of_registered_user')
-        # expect(json_response['unique'].first).to include('country', 'created_at', 'time_spent_seconds', 'email_of_registered_user')
       end
     end
 

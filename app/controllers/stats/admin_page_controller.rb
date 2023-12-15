@@ -2,6 +2,7 @@
 
 module Stats
   class AdminPageController < ApplicationController
+    # rubocop:disable Metrics/AbcSize
     def register_new_page_visit
       return render_bad_request if geolocation_from_ip(request.remote_ip).nil?
 
@@ -12,7 +13,9 @@ module Stats
       session[:visit_id] = page_visit.id
       render json: {message: "Registered new visit successfully"}
     end
+    # rubocop:enable Metrics/AbcSize
 
+    # rubocop:disable Metrics/AbcSize
     def register_new_page_visit_with_ip_param
       ip = params[:ip]
       return render_bad_request if ip.nil?
@@ -25,7 +28,9 @@ module Stats
       session[:visit_id] = page_visit.id
       render json: {message: "Registered new visit successfully"}
     end
+    # rubocop:enable Metrics/AbcSize
 
+    # rubocop:disable Metrics/AbcSize
     def update_page_visit
       time_spent_seconds = params[:time_spent_seconds]
       return render_bad_request if time_spent_seconds.nil?
@@ -42,5 +47,6 @@ module Stats
       page_visit.save
       render json: {message: "Page visit updated successfully"}
     end
+    # rubocop:enable Metrics/AbcSize
   end
 end

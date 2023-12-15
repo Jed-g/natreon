@@ -10,7 +10,7 @@
 #  updated_at :datetime         not null
 #
 require "rails_helper"
-
+# rubocop:disable RSpec/NamedSubject
 RSpec.describe MailingList do
   subject { described_class.new(email: "test@example.com") }
 
@@ -21,3 +21,4 @@ RSpec.describe MailingList do
     end
   end
 end
+# rubocop:enable RSpec/NamedSubject

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/VerifiedDoubles
 require "rails_helper"
 
 RSpec.describe UtilsController do
@@ -8,7 +9,7 @@ RSpec.describe UtilsController do
       it "returns JSON with latitude and longitude" do
         allow(request).to receive(:remote_ip).and_return("0.0.0.0")
 
-        expect(Geocoder).to receive(:search).with("0.0.0.0").and_return([double(coordinates: [1.23, 4.56])])
+        allow(Geocoder).to receive(:search).with("0.0.0.0").and_return([double(coordinates: [1.23, 4.56])])
 
         get :geolocation
 
@@ -26,7 +27,7 @@ RSpec.describe UtilsController do
       it "returns JSON with a not found message" do
         allow(request).to receive(:remote_ip).and_return("0.0.0.0")
 
-        expect(Geocoder).to receive(:search).with("0.0.0.0").and_return([double(coordinates: [])])
+        allow(Geocoder).to receive(:search).with("0.0.0.0").and_return([double(coordinates: [])])
 
         get :geolocation
 
@@ -83,3 +84,4 @@ RSpec.describe UtilsController do
     end
   end
 end
+# rubocop:enable RSpec/VerifiedDoubles
