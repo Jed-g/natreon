@@ -29,7 +29,7 @@ module Stats
     def update_page_visit
       time_spent_seconds = params[:time_spent_seconds]
       return render_bad_request if time_spent_seconds.nil?
-      return render_bad_request unless time_spent_seconds.is_a?(Integer) && time_spent_seconds.to_i >= 0
+      return render_bad_request unless time_spent_seconds.to_i.is_a?(Integer) && time_spent_seconds.to_i >= 0
 
       visit_id = session[:visit_id]
       return render_bad_request if visit_id.nil?
