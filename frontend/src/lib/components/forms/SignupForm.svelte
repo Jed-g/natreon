@@ -21,7 +21,7 @@
 	// const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
 	const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-	let formData = { email: '', password: '', confirmPassword: '' };
+	let formData = { email: '', nickname: '', description: '', password: '', confirmPassword: '' };
 
 	type FormValidation = null | false | true;
 
@@ -63,7 +63,7 @@
 			return;
 		}
 
-		const signupSuccessful = await signUp(formData.email, formData.password);
+		const signupSuccessful = await signUp(formData.email, formData.nickname, formData.description, formData.password);
 
 		if (signupSuccessful) {
 			fetch('/api/stats/landing/registration-completed', {
@@ -117,6 +117,29 @@
 
 					formValidation.emailNotTaken = null;
 				}}
+			/>
+		</div>
+		<div class="form-control">
+			<label class="label" for = "nickname">
+				<span class="label-text">Nickname</span>
+			</label>
+			<input
+				type="text"
+				placeholder="nickname"
+				class="input input-bordered"
+				id="nickname"
+				bind:value={formData.nickname}
+			/>
+		</div>
+		<div class="form-control">
+			<label class="label" for="description">
+				<span class="label-text">Description</span>
+			</label>
+			<textarea
+				placeholder="description"
+				class="textarea textarea-bordered"
+				id="description"
+				bind:value={formData.description}
 			/>
 		</div>
 		<div class="form-control">
