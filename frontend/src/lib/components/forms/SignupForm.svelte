@@ -30,11 +30,13 @@
 		emailNotTaken: FormValidation;
 		passwordMin8: FormValidation;
 		passwordsMatch: FormValidation;
+		nicknameMin3: FormValidation;
 	} = {
 		emailValid: null,
 		emailNotTaken: null,
 		passwordMin8: null,
-		passwordsMatch: null
+		passwordsMatch: null,
+		nicknameMin3: null
 	};
 
 	const validateData = (): boolean => {
@@ -54,6 +56,12 @@
 			isOk = false;
 			formValidation.passwordsMatch = false;
 		}
+
+		if (formData.nickname.length < 3) {
+			isOk = false;
+			formValidation.nicknameMin3 = false;
+		}
+
 
 		return isOk;
 	};
@@ -83,6 +91,11 @@
 		if (formValidation.emailValid !== null) {
 			formValidation.emailValid = EMAIL_REGEX.test(formData.email);
 		}
+
+		if (formValidation.nicknameMin3 !== null) {
+			formValidation.nicknameMin3 = formData.nickname.length >= 3;
+		}
+
 
 		if (formValidation.passwordMin8 !== null) {
 			formValidation.passwordMin8 = formData.password.length >= 8;
@@ -129,6 +142,12 @@
 				class="input input-bordered"
 				id="nickname"
 				bind:value={formData.nickname}
+				on:input={() => {
+					if (formValidation.nicknameMin3=== null) {
+						formValidation.nicknameMin3= false;
+					}
+				}}
+
 			/>
 		</div>
 		<div class="form-control">
@@ -194,6 +213,17 @@
 			<div class="flex">
 				<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
 				<p class="ml-3">Email Belongs To Another User</p>
+			</div>
+		{/if}
+		{#if formValidation.nicknameMin3 === false}
+			<div class="flex">
+				<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+				<p class="ml-3">Nickname Needs To Be At Least 3 Characters Long</p>
+			</div>
+		{:else if formValidation.nicknameMin3 === true}
+			<div class="flex">
+				<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+				<p class="ml-3">Nickname Length Ok</p>
 			</div>
 		{/if}
 		{#if formValidation.passwordMin8 === false}

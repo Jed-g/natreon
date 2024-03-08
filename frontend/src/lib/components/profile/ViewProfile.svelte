@@ -44,29 +44,30 @@
 
 <div class="flex flex-col items-center justify-center min-h-screen bg-lime-900">
     <div class="text-white text-4xl">Profile</div>
-    <div class="p-6 bg-green-700 text-white rounded shadow-md w-full md:w-1/2 lg:w-1/3">
+    <div class="p-6 bg-green-700 text-white rounded shadow-md w-full md:w-1/2">
         <div class="mb-4">
-            <label for="name" class="block">Name:</label>
+            <label for="name">Name:</label>
             <input id="name" type="text" bind:value={user.nickname} 
-                readonly={!isEditing} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50" />
+                readonly={!isEditing} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
         </div>
         
         <div class="mb-4">
-            <label for="email" class="block">Email:</label>
+            <label for="email">Email:</label>
             <input id="email" type="text" bind:value={user.email} 
-                readonly={!isEditing} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50" />
+                readonly class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
         </div>
         
         <div>
-            <label for="description" class="block">Description:</label>
+            <label for="description">Description:</label>
             <textarea id="description" rows="8" cols="50" bind:value={user.description} 
-                readonly={!isEditing} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50"></textarea>
+                readonly={!isEditing} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"></textarea>
         </div>
 
         {#if isEditing}
-            <button on:click={saveChanges} class="btn">Save Changes</button>
+            <div class="text-white text-2xl text-center">Editing Profile</div>
+            <button class="btn" on:click={saveChanges}>Save Changes</button>
         {:else}
-            <div class="flex items-center justify-center">
+            <div class="flex items-center justify-center h-full">
                 <button class="btn" on:click={toggleEdit}>Edit Profile</button>
             </div>
         {/if}
