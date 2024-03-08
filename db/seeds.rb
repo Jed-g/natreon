@@ -3,10 +3,16 @@ when "test"
     User.find_or_create_by(email: "test@user.com") do |user|
         user.password = "password"
         user.user_type = 0
+        user.nickname = "test_user"
+        user.description = "test_description"
+
       end
     User.find_or_create_by(email: "test@admin.com") do |user|
         user.password = "password"
         user.user_type = 1
+        user.nickname = "test_user"
+        user.description = "test_description"
+
     end
     # User.find_or_create_by(email: "test@reporter.com") do |user|
     #     user.password = "password"
@@ -21,14 +27,23 @@ when "development"
     User.find_or_create_by(email: "test@user.com") do |user|
         user.password = "password"
         user.user_type = 0
+        user.nickname = "test_user"
+        user.description = "test_description"
+
       end
     User.find_or_create_by(email: "test@admin.com") do |user|
         user.password = "password"
         user.user_type = 1
+        user.nickname = "test_user"
+        user.description = "test_description"
+
     end
     User.find_or_create_by(email: "test@reporter.com") do |user|
         user.password = "password"
         user.user_type = 2
+        user.nickname = "test_user"
+        user.description = "test_description"
+
     end
 
 when "production"
@@ -37,13 +52,22 @@ when "demo"
     User.find_or_create_by(email: "test@user.com") do |user|
         user.password = "password"
         user.user_type = 0
+        user.nickname = "test_user"
+        user.description = "test_description"
+
       end
     User.find_or_create_by(email: "test@admin.com") do |user|
         user.password = "password"
         user.user_type = 1
+        user.nickname = "test_user"
+        user.description = "test_description"
+
     end
     User.find_or_create_by(email: "test@reporter.com") do |user|
         user.password = "password"
         user.user_type = 2
+        user.nickname = "test_user"
+        user.description = "test_description"
+
     end
 end
