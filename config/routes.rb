@@ -73,6 +73,7 @@ Rails.application.routes.draw do
     delete "/reviews/downvote", to: "reviews#cancel_downvote_review"
 
     get "/users/profile", to: "users/profile#user_profile"
+    put "/users/profile", to: "users/profile#update_user_profile"
 
     post "/mailinglist", to: "mailing_list#submit_email"
   end
