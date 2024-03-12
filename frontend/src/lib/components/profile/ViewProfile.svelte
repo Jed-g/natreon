@@ -4,6 +4,7 @@
     let isEditing = false;
     let files: File[] = [];
     let selectedFile: File | null;
+    let nicknameMin3 = '';
 
     let user = { nickname: '', email: '', description: '',profile_picture: ''  };
 
@@ -17,7 +18,18 @@
         isEditing = !isEditing;
     }
 
+    $: {
+        if (user && user.nickname && user.nickname.length < 3) {
+            nicknameMin3 = 'Nickname must be at least 3 characters long';
+        } else {
+            nicknameMin3 = '';
+        }
+    }
+
     async function saveChanges() {
+        if (nicknameMin3) {
+            return;
+        }
         const { profile_picture, ... rest} = user;
         const response = await fetch('/api/users/profile', {
             method: 'PUT',
@@ -78,9 +90,14 @@
     <div class="p-6 bg-green-700 text-white rounded shadow-md w-full md:w-3/4 lg:w-1/2">
         <div class="mb-4">
             <h2 class="text-2xl font-bold mb-2">Details</h2>
-            <label for="name">Name:</label>
-            <input id="name" type="text" bind:value={user.nickname} 
-                readonly={!isEditing} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
+            <div>
+                <label for="nickname">Nickname:</label>
+                <input id="nickname" bind:value={user.nickname} readonly={!isEditing}
+                    class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
+                {#if nicknameMin3}
+                    <p>{nicknameMin3}</p>
+                {/if}
+            </div>
         </div>
         
         <div class="mb-4">
