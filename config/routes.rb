@@ -41,6 +41,8 @@ Rails.application.routes.draw do
     get "/admin/users", to: "admin/users#all_users"
     post "/admin/users", to: "admin/users#update_user"
     delete "/admin/users", to: "admin/users#delete_user"
+    post "/admin/users/deactivate", to: "admin/users#deactivate_user"
+    post "/admin/users/activate", to: "admin/users#activate_user"
     get "/admin/reviews", to: "admin/reviews#all_reviews"
     delete "/admin/reviews", to: "admin/reviews#delete_review"
     get "/admin/questions", to: "admin/questions#all_questions"

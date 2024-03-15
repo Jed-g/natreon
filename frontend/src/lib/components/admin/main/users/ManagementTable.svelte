@@ -7,6 +7,8 @@
 	export let getItemsAction: () => Promise<itemType[]>;
 	export let editAction: (id: number, values: Record<string, string>) => Promise<void>;
 	export let deleteAction: (id: number) => Promise<void>;
+	export let deactivateAction: (id: number) => Promise<void>;
+	export let activateAction: (id: number) => Promise<void>;
 	export let tableName: string;
 	export let tableHeaders: string[];
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -117,6 +119,20 @@
 									await deleteAction(item.id);
 									updateTableUiState();
 								}}>Delete</button
+							>
+							<button
+								class="btn btn-warning"
+								on:click={async () => {
+									await deactivateAction(item.id);
+									updateTableUiState();
+								}}>Deactivate</button
+							>
+							<button
+								class="btn btn-success"
+								on:click={async () => {
+									await activateAction(item.id);
+									updateTableUiState();
+								}}>Activate</button
 							>
 						</td>
 					</tr>

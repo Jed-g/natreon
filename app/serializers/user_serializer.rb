@@ -5,9 +5,12 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  deactivated            :boolean          default(FALSE)
+#  description            :string           not null
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  jti                    :string           not null
+#  nickname               :string           not null
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
