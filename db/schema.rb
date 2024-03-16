@@ -141,10 +141,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_15_135852) do
     t.string "jti", null: false
     t.string "nickname", null: false
     t.string "description", null: false
-<<<<<<< HEAD
-=======
     t.boolean "deactivated", default: false
->>>>>>> manage-users
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
