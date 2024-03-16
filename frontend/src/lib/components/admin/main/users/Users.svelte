@@ -35,6 +35,32 @@
 		const data = await response.json();
 		return data;
 	};
+
+	const deactivateUser = async (id: number) => {
+		const response = await fetch('/api/admin/users/deactivate', {
+			method: 'POST',
+			body: JSON.stringify({ id }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		authenticated.verify();
+		const data = await response.json();
+		return data;
+	};
+
+	const activateUser = async (id: number) => {
+		const response = await fetch('/api/admin/users/activate', {
+			method: 'POST',
+			body: JSON.stringify({ id }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		authenticated.verify();
+		const data = await response.json();
+		return data;
+	};
 </script>
 
 <div class="relative p-6 h-full w-full">
@@ -44,8 +70,10 @@
 			getItemsAction={getAllUsers}
 			editAction={updateUser}
 			deleteAction={deleteUser}
+			deactivateAction={deactivateUser}
+			activateAction={activateUser}
 			tableFieldFormatters={{ user_type: (value) => value.toUpperCase() }}
-			tableHeaders={['Email', 'User Type']}
+			tableHeaders={['Email', 'User Type', 'Deactivated?']}
 			tableName={'User Management'}
 		/>
 	</div>

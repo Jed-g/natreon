@@ -5,6 +5,10 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+<<<<<<< HEAD
+=======
+#  deactivated            :boolean          default(FALSE)
+>>>>>>> manage-users
 #  description            :string           not null
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
@@ -37,4 +41,8 @@ class User < ApplicationRecord
   validates :email, presence: true, format: {with: EMAIL_REGEX}
 
   has_one_attached :profile_picture
+  def active_for_authentication?
+    super && !deactivated
+  end
+
 end

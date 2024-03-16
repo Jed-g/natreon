@@ -5,7 +5,7 @@ module Admin
     before_action :authorize_admin_controllers
 
     def all_users
-      render json: {users: User.select(:id, :email, :user_type)}
+      render json: {users: User.select(:id, :email, :user_type, :deactivated)}
     end
 
     def update_user
@@ -24,6 +24,24 @@ module Admin
 
       user.destroy
       render json: {message: "Deleted user successfully"}
+    end
+
+    def deactivate_user
+      user = User.find(params[:id])
+      return render_bad_request if user.nil?
+
+      user.deactivated = true
+      user.save
+      render json: {message: "Deactivated user successfully"}
+    end
+
+    def activate_user
+      user = User.find(params[:id])
+      return render_bad_request if user.nil?
+
+      user.deactivated = false
+      user.save
+      render json: {message: "Activated user successfully"}
     end
 
     # EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/

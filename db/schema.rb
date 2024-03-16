@@ -11,6 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2024_03_09_111025) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_15_135852) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -140,6 +141,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_09_111025) do
     t.string "jti", null: false
     t.string "nickname", null: false
     t.string "description", null: false
+<<<<<<< HEAD
+=======
+    t.boolean "deactivated", default: false
+>>>>>>> manage-users
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
