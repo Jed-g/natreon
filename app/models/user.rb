@@ -5,9 +5,11 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  description            :string           not null
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  jti                    :string           not null
+#  nickname               :string           not null
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
@@ -33,4 +35,6 @@ class User < ApplicationRecord
 
   EMAIL_REGEX = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
   validates :email, presence: true, format: {with: EMAIL_REGEX}
+
+  has_one_attached :profile_picture
 end

@@ -1,4 +1,5 @@
 import UserType from '$lib/enums/userType';
+import type { Test } from 'vitest';
 
 /**
  * Checks if the user is authenticated / Determines userType by making a request to the server.
@@ -51,11 +52,11 @@ export const logIn = async (email: string, password: string) => {
  * @param password The password of the user to sign up.
  * @returns A Promise that resolves to a boolean indicating whether the sign up was successful.
  */
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (email: string, nickname: string, description: string,  password: string) => {
 	try {
 		const response = await fetch('/api/auth/signup', {
 			method: 'POST',
-			body: JSON.stringify({ user: { email, password } }),
+			body: JSON.stringify({ user: { email, nickname, description, password } }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
