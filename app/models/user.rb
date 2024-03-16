@@ -36,4 +36,9 @@ class User < ApplicationRecord
 
   EMAIL_REGEX = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
   validates :email, presence: true, format: {with: EMAIL_REGEX}
+
+  def active_for_authentication?
+    super && !deactivated
+  end
+
 end
