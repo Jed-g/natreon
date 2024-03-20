@@ -144,29 +144,29 @@
 							>{item.name.length === 0
 								? 'EMPTY'
 								: item.name.length > 30
-								? Array.from(item.content).slice(0, 30).join('') + '...'
-								: item.content}</td
+								? Array.from(item.name).slice(0, 30).join('') + '...'
+								: item.name}</td
 						>
 						<td
 							>{item.description.length === 0
 								? 'EMPTY'
 								: item.description.length > 30
-								? Array.from(item.content).slice(0, 30).join('') + '...'
-								: item.content}</td
+								? Array.from(item.description).slice(0, 30).join('') + '...'
+								: item.description}</td
 						>
 						<td
 							>{item.location.length === 0
 								? 'EMPTY'
 								: item.location.length > 10
-								? Array.from(item.author).slice(0, 10).join('') + '...'
-								: item.author}</td
+								? Array.from(item.location).slice(0, 10).join('') + '...'
+								: item.location}</td
 						>
 						<td
 							>{item.features.length === 0
 								? 'EMPTY'
 								: item.features.length > 10
-								? Array.from(item.author).slice(0, 10).join('') + '...'
-								: item.author}</td
+								? Array.from(item.features).slice(0, 10).join('') + '...'
+								: item.features}</td
 						>
 						<td>{item.likes}</td>
 						<td>{item.latitude}</td>

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Admin  
   class PoisController < ApplicationController
-    before_action :set_poi, only: %i[ show update destroy ]
+    before_action :authorize_admin_controllers
 
     # GET /pois
     def index
@@ -10,8 +12,8 @@ module Admin
     end
 
     def all_pois
-      pois = Poi.order(created_at: :desc).select(:id, :name, :description, :location, :location, :features, :likes, :latitude, :longitude)
-      render json: {pois: pois}
+      render json: Poi.order(created_at: :desc).select(:id, :name, :description, :location, 
+                    :features, :likes, :latitude, :longitude)
     end
 
     def delete_poi

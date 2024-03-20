@@ -1,16 +1,15 @@
 <script lang="ts">
-	import ManagementTable from '$lib/components/admin/main/reviews/ManagementTable.svelte';
+	import ManagementTable from '$lib/components/admin/main/managepois/ManagementTable.svelte';
 	import { authenticated } from '$lib/stores';
 
 	const getAllPois = async () => {
 		const response = await fetch('/api/admin/pois');
 		const data = await response.json();
-		console.log(data.users);
-		return data.users;
+		return data;
 	};
 
 	const deletePoi = async (id: number) => {
-		const response = await fetch('/api/admin/reviews', {
+		const response = await fetch('/api/admin/pois', {
 			method: 'DELETE',
 			body: JSON.stringify({ id }),
 			headers: {
