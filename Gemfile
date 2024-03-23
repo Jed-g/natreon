@@ -59,7 +59,7 @@ gem "rubocop-rspec"
 gem "sanitize_email"
 gem "sentry-rails"
 gem "sentry-ruby"
-gem "shakapacker"
+gem "shakapacker", "7.0.3"
 gem "simple_form"
 gem "whenever"
 

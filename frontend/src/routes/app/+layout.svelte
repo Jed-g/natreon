@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '$lib/global.css';
 	import { authenticated } from '$lib/stores';
 	import { onDestroy, onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
@@ -82,7 +81,10 @@
 			<span class="loading loading-ring loading-lg" />
 		</div>
 	{:else}
-		<div class="grow overflow-hidden" in:scale={{ start: 0.9, duration: 500, opacity: 0 }}>
+		<div
+			class="flex flex-col grow relative overflow-x-hidden"
+			in:scale={{ start: 0.9, duration: 500, opacity: 0 }}
+		>
 			<slot />
 		</div>
 	{/if}

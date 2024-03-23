@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Map from '$lib/components/app/map/Map.svelte';
 	import LogoutButton from '$lib/components/LogoutButton.svelte';
-	import GoToProfile from '$lib/components/GoToProfile.svelte';
+	import GoToProfile from '$lib/components/app/GoToProfile.svelte';
 </script>
 
 <Map />
