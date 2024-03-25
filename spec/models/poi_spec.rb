@@ -4,7 +4,7 @@
 #
 #  id          :bigint           not null, primary key
 #  description :text
-#  features    :text
+#  features    :string           default([]), is an Array
 #  latitude    :float
 #  likes       :integer
 #  location    :string

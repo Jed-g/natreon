@@ -16,6 +16,17 @@ module Admin
                     :features, :likes, :latitude, :longitude)
     end
 
+    def create_poi
+      poi = Poi.new(poi_params)
+
+      if poi.save
+        render json: {message: "Poi created successfully", poi: poi}
+      else
+        render json: poi.errors
+      end
+    end
+
+
     def delete_poi
       read_id_param
       poi = Poi.find(@id)
@@ -66,5 +77,11 @@ module Admin
       def poi_params
         params.require(:poi).permit(:name, :description, :location, :features, :likes, :latitude, :longitude)
       end
+
+      def read_id_param
+        @id = params[:id]
+        render_bad_request if @id.nil?
+      end
+
   end
 end

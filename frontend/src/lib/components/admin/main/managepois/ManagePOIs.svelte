@@ -8,6 +8,21 @@
 		return data;
 	};
 
+	const createPoi = async (poi: { name: string, description: string, location: string,
+					features: string[], likes: number, latitude: number, longitude: number }) => {
+		const response = await fetch('/api/admin/pois', {
+			method: 'POST',
+			body: JSON.stringify({ poi }),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		authenticated.verify();
+		const data = await response.json();
+		return data;
+	};
+
+
 	const deletePoi = async (id: number) => {
 		const response = await fetch('/api/admin/pois', {
 			method: 'DELETE',
@@ -27,8 +42,9 @@
 		<ManagementTable
 			getItemsAction={getAllPois}
 			deleteAction={deletePoi}
+			createAction={createPoi}
 			tableHeaders={['Name', 'Description', 'Location', 'Features', 'Likes', 'Latitude', 'Longitude']}
-			tableName={'POIs'}
+			tableName={'POI Management'}
 		/>
 	</div>
 </div>
