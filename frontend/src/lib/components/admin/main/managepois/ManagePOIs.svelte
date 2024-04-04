@@ -35,6 +35,20 @@
 		const data = await response.json();
 		return data;
 	};
+
+	const editPoi = async (id: number, values: Record<string, string | number>) => {
+		const response = await fetch('/api/admin/pois/edit', {
+			method: 'POST',
+			body: JSON.stringify({ id, name: values.name, description: values.description, location: values.location,
+					features: values.features, latitude: values.latitude, longitude: values.longitude}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+		authenticated.verify();
+		const data = await response.json();
+		return data;
+	};
 </script>
 
 <div class="relative p-6 h-full w-full">
@@ -43,6 +57,7 @@
 			getItemsAction={getAllPois}
 			deleteAction={deletePoi}
 			createAction={createPoi}
+			editAction={editPoi}
 			tableHeaders={['Name', 'Description', 'Location', 'Features', 'Likes', 'Latitude', 'Longitude']}
 			tableName={'POI Management'}
 		/>

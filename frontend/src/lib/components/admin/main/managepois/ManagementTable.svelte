@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import Icon from '@iconify/svelte';
+	import validIcon from '@iconify-icons/mdi/checkbox-marked';
+	import errorIcon from '@iconify-icons/mdi/close-box';
 
 	//type TypeFromVar<T> = T[keyof T][];
 	type itemType = Record<string, string> & { id: number };
@@ -9,8 +12,7 @@
 	export let tableHeaders: string[];
 	export let createAction: (poi: { name: string, description: string, 
 					features: string[], location: string, likes: number, latitude: number, longitude: number }) => Promise<void>;
-
-
+	export let editAction: (id: number, values: Record<string, string | number>) => Promise<void>;
 	let loading = true;
 	let currentlyViewed: {
 		id: number;
@@ -18,6 +20,90 @@
 	} | null = null;
 	let items: itemType[];
 
+	//Form validation
+	
+	type FormValidation = null | false | true;
+
+	let formValidation: {
+		nameMin3: FormValidation;
+		nameValid: FormValidation;
+		latitudeValid: FormValidation;
+		longitudeValid: FormValidation;
+		featuresValid: FormValidation;
+		locationValid: FormValidation;
+	} = {
+		nameMin3: null,
+		nameValid: null,
+		latitudeValid: null,
+		longitudeValid: null,
+		featuresValid: null,
+		locationValid: null
+	};
+
+	const nameRegex = /^[a-z0-9 ]+$/i;
+
+	const validateData = (): boolean => {
+		let isOk = true;
+
+		if (poi.name.length < 3) {
+			isOk = false;
+			formValidation.nameMin3 = false;
+		}
+		
+        if (!nameRegex.test(poi.name)) {
+            isOk = false;
+            formValidation.nameValid = false;
+        }
+
+		if (poi.features.length == 0) {
+			isOk = false;
+			formValidation.featuresValid = false;
+		}
+
+		if (isNaN(poi.latitude) || poi.latitude <= -90 || poi.latitude >= 90 || poi.latitude == null) {
+			isOk = false;
+			formValidation.latitudeValid = false;
+		}
+
+		if (isNaN(poi.longitude) || poi.longitude <= -180 || poi.longitude >= 180 || poi.longitude == null) {
+			isOk = false;
+			formValidation.longitudeValid = false;
+		}
+
+		if (poi.location == null || poi.location == '') {
+			isOk = false;
+			formValidation.locationValid = false;
+		}
+
+		return isOk;
+	}
+
+	$: {
+		if (formValidation.nameMin3 !== null) {
+			formValidation.nameMin3 = poi.name.length >= 3;
+		}
+
+		if (formValidation.nameValid !== null) {
+			formValidation.nameValid = nameRegex.test(poi.name);
+		}
+
+		if (formValidation.featuresValid !== null) {
+			formValidation.featuresValid = poi.features.length != 0;
+		}
+
+		if (formValidation.latitudeValid !== null) {
+			formValidation.latitudeValid = !isNaN(poi.latitude) && poi.latitude >= -90 && poi.latitude <= 90 && poi.latitude != null;
+		}
+
+		if (formValidation.longitudeValid !== null) {
+			formValidation.longitudeValid = !isNaN(poi.longitude) && poi.longitude >= -180 && poi.longitude <= 180 && poi.longitude != null;
+		}
+		
+		if (formValidation.locationValid !== null) {
+			formValidation.locationValid = poi.location != '' && poi.location != null;
+		}
+	}
+	
 	let creatingNewPoi = false;
 
 	let poi = {
@@ -29,6 +115,12 @@
         longitude: 0,
 		likes: 0,
     };
+	let features = [''];
+
+	function addFeature() {
+		//features.push('');
+		features = [...features, ''];
+	}
 
     const createNewPoi = () => {
         creatingNewPoi = true;
@@ -36,6 +128,18 @@
 
 	let editing = false;
 
+	function resetPoi() {
+		poi = {
+			name: '',
+			description: '',
+			features: [''],
+			location: '',
+			latitude: 0,
+			longitude: 0,
+			likes: 0,
+		};
+		features = [''];
+	}
     function startEditing() {
         editing = true;
     }
@@ -84,7 +188,40 @@
 
 			<div class="divider my-2" />
 			{#if editing}
-                <button class="btn btn-primary" on:click={stopEditing}>Done</button>
+				<form class="flex flex-col grow" on:submit|preventDefault={() => {
+							if (currentlyViewed) {
+								editAction(currentlyViewed.id, currentlyViewed.values);
+							}
+							stopEditing;
+							return false;
+						}}>
+					<label>
+						<span>Name</span>
+						<input type="text" bind:value={currentlyViewed.values.name} class="input input-bordered" />
+					</label>
+					<label>
+						<span>Description</span>
+						<input type="text" bind:value={currentlyViewed.values.description} class="input input-bordered" />
+					</label>
+					<label>
+						<span>Features</span>
+						<input type="text" bind:value={currentlyViewed.values.features} class="input input-bordered" />
+					</label>
+					<label>
+						<span>Location</span>
+						<input type="text" bind:value={currentlyViewed.values.location} class="input input-bordered" />
+					</label>
+					<label>
+						<span>Latitude</span>
+						<input type="number" bind:value={currentlyViewed.values.latitude} class="input input-bordered" />
+					</label>
+					<label>
+						<span>Longitude</span>
+						<input type="number" bind:value={currentlyViewed.values.longitude} class="input input-bordered" />
+					</label>
+					<button type="submit" class="btn btn-primary mt-4" >Save</button>
+				</form>
+                <button class="btn btn-error" on:click={stopEditing}>Back</button>
             {:else}
 
 			<div class="flex flex-col grow">
@@ -154,7 +291,7 @@
 				</div>
 				<div class="divider" />
 				<div class="flex justify-between">
-					<button class="btn" on:click={() => (currentlyViewed = null)}>Cancel</button>
+					<button class="btn" on:click={() => (currentlyViewed = null)}>Back</button>
 					<button
 						class="btn btn-error"
 						on:click={() => {
@@ -170,45 +307,145 @@
 		</div>
 	</div>
 
-	{:else if creatingNewPoi}
+{:else if creatingNewPoi}
     <div class="relative grow flex items-center justify-center">
         <div
             class="relative card h-full w-full md:w-3/4 max-w-3xl md:max-h-[32rem] max-h-none flex bg-base-200 shadow-xl p-6 flex-col"
         >
             <div class="flex justify-center"><h2>Create New POI</h2></div>
             <div class="divider my-2" />
-			<form class="flex flex-col grow" on:submit={() => {
-							createAction(poi);
-							creatingNewPoi = false;
-							updateTableUiState();
-							return false;
+			<form class="flex flex-col grow space-y-4" on:submit|preventDefault={() => {
+							poi.features = features;
+							if (!validateData()) {
+								return false;
+							}
+							else {
+								createAction(poi);
+								creatingNewPoi = false;
+								resetPoi();
+								updateTableUiState();
+								return false;
+							}
+						
 						}}>
-				<label>
+				<label class="flex flex-col space-y-1">
 					<span>Name</span>
-					<input type="text" bind:value={poi.name} class="input input-bordered" />
+					<input type="text" 
+					bind:value={poi.name}
+					on:input={() => {
+						if (formValidation.nameValid === null) {
+							formValidation.nameValid = false;
+						}
+						if (formValidation.nameMin3 === null) {
+							formValidation.nameMin3 = false;
+						}
+					}} 
+					class="input input-bordered text-lg p-2" />
 				</label>
-				<label>
+				<label class="flex flex-col space-y-1">
 					<span>Description</span>
-					<input type="text" bind:value={poi.description} class="input input-bordered" />
+					<textarea bind:value={poi.description} class="input input-bordered"></textarea>	
 				</label>
-				<label>
-					<span>Features</span>
-					<input type="text" bind:value={poi.features} class="input input-bordered" />
-				</label>
-				<label>
+				{#each features as feature, i}
+					<label class="flex flex-col space-y-1">
+						<span>Feature {i + 1}</span>
+						<input type="text" bind:value={features[i]} class="input input-bordered" />
+					</label>
+				{/each}
+				<button on:click={addFeature} class = "btn btn-primary w-auto">Add Feature</button>
+				<label class="flex flex-col space-y-1">
 					<span>Location</span>
-					<input type="text" bind:value={poi.location} class="input input-bordered" />
+					<input type="text" 
+					bind:value={poi.location}
+					on:input={() => {
+						if (formValidation.locationValid === null) {
+							formValidation.locationValid = false;
+						}
+					}} 
+					class="input input-bordered" />
 				</label>
-				<label>
+				<label class="flex flex-col space-y-1">
 					<span>Latitude</span>
-					<input type="number" bind:value={poi.latitude} class="input input-bordered" />
+					<input type="number" 
+					bind:value={poi.latitude}
+					on:input={() => {
+						if (formValidation.latitudeValid === null) {
+							formValidation.latitudeValid = false;
+						}
+					}} 
+					class="input input-bordered" />
 				</label>
-				<label>
+				<label class="flex flex-col space-y-1">
 					<span>Longitude</span>
-					<input type="number" bind:value={poi.longitude} class="input input-bordered" />
+					<input type="number" 
+					bind:value={poi.longitude}
+					on:input={() => {
+						if (formValidation.longitudeValid === null) {
+							formValidation.longitudeValid = false;
+						}
+					}} 
+					class="input input-bordered" />
 				</label>
 				<button type="submit" class="btn btn-primary mt-4" >Create</button>
 				<button class="btn btn-error" on:click={() => creatingNewPoi = false}>Back</button>
+				{#if formValidation.nameValid !== null}
+					<div class="divider my-1" />
+				{/if}
+				{#if formValidation.nameValid === false || formValidation.nameMin3 === false}
+					<div class="flex">
+						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+						<p class="ml-3">Name Not Valid</p>
+					</div>
+				{:else if formValidation.nameValid === true && formValidation.nameMin3 === true}
+					<div class="flex">
+						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+						<p class="ml-3">Name Valid</p>
+					</div>
+				{/if}
+				{#if formValidation.featuresValid === false}
+					<div class="flex">
+						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+						<p class="ml-3">Features not Valid</p>
+					</div>
+				{:else if formValidation.featuresValid === true}
+					<div class="flex">
+						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+						<p class="ml-3">Features Valid</p>
+					</div>
+				{/if}
+				{#if formValidation.latitudeValid === false}
+					<div class="flex">
+						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+						<p class="ml-3">Latitude not Valid</p>
+					</div>
+				{:else if formValidation.latitudeValid === true}
+					<div class="flex">
+						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+						<p class="ml-3">Latitude Valid</p>
+					</div>
+				{/if}
+				{#if formValidation.longitudeValid === false}
+					<div class="flex">
+						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+						<p class="ml-3">Longitude not Valid</p>
+					</div>
+				{:else if formValidation.longitudeValid === true}
+					<div class="flex">
+						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+						<p class="ml-3">Longitude Valid</p>
+					</div>
+				{/if}
+				{#if formValidation.locationValid === false}
+					<div class="flex">
+						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+						<p class="ml-3">Location not Valid</p>
+					</div>
+				{:else if formValidation.locationValid === true}
+					<div class="flex">
+						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+						<p class="ml-3">Location Valid</p>
+					</div>
+				{/if}
             </form>
         </div>
     </div>

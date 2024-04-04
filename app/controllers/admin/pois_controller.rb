@@ -26,6 +26,21 @@ module Admin
       end
     end
 
+    def edit_poi
+      @poi = Poi.find(params[:id])
+
+      @poi.name = params[:name] if update_name?
+      @poi.description = params[:description] if update_description?
+      @poi.features = params[:features] if update_features?
+      @poi.location = params[:location] if update_location?
+      @poi.latitude = params[:latitude] if update_latitude?
+      @poi.longitude = params[:longitude] if update_longitude?
+      return render_bad_request if @poi.nil?
+
+      @poi.save
+      render json: {message: "Updated poi successfully"}
+
+    end
 
     def delete_poi
       read_id_param
@@ -75,12 +90,36 @@ module Admin
 
       # Only allow a list of trusted parameters through.
       def poi_params
-        params.require(:poi).permit(:name, :description, :location, :features, :likes, :latitude, :longitude)
+        params.require(:poi).permit(:name, :description, :location, :likes, :latitude, :longitude, features: [])
       end
 
       def read_id_param
         @id = params[:id]
         render_bad_request if @id.nil?
+      end
+
+      def update_name?
+        !params[:name].nil?
+      end
+
+      def update_description?
+        !params[:description].nil?
+      end
+
+      def update_features?
+        !params[:features].nil?
+      end
+
+      def update_location?
+        !params[:location].nil?
+      end
+
+      def update_latitude?
+        !params[:latitude].nil?
+      end
+
+      def update_longitude?
+        !params[:longitude].nil?
       end
 
   end

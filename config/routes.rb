@@ -53,6 +53,7 @@ Rails.application.routes.draw do
     get "/admin/pois", to: "admin/pois#all_pois"
     post "/admin/pois", to: "admin/pois#create_poi"
     delete "/admin/pois", to: "admin/pois#delete_poi"
+    post "/admin/pois/edit", to: "admin/pois#edit_poi"
 
     get "/admin/stats/globe", to: "admin/stats#globe"
     get "/admin/stats/all-visits", to: "admin/stats#all_visits"
