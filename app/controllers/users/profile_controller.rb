@@ -17,7 +17,7 @@ module Users
       if @user.update(user_params)
         show
       else
-        render json: @user.errors, status: 500
+        render json: @user.errors, status: :internal_server_error
       end
     end
 
@@ -28,7 +28,7 @@ module Users
       if @user.save
         show
       else
-        render json: @user.errors, status: 500
+        render json: @user.errors, status: :internal_server_error
       end
     end
 
