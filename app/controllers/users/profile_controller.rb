@@ -32,7 +32,7 @@ module Users
         private
 
         def user_params
-            params.require(:user).permit(:nickname, :email, :description,:id, :user_type, :profile_picture, :created_at, :updated_at, :jti)
+            params.require(:user).permit(:nickname, :email, :description,:id, :user_type, :profile_picture, :deactivated, :created_at, :updated_at, :jti)
         end
 
     end

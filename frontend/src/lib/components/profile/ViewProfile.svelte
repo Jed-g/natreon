@@ -2,16 +2,18 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     let isEditing = false;
-    let files: File[] = [];
     let selectedFile: File | null;
     let nicknameMin3 = '';
+    let loading = true;
 
     let user = { nickname: '', email: '', description: '',profile_picture: ''  };
 
     async function getUserProfile() {
         const response = await fetch('/api/users/profile');
-        const data = await response.json();
-        user = data;
+        if (response.ok) {
+            user = await response.json();
+        }
+        loading = false;
     }
 
     function toggleEdit() {
@@ -82,60 +84,65 @@
     </div>
 </div>
 
+{#if loading}
+    <div class="grow flex items-center justify-center">
+        <span class="loading loading-ring loading-lg" />
+    </div>
+{:else if user}
+    <div class="flex flex-col items-center justify-center min-h-screen bg-lime-900">
+        <h1 class="text-4xl font-bold mb-6 text-white">Profile</h1>
 
-
-<div class="flex flex-col items-center justify-center min-h-screen bg-lime-900">
-    <h1 class="text-4xl font-bold mb-6 text-white">Profile</h1>
-
-    <div class="p-6 bg-green-700 text-white rounded shadow-md w-full md:w-3/4 lg:w-1/2">
-        <div class="mb-4">
-            <h2 class="text-2xl font-bold mb-2">Details</h2>
+        <div class="p-6 bg-green-700 text-white rounded shadow-md w-full md:w-3/4 lg:w-1/2">
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold mb-2">Details</h2>
+                <div>
+                    <label for="nickname">Nickname:</label>
+                    <input id="nickname" bind:value={user.nickname} readonly={!isEditing}
+                        class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
+                    {#if nicknameMin3}
+                        <p>{nicknameMin3}</p>
+                    {/if}
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label for="email">Email:</label>
+                <input id="email" type="text" bind:value={user.email} 
+                    readonly class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
+            </div>
+            
             <div>
-                <label for="nickname">Nickname:</label>
-                <input id="nickname" bind:value={user.nickname} readonly={!isEditing}
-                    class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
-                {#if nicknameMin3}
-                    <p>{nicknameMin3}</p>
-                {/if}
+                <label for="description">Description:</label>
+                <textarea id="description" rows="5" cols="50" bind:value={user.description} 
+                    readonly={!isEditing} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"></textarea>
             </div>
-        </div>
-        
-        <div class="mb-4">
-            <label for="email">Email:</label>
-            <input id="email" type="text" bind:value={user.email} 
-                readonly class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
-        </div>
-        
-        <div>
-            <label for="description">Description:</label>
-            <textarea id="description" rows="5" cols="50" bind:value={user.description} 
-                readonly={!isEditing} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"></textarea>
+
+            {#if !isEditing}
+                <div class="flex items-center justify-center h-full">
+                    <button class="btn" on:click={toggleEdit}>Edit Profile</button>
+                </div>
+            {/if}
+            
+            {#if isEditing}
+                <div class="text-white text-2xl text-center">Editing Profile</div>
+                <button class="btn" on:click={saveChanges}>Save Changes</button>
+            {/if}
         </div>
 
-        {#if !isEditing}
-            <div class="flex items-center justify-center h-full">
-                <button class="btn" on:click={toggleEdit}>Edit Profile</button>
+        <div class="p-6 bg-green-700 text-white rounded shadow-md mt-6 w-full md:w-3/4 lg:w-1/2">
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold mb-2">Profile Picture</h2>
+                <div style="display: flex; justify-content: center;">
+                    <!-- svelte-ignore a11y-img-redundant-alt -->
+                    <img src={user.profile_picture} alt="Profile Picture" style="width: 200px;"/>
+                </div>
+                <label for="profile-picture">Profile Picture:</label>
+                <input id="profile-picture" type="file" accept="image/*" on:change={selectFile} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
             </div>
-        {/if}
-        
-        {#if isEditing}
-            <div class="text-white text-2xl text-center">Editing Profile</div>
-            <button class="btn" on:click={saveChanges}>Save Changes</button>
-        {/if}
-    </div>
 
-    <div class="p-6 bg-green-700 text-white rounded shadow-md mt-6 w-full md:w-3/4 lg:w-1/2">
-        <div class="mb-4">
-            <h2 class="text-2xl font-bold mb-2">Profile Picture</h2>
-            <div style="display: flex; justify-content: center;">
-                <img src={user.profile_picture} alt="Profile Picture" style="width: 200px;"/>
+            <div class="mb-4">
+                <button class="btn" on:click={handleUpload}>Upload Profile Picture</button>
             </div>
-            <label for="profile-picture">Profile Picture:</label>
-            <input id="profile-picture" type="file" accept="image/*" on:change={selectFile} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
-        </div>
-
-        <div class="mb-4">
-            <button class="btn" on:click={handleUpload}>Upload Profile Picture</button>
         </div>
     </div>
-</div>
+{/if}

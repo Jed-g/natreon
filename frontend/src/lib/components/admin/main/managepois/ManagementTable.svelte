@@ -12,11 +12,11 @@
 	export let tableHeaders: string[];
 	export let createAction: (poi: { name: string, description: string, 
 					features: string[], location: string, likes: number, latitude: number, longitude: number }) => Promise<void>;
-	export let editAction: (id: number, values: Record<string, string | number>) => Promise<void>;
+	export let editAction: (id: number, values: Record<string, string | number | string[]>) => Promise<void>;
 	let loading = true;
 	let currentlyViewed: {
 		id: number;
-		values: Record<string, string | number>;
+		values: Record<string, string | number | string[]>;
 	} | null = null;
 	let items: itemType[];
 
@@ -29,18 +29,16 @@
 		nameValid: FormValidation;
 		latitudeValid: FormValidation;
 		longitudeValid: FormValidation;
-		featuresValid: FormValidation;
-		locationValid: FormValidation;
+		
 	} = {
 		nameMin3: null,
 		nameValid: null,
 		latitudeValid: null,
-		longitudeValid: null,
-		featuresValid: null,
-		locationValid: null
+		longitudeValid: null
 	};
 
 	const nameRegex = /^[a-z0-9 ]+$/i;
+	
 
 	const validateData = (): boolean => {
 		let isOk = true;
@@ -55,10 +53,10 @@
             formValidation.nameValid = false;
         }
 
-		if (poi.features.length == 0) {
-			isOk = false;
-			formValidation.featuresValid = false;
-		}
+		//if (poi.features.length == 0) {
+		//	isOk = false;
+		//	formValidation.featuresValid = false;
+		//}
 
 		if (isNaN(poi.latitude) || poi.latitude <= -90 || poi.latitude >= 90 || poi.latitude == null) {
 			isOk = false;
@@ -68,11 +66,6 @@
 		if (isNaN(poi.longitude) || poi.longitude <= -180 || poi.longitude >= 180 || poi.longitude == null) {
 			isOk = false;
 			formValidation.longitudeValid = false;
-		}
-
-		if (poi.location == null || poi.location == '') {
-			isOk = false;
-			formValidation.locationValid = false;
 		}
 
 		return isOk;
@@ -87,9 +80,9 @@
 			formValidation.nameValid = nameRegex.test(poi.name);
 		}
 
-		if (formValidation.featuresValid !== null) {
-			formValidation.featuresValid = poi.features.length != 0;
-		}
+		//if (formValidation.featuresValid !== null) {
+		//	formValidation.featuresValid = poi.features.length != 0;
+		//}
 
 		if (formValidation.latitudeValid !== null) {
 			formValidation.latitudeValid = !isNaN(poi.latitude) && poi.latitude >= -90 && poi.latitude <= 90 && poi.latitude != null;
@@ -99,9 +92,6 @@
 			formValidation.longitudeValid = !isNaN(poi.longitude) && poi.longitude >= -180 && poi.longitude <= 180 && poi.longitude != null;
 		}
 		
-		if (formValidation.locationValid !== null) {
-			formValidation.locationValid = poi.location != '' && poi.location != null;
-		}
 	}
 	
 	let creatingNewPoi = false;
@@ -109,22 +99,26 @@
 	let poi = {
         name: '',
         description: '',
-        features: [''],
-		location: '',
+        features: ['Feature1'],
+		location: 'Location1',
         latitude: 0,
         longitude: 0,
 		likes: 0,
     };
-	let features = [''];
+	let features = ['Feature1'];
 
 	function addFeature() {
 		//features.push('');
-		features = [...features, ''];
+		features = [...features, 'Feature1'];
 	}
 
     const createNewPoi = () => {
         creatingNewPoi = true;
     };
+
+	let defaultFeature = "Feature1";
+	features = features.length ? features : [defaultFeature];
+	
 
 	let editing = false;
 
@@ -132,8 +126,8 @@
 		poi = {
 			name: '',
 			description: '',
-			features: [''],
-			location: '',
+			features: ['Feature1'],
+			location: 'Location1',
 			latitude: 0,
 			longitude: 0,
 			likes: 0,
@@ -285,7 +279,7 @@
 							type="Integer"
 							class="input input-bordered"
 							disabled
-							value={currentlyViewed.values.latitude}
+							value="{currentlyViewed.values.latitude}, {currentlyViewed.values.longitude}"
 						/>
 					</div>
 				</div>
@@ -315,7 +309,7 @@
             <div class="flex justify-center"><h2>Create New POI</h2></div>
             <div class="divider my-2" />
 			<form class="flex flex-col grow space-y-4" on:submit|preventDefault={() => {
-							poi.features = features;
+							poi.features = features.filter(feature => feature.trim() !== '');
 							if (!validateData()) {
 								return false;
 							}
@@ -328,6 +322,15 @@
 							}
 						
 						}}>
+				<div>
+					<h2 style="font-weight: bold">Rules for creating POI:</h2>
+					<ul style="font-weight: bold">
+						<li>Name must be at least 3 characters long</li>
+						<li>Latitude must be between -90 and 90</li>
+						<li>Longitude must be between -180 and 180</li>
+						<li>Location must not be empty</li>
+					</ul>
+				</div>
 				<label class="flex flex-col space-y-1">
 					<span>Name</span>
 					<input type="text" 
@@ -349,20 +352,21 @@
 				{#each features as feature, i}
 					<label class="flex flex-col space-y-1">
 						<span>Feature {i + 1}</span>
-						<input type="text" bind:value={features[i]} class="input input-bordered" />
+						<select bind:value={features[i]} class="input input-bordered">
+							<option value="Feature1">Water Feature</option>
+							<option value="Feature2">Statue</option>
+							<option value="Feature3">Further options to be added</option>
+						</select>
 					</label>
 				{/each}
 				<button on:click={addFeature} class = "btn btn-primary w-auto">Add Feature</button>
 				<label class="flex flex-col space-y-1">
 					<span>Location</span>
-					<input type="text" 
-					bind:value={poi.location}
-					on:input={() => {
-						if (formValidation.locationValid === null) {
-							formValidation.locationValid = false;
-						}
-					}} 
-					class="input input-bordered" />
+					<select bind:value={poi.location} class="input input-bordered">
+						<option value="Location1">Sheffield</option>
+						<option value="Location2">Manchester</option>
+						<option value="Location3">Further locations to be added</option>
+					</select>
 				</label>
 				<label class="flex flex-col space-y-1">
 					<span>Latitude</span>
@@ -402,17 +406,6 @@
 						<p class="ml-3">Name Valid</p>
 					</div>
 				{/if}
-				{#if formValidation.featuresValid === false}
-					<div class="flex">
-						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
-						<p class="ml-3">Features not Valid</p>
-					</div>
-				{:else if formValidation.featuresValid === true}
-					<div class="flex">
-						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
-						<p class="ml-3">Features Valid</p>
-					</div>
-				{/if}
 				{#if formValidation.latitudeValid === false}
 					<div class="flex">
 						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
@@ -433,17 +426,6 @@
 					<div class="flex">
 						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
 						<p class="ml-3">Longitude Valid</p>
-					</div>
-				{/if}
-				{#if formValidation.locationValid === false}
-					<div class="flex">
-						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
-						<p class="ml-3">Location not Valid</p>
-					</div>
-				{:else if formValidation.locationValid === true}
-					<div class="flex">
-						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
-						<p class="ml-3">Location Valid</p>
 					</div>
 				{/if}
             </form>
