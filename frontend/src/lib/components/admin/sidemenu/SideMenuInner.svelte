@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AdminDashboardUrls from '$lib/enums/adminDashboardUrls';
+	import AdminDashboardUrls from '$lib/enums/AdminDashboardUrls';
 	import { createEventDispatcher } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import homeIcon from '@iconify-icons/mdi/home';
