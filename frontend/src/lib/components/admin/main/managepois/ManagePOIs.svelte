@@ -58,7 +58,7 @@
 			deleteAction={deletePoi}
 			createAction={createPoi}
 			editAction={editPoi}
-			tableHeaders={['Name', 'Description', 'Location', 'Features', 'Likes', 'Latitude', 'Longitude']}
+			tableHeaders={['Name', 'Description', 'Location', 'Features', 'Likes', 'Coordinates']}
 			tableName={'POI Management'}
 		/>
 	</div>

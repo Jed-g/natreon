@@ -99,24 +99,24 @@
 	let poi = {
         name: '',
         description: '',
-        features: ['Feature1'],
-		location: 'Location1',
+        features: ['Water Feature'],
+		location: 'Sheffield',
         latitude: 0,
         longitude: 0,
 		likes: 0,
     };
-	let features = ['Feature1'];
+	let features = ['Water Feature'];
 
 	function addFeature() {
 		//features.push('');
-		features = [...features, 'Feature1'];
+		features = [...features, 'Water Feature'];
 	}
 
     const createNewPoi = () => {
         creatingNewPoi = true;
     };
 
-	let defaultFeature = "Feature1";
+	let defaultFeature = "Water Feature";
 	features = features.length ? features : [defaultFeature];
 	
 
@@ -126,8 +126,8 @@
 		poi = {
 			name: '',
 			description: '',
-			features: ['Feature1'],
-			location: 'Location1',
+			features: ['Water Feature'],
+			location: 'Sheffield',
 			latitude: 0,
 			longitude: 0,
 			likes: 0,
@@ -353,18 +353,18 @@
 					<label class="flex flex-col space-y-1">
 						<span>Feature {i + 1}</span>
 						<select bind:value={features[i]} class="input input-bordered">
-							<option value="Feature1">Water Feature</option>
-							<option value="Feature2">Statue</option>
+							<option value="Water Feature">Water Feature</option>
+							<option value="Statue">Statue</option>
 							<option value="Feature3">Further options to be added</option>
 						</select>
 					</label>
 				{/each}
-				<button on:click={addFeature} class = "btn btn-primary w-auto">Add Feature</button>
+				<button type="button" on:click={addFeature} class = "btn btn-primary w-auto">Add Feature</button>
 				<label class="flex flex-col space-y-1">
 					<span>Location</span>
 					<select bind:value={poi.location} class="input input-bordered">
-						<option value="Location1">Sheffield</option>
-						<option value="Location2">Manchester</option>
+						<option value="Sheffield">Sheffield</option>
+						<option value="Manchester">Manchester</option>
 						<option value="Location3">Further locations to be added</option>
 					</select>
 				</label>
@@ -475,8 +475,7 @@
 								: item.features}</td
 						>
 						<td>{item.likes}</td>
-						<td>{item.latitude}</td>
-						<td>{item.longitude}</td>
+						<td>{item.latitude},{item.longitude}</td>
 						<td class="flex items-center justify-center">
 							<button
 								class="btn btn-primary mr-4"
