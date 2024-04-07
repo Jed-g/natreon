@@ -62,7 +62,7 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ user: { ...user, profile_picture: undefined } })
+			body: JSON.stringify({ user: { ...user, email: undefined, profile_picture: undefined } })
 		});
 		const data = await response.json();
 		user = data;

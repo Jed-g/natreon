@@ -35,7 +35,7 @@ module Users
     private
 
     def user_params
-      params.require(:user).permit(:nickname, :email, :description)
+      params.require(:user).permit(:nickname, :description)
     end
   end
 end
