@@ -36,7 +36,7 @@
 		return data;
 	};
 
-	const editPoi = async (id: number, values: Record<string, string | number>) => {
+	const editPoi = async (id: number, values: Record<string, string | number | string[]>) => {
 		const response = await fetch('/api/admin/pois/edit', {
 			method: 'POST',
 			body: JSON.stringify({ id, name: values.name, description: values.description, location: values.location,

@@ -10,18 +10,28 @@
 	export let deleteAction: (id: number) => Promise<void>;
 	export let tableName: string;
 	export let tableHeaders: string[];
-	export let createAction: (poi: { name: string, description: string, 
-					features: string[], location: string, likes: number, latitude: number, longitude: number }) => Promise<void>;
-	export let editAction: (id: number, values: Record<string, string | number>) => Promise<void>;
+	export let createAction: (poi: {
+		name: string;
+		description: string;
+		features: string[];
+		location: string;
+		likes: number;
+		latitude: number;
+		longitude: number;
+	}) => Promise<void>;
+	export let editAction: (
+		id: number,
+		values: Record<string, string | number | string[]>
+	) => Promise<void>;
 	let loading = true;
 	let currentlyViewed: {
 		id: number;
-		values: Record<string, string | number>;
+		values: Record<string, string | number | string[]>;
 	} | null = null;
 	let items: itemType[];
 
 	//Form validation
-	
+
 	type FormValidation = null | false | true;
 
 	let formValidation: {
@@ -49,11 +59,11 @@
 			isOk = false;
 			formValidation.nameMin3 = false;
 		}
-		
-        if (!nameRegex.test(poi.name)) {
-            isOk = false;
-            formValidation.nameValid = false;
-        }
+
+		if (!nameRegex.test(poi.name)) {
+			isOk = false;
+			formValidation.nameValid = false;
+		}
 
 		if (poi.features.length == 0) {
 			isOk = false;
@@ -65,7 +75,12 @@
 			formValidation.latitudeValid = false;
 		}
 
-		if (isNaN(poi.longitude) || poi.longitude <= -180 || poi.longitude >= 180 || poi.longitude == null) {
+		if (
+			isNaN(poi.longitude) ||
+			poi.longitude <= -180 ||
+			poi.longitude >= 180 ||
+			poi.longitude == null
+		) {
 			isOk = false;
 			formValidation.longitudeValid = false;
 		}
@@ -76,7 +91,7 @@
 		}
 
 		return isOk;
-	}
+	};
 
 	$: {
 		if (formValidation.nameMin3 !== null) {
@@ -92,29 +107,34 @@
 		}
 
 		if (formValidation.latitudeValid !== null) {
-			formValidation.latitudeValid = !isNaN(poi.latitude) && poi.latitude >= -90 && poi.latitude <= 90 && poi.latitude != null;
+			formValidation.latitudeValid =
+				!isNaN(poi.latitude) && poi.latitude >= -90 && poi.latitude <= 90 && poi.latitude != null;
 		}
 
 		if (formValidation.longitudeValid !== null) {
-			formValidation.longitudeValid = !isNaN(poi.longitude) && poi.longitude >= -180 && poi.longitude <= 180 && poi.longitude != null;
+			formValidation.longitudeValid =
+				!isNaN(poi.longitude) &&
+				poi.longitude >= -180 &&
+				poi.longitude <= 180 &&
+				poi.longitude != null;
 		}
-		
+
 		if (formValidation.locationValid !== null) {
 			formValidation.locationValid = poi.location != '' && poi.location != null;
 		}
 	}
-	
+
 	let creatingNewPoi = false;
 
 	let poi = {
-        name: '',
-        description: '',
-        features: [''],
+		name: '',
+		description: '',
+		features: [''],
 		location: '',
-        latitude: 0,
-        longitude: 0,
-		likes: 0,
-    };
+		latitude: 0,
+		longitude: 0,
+		likes: 0
+	};
 	let features = [''];
 
 	function addFeature() {
@@ -122,9 +142,11 @@
 		features = [...features, ''];
 	}
 
-    const createNewPoi = () => {
-        creatingNewPoi = true;
-    };
+	const createNewPoi = () => {
+		creatingNewPoi = true;
+		currentlyViewed = null;
+		editing = false;
+	};
 
 	let editing = false;
 
@@ -136,18 +158,35 @@
 			location: '',
 			latitude: 0,
 			longitude: 0,
-			likes: 0,
+			likes: 0
 		};
 		features = [''];
 	}
-    function startEditing() {
-        editing = true;
-    }
+	function startEditing() {
+		editing = true;
+	}
 
-    function stopEditing() {
-        editing = false;
-    }
+	function stopEditing() {
+		editing = false;
+		refreshCurrentlyViewedData();
+	}
 
+	const refreshCurrentlyViewedData = async () => {
+		if (currentlyViewed === null) {
+			return;
+		}
+
+		loading = true;
+		const itemId = currentlyViewed.id;
+
+		const latestData = await getItemsAction();
+		const latestCurrentlyViewedData = latestData.find(({ id }) => id === itemId);
+
+		if (latestCurrentlyViewedData !== undefined) {
+			currentlyViewed.values = removeIdFromItem(latestCurrentlyViewedData);
+		}
+		loading = false;
+	};
 
 	const updateTableUiState = async () => {
 		loading = true;
@@ -164,11 +203,16 @@
 			}, {} as Record<string, string>);
 
 	onMount(updateTableUiState);
+
+	$: {
+		if (!creatingNewPoi) {
+			features = [''];
+		}
+	}
 </script>
 
-
 <div class="flex">
-    <button class="ml-auto btn btn-primary" on:click={createNewPoi}>Create New POI</button>
+	<button class="ml-auto btn btn-primary" on:click={createNewPoi}>Create New POI</button>
 </div>
 
 <div class="flex"><h1 class="text-2xl">{tableName}</h1></div>
@@ -179,215 +223,309 @@
 	</div>
 {:else if currentlyViewed !== null}
 	<div class="relative grow flex items-center justify-center">
-		<div class="relative card h-full w-full md:w-3/4 max-w-3xl md:max-h-[32rem] max-h-none flex bg-base-200 shadow-xl p-6 flex-col">
-			<div class="flex justify-center"><h2>POI Details</h2>
+		<div
+			class="relative card h-full w-full md:w-3/4 max-w-3xl md:max-h-[32rem] max-h-none flex bg-base-200 shadow-xl p-6 flex-col"
+		>
+			<div class="flex justify-center">
+				<h2>POI Details</h2>
 				{#if !editing}
-                    <button class="btn btn-primary" on:click={startEditing}>Edit</button>
-                {/if}
+					<button class="btn btn-primary" on:click={startEditing}>Edit</button>
+				{/if}
 			</div>
 
 			<div class="divider my-2" />
 			{#if editing}
-				<form class="flex flex-col grow" on:submit|preventDefault={() => {
-							if (currentlyViewed) {
-								editAction(currentlyViewed.id, currentlyViewed.values);
-							}
-							stopEditing;
-							return false;
-						}}>
+				<form
+					class="flex flex-col grow"
+					on:submit|preventDefault={() => {
+						if (currentlyViewed) {
+							editAction(currentlyViewed.id, currentlyViewed.values);
+						}
+						stopEditing();
+						return false;
+					}}
+				>
 					<label>
 						<span>Name</span>
-						<input type="text" bind:value={currentlyViewed.values.name} class="input input-bordered" />
+						<input
+							type="text"
+							bind:value={currentlyViewed.values.name}
+							class="input input-bordered"
+						/>
 					</label>
 					<label>
 						<span>Description</span>
-						<input type="text" bind:value={currentlyViewed.values.description} class="input input-bordered" />
+						<input
+							type="text"
+							bind:value={currentlyViewed.values.description}
+							class="input input-bordered"
+						/>
 					</label>
-					<label>
-						<span>Features</span>
-						<input type="text" bind:value={currentlyViewed.values.features} class="input input-bordered" />
-					</label>
+					{#if Array.isArray(currentlyViewed.values.features)}
+						{#each currentlyViewed.values.features as feature, i}
+							<label class="flex flex-col space-y-1">
+								<span>Feature {i + 1}</span>
+								<div class="flex gap-2">
+									<input type="text" bind:value={feature} class="input input-bordered grow" />
+									{#if currentlyViewed.values.features.length > 1}
+										<button
+											type="button"
+											class="btn btn-error"
+											on:click={() => {
+												if (Array.isArray(currentlyViewed?.values.features)) {
+													currentlyViewed.values.features.splice(i, 1);
+													currentlyViewed.values.features = currentlyViewed.values.features;
+												}
+											}}>Delete</button
+										>
+									{/if}
+								</div>
+							</label>
+						{/each}
+					{/if}
+					<button
+						type="button"
+						on:click={() => {
+							if (Array.isArray(currentlyViewed?.values.features)) {
+								currentlyViewed.values.features = [...currentlyViewed.values.features, ''];
+							}
+						}}
+						class="btn btn-primary w-auto">Add Feature</button
+					>
 					<label>
 						<span>Location</span>
-						<input type="text" bind:value={currentlyViewed.values.location} class="input input-bordered" />
+						<input
+							type="text"
+							bind:value={currentlyViewed.values.location}
+							class="input input-bordered"
+						/>
 					</label>
 					<label>
 						<span>Latitude</span>
-						<input type="number" bind:value={currentlyViewed.values.latitude} class="input input-bordered" />
+						<input
+							type="number"
+							bind:value={currentlyViewed.values.latitude}
+							class="input input-bordered"
+						/>
 					</label>
 					<label>
 						<span>Longitude</span>
-						<input type="number" bind:value={currentlyViewed.values.longitude} class="input input-bordered" />
+						<input
+							type="number"
+							bind:value={currentlyViewed.values.longitude}
+							class="input input-bordered"
+						/>
 					</label>
-					<button type="submit" class="btn btn-primary mt-4" >Save</button>
+					<button type="submit" class="btn btn-primary mt-4">Save</button>
 				</form>
-                <button class="btn btn-error" on:click={stopEditing}>Back</button>
-            {:else}
-
-			<div class="flex flex-col grow">
+				<button type="button" class="btn btn-error" on:click={stopEditing}>Back</button>
+			{:else}
 				<div class="flex flex-col grow">
-					<div class="flex mt-2">
-						<div class="form-control grow">
-							<!-- svelte-ignore a11y-label-has-associated-control -->
-							<label class="label">
-								<span class="label-text">Name</span>
-							</label>
-							<p>{currentlyViewed.values.name}</p>
+					<div class="flex flex-col grow">
+						<div class="flex mt-2">
+							<div class="form-control grow">
+								<!-- svelte-ignore a11y-label-has-associated-control -->
+								<label class="label">
+									<span class="label-text">Name</span>
+								</label>
+								<p>{currentlyViewed.values.name}</p>
+							</div>
+							<div class="divider divider-horizontal" />
+							<div class="form-control grow">
+								<!-- svelte-ignore a11y-label-has-associated-control -->
+								<label class="label">
+									<span class="label-text">Description</span>
+								</label>
+								<p>{currentlyViewed.values.description}</p>
+							</div>
+							<div class="divider divider-horizontal" />
+							<div class="form-control grow">
+								<!-- svelte-ignore a11y-label-has-associated-control -->
+								<label class="label">
+									<span class="label-text">Location</span>
+								</label>
+								<p>{currentlyViewed.values.location}</p>
+							</div>
 						</div>
-						<div class="divider divider-horizontal" />
-						<div class="form-control grow">
+						<div class="divider" />
+						<div class="form-control">
 							<!-- svelte-ignore a11y-label-has-associated-control -->
 							<label class="label">
-								<span class="label-text">Description</span>
+								<span class="label-text">Features</span>
 							</label>
-							<p>{currentlyViewed.values.description}</p>
+							{#if Array.isArray(currentlyViewed.values.features)}
+								{#each currentlyViewed.values.features as feature, i}
+									<label class="flex flex-col space-y-1">
+										<div class="flex gap-2 items-center">
+											<p class="text-xs">Feature {i + 1}:</p>
+											<input value={feature} readonly class="input input-bordered grow" />
+										</div>
+									</label>
+								{/each}
+							{/if}
 						</div>
-						<div class="divider divider-horizontal" />
-						<div class="form-control grow">
+						<div class="divider" />
+						<div class="form-control">
 							<!-- svelte-ignore a11y-label-has-associated-control -->
 							<label class="label">
-								<span class="label-text">Location</span>
+								<span class="label-text">Likes</span>
 							</label>
-							<p>{currentlyViewed.values.location}</p>
+							<input
+								type="Integer"
+								class="input input-bordered"
+								disabled
+								value={currentlyViewed.values.likes}
+							/>
+						</div>
+						<div class="form-control">
+							<!-- svelte-ignore a11y-label-has-associated-control -->
+							<label class="label">
+								<span class="label-text">Coordinates</span>
+							</label>
+							<input
+								type="Integer"
+								class="input input-bordered"
+								disabled
+								value={currentlyViewed.values.latitude}
+							/>
 						</div>
 					</div>
 					<div class="divider" />
-					<div class="form-control">
-						<!-- svelte-ignore a11y-label-has-associated-control -->
-						<label class="label">
-							<span class="label-text">Features</span>
-						</label>
-						<textarea
-							class="textarea textarea-bordered h-16"
-							disabled
-							value={currentlyViewed.values.features}
-						/>
-					</div>
-					<div class="divider" />
-					<div class="form-control">
-						<!-- svelte-ignore a11y-label-has-associated-control -->
-						<label class="label">
-							<span class="label-text">Likes</span>
-						</label>
-						<input
-							type="Integer"
-							class="input input-bordered"
-							disabled
-							value={currentlyViewed.values.likes}
-						/>
-					</div>
-					<div class="form-control">
-						<!-- svelte-ignore a11y-label-has-associated-control -->
-						<label class="label">
-							<span class="label-text">Coordinates</span>
-						</label>
-						<input
-							type="Integer"
-							class="input input-bordered"
-							disabled
-							value={currentlyViewed.values.latitude}
-						/>
-					</div>
-				</div>
-				<div class="divider" />
-				<div class="flex justify-between">
-					<button class="btn" on:click={() => (currentlyViewed = null)}>Back</button>
-					<button
-						class="btn btn-error"
-						on:click={() => {
-							if (currentlyViewed !== null) {
-								deleteAction(currentlyViewed.id);
+					<div class="flex justify-between">
+						<button
+							class="btn"
+							on:click={() => {
 								currentlyViewed = null;
-							}
-						}}>Delete</button
-					>
+								updateTableUiState();
+							}}>Back</button
+						>
+						<button
+							class="btn btn-error"
+							on:click={() => {
+								if (currentlyViewed !== null) {
+									deleteAction(currentlyViewed.id);
+									currentlyViewed = null;
+									updateTableUiState();
+								}
+							}}>Delete</button
+						>
+					</div>
 				</div>
-			</div>
 			{/if}
 		</div>
 	</div>
-
 {:else if creatingNewPoi}
-    <div class="relative grow flex items-center justify-center">
-        <div
-            class="relative card h-full w-full md:w-3/4 max-w-3xl md:max-h-[32rem] max-h-none flex bg-base-200 shadow-xl p-6 flex-col"
-        >
-            <div class="flex justify-center"><h2>Create New POI</h2></div>
-            <div class="divider my-2" />
-			<form class="flex flex-col grow space-y-4" on:submit|preventDefault={() => {
-							poi.features = features;
-							if (!validateData()) {
-								return false;
-							}
-							else {
-								createAction(poi);
-								creatingNewPoi = false;
-								resetPoi();
-								updateTableUiState();
-								return false;
-							}
-						
-						}}>
+	<div class="relative grow flex items-center justify-center">
+		<div
+			class="relative card h-full w-full md:w-3/4 max-w-3xl md:max-h-[32rem] max-h-none flex bg-base-200 shadow-xl p-6 flex-col"
+		>
+			<div class="flex justify-center"><h2>Create New POI</h2></div>
+			<div class="divider my-2" />
+			<form
+				class="flex flex-col grow space-y-4"
+				on:submit|preventDefault={() => {
+					poi.features = features;
+					if (!validateData()) {
+						return false;
+					} else {
+						createAction(poi);
+						creatingNewPoi = false;
+						resetPoi();
+						updateTableUiState();
+						return false;
+					}
+				}}
+			>
 				<label class="flex flex-col space-y-1">
 					<span>Name</span>
-					<input type="text" 
-					bind:value={poi.name}
-					on:input={() => {
-						if (formValidation.nameValid === null) {
-							formValidation.nameValid = false;
-						}
-						if (formValidation.nameMin3 === null) {
-							formValidation.nameMin3 = false;
-						}
-					}} 
-					class="input input-bordered text-lg p-2" />
+					<input
+						type="text"
+						bind:value={poi.name}
+						on:input={() => {
+							if (formValidation.nameValid === null) {
+								formValidation.nameValid = false;
+							}
+							if (formValidation.nameMin3 === null) {
+								formValidation.nameMin3 = false;
+							}
+						}}
+						class="input input-bordered text-lg p-2"
+					/>
 				</label>
 				<label class="flex flex-col space-y-1">
 					<span>Description</span>
-					<textarea bind:value={poi.description} class="input input-bordered"></textarea>	
+					<textarea bind:value={poi.description} class="input input-bordered" />
 				</label>
 				{#each features as feature, i}
 					<label class="flex flex-col space-y-1">
 						<span>Feature {i + 1}</span>
-						<input type="text" bind:value={features[i]} class="input input-bordered" />
+						<div class="flex gap-2">
+							<input type="text" bind:value={feature} class="input input-bordered grow" />
+							{#if features.length > 1}
+								<button
+									type="button"
+									class="btn btn-error"
+									on:click={() => {
+										features.splice(i, 1);
+										features = features;
+									}}>Delete</button
+								>
+							{/if}
+						</div>
 					</label>
 				{/each}
-				<button on:click={addFeature} class = "btn btn-primary w-auto">Add Feature</button>
+				<button type="button" on:click={addFeature} class="btn btn-primary w-auto"
+					>Add Feature</button
+				>
 				<label class="flex flex-col space-y-1">
 					<span>Location</span>
-					<input type="text" 
-					bind:value={poi.location}
-					on:input={() => {
-						if (formValidation.locationValid === null) {
-							formValidation.locationValid = false;
-						}
-					}} 
-					class="input input-bordered" />
+					<input
+						type="text"
+						bind:value={poi.location}
+						on:input={() => {
+							if (formValidation.locationValid === null) {
+								formValidation.locationValid = false;
+							}
+						}}
+						class="input input-bordered"
+					/>
 				</label>
 				<label class="flex flex-col space-y-1">
 					<span>Latitude</span>
-					<input type="number" 
-					bind:value={poi.latitude}
-					on:input={() => {
-						if (formValidation.latitudeValid === null) {
-							formValidation.latitudeValid = false;
-						}
-					}} 
-					class="input input-bordered" />
+					<input
+						type="number"
+						bind:value={poi.latitude}
+						on:input={() => {
+							if (formValidation.latitudeValid === null) {
+								formValidation.latitudeValid = false;
+							}
+						}}
+						class="input input-bordered"
+					/>
 				</label>
 				<label class="flex flex-col space-y-1">
 					<span>Longitude</span>
-					<input type="number" 
-					bind:value={poi.longitude}
-					on:input={() => {
-						if (formValidation.longitudeValid === null) {
-							formValidation.longitudeValid = false;
-						}
-					}} 
-					class="input input-bordered" />
+					<input
+						type="number"
+						bind:value={poi.longitude}
+						on:input={() => {
+							if (formValidation.longitudeValid === null) {
+								formValidation.longitudeValid = false;
+							}
+						}}
+						class="input input-bordered"
+					/>
 				</label>
-				<button type="submit" class="btn btn-primary mt-4" >Create</button>
-				<button class="btn btn-error" on:click={() => creatingNewPoi = false}>Back</button>
+				<button type="submit" class="btn btn-primary mt-4">Create</button>
+				<button
+					type="button"
+					class="btn btn-error"
+					on:click={() => {
+						creatingNewPoi = false;
+						editing = false;
+						updateTableUiState();
+					}}>Back</button
+				>
 				{#if formValidation.nameValid !== null}
 					<div class="divider my-1" />
 				{/if}
@@ -446,10 +584,9 @@
 						<p class="ml-3">Location Valid</p>
 					</div>
 				{/if}
-            </form>
-        </div>
-    </div>
-
+			</form>
+		</div>
+	</div>
 {:else}
 	<div class="overflow-x-auto grow">
 		<table class="table table-zebra">
