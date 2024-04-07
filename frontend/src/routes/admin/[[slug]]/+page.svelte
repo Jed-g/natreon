@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Header from '$lib/components/admin/header/Header.svelte';
 	import SideMenu from '$lib/components/admin/sidemenu/SideMenu.svelte';
-	import AdminDashboardUrls from '$lib/enums/adminDashboardUrls.js';
+	import AdminDashboardUrls from '$lib/enums/AdminDashboardUrls';
 	import Overview from '$lib/components/admin/main/overview/Overview.svelte';
 	import Users from '$lib/components/admin/main/users/Users.svelte';
 	import Reviews from '$lib/components/admin/main/reviews/Reviews.svelte';

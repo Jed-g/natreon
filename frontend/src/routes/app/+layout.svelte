@@ -1,11 +1,15 @@
 <script lang="ts">
-	import '$lib/global.css';
 	import { authenticated } from '$lib/stores';
 	import { onDestroy, onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import UserType from '$lib/enums/userType';
 	import { sleep } from '$lib/utils';
 	import { POLLING_INTERVAL_FOR_TIME_SPENT_ON_PAGE } from '$lib/config';
+	import { setContext } from 'svelte';
+	import { writable } from 'svelte/store';
+
+	const refreshAvatarData = writable<null | (() => Promise<void>)>(null);
+	setContext('refreshAvatarData', refreshAvatarData);
 
 	const timeOnPageMountInMs = Date.now();
 	let timeSpentInMs = 0;
@@ -82,7 +86,10 @@
 			<span class="loading loading-ring loading-lg" />
 		</div>
 	{:else}
-		<div class="grow overflow-hidden" in:scale={{ start: 0.9, duration: 500, opacity: 0 }}>
+		<div
+			class="flex flex-col grow relative overflow-x-hidden"
+			in:scale={{ start: 0.9, duration: 500, opacity: 0 }}
+		>
 			<slot />
 		</div>
 	{/if}
