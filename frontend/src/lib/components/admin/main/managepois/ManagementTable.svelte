@@ -162,7 +162,7 @@
 
 
 <div class="flex">
-    <button class="ml-auto btn btn-primary" on:click={createNewPoi}>Create New POI</button>
+    <button type="button" class="ml-auto btn btn-primary" on:click={createNewPoi}>Create New POI</button>
 </div>
 
 <div class="flex"><h1 class="text-2xl">{tableName}</h1></div>
@@ -215,7 +215,7 @@
 					</label>
 					<button type="submit" class="btn btn-primary mt-4" >Save</button>
 				</form>
-                <button class="btn btn-error" on:click={stopEditing}>Back</button>
+                <button type="button" class="btn btn-error" on:click={stopEditing}>Back</button>
             {:else}
 
 			<div class="flex flex-col grow">
@@ -391,7 +391,7 @@
 					class="input input-bordered" />
 				</label>
 				<button type="submit" class="btn btn-primary mt-4" >Create</button>
-				<button class="btn btn-error" on:click={() => creatingNewPoi = false}>Back</button>
+				<button type="button" class="btn btn-error" on:click={() => creatingNewPoi = false}>Back</button>
 				{#if formValidation.nameValid !== null}
 					<div class="divider my-1" />
 				{/if}
