@@ -1,4 +1,4 @@
-import AdminDashboardUrls from '$lib/enums/adminDashboardUrls.js';
+import AdminDashboardUrls from '$lib/enums/AdminDashboardUrls';
 
 export const load = ({ params }) => {
 	return {
