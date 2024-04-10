@@ -1,4 +1,4 @@
-import AdminDashboardUrls from '$lib/enums/AdminDashboardUrls';
+import AppUrls from '$lib/enums/AppUrls';
 
 export const load = ({ params }) => {
 	return {
@@ -8,5 +8,5 @@ export const load = ({ params }) => {
 
 /** @type {import('./$types').EntryGenerator} */
 export function entries() {
-	return Object.values(AdminDashboardUrls).map((slug) => ({ slug }));
+	return Object.values(AppUrls).map((slug) => ({ slug }));
 }

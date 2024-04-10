@@ -5,6 +5,11 @@
 	import UserType from '$lib/enums/userType';
 	import { sleep } from '$lib/utils';
 	import { POLLING_INTERVAL_FOR_TIME_SPENT_ON_PAGE } from '$lib/config';
+	import { setContext } from 'svelte';
+	import { writable } from 'svelte/store';
+
+	const refreshAvatarData = writable<null | (() => Promise<void>)>(null);
+	setContext('refreshAvatarData', refreshAvatarData);
 
 	const timeOnPageMountInMs = Date.now();
 	let timeSpentInMs = 0;
