@@ -9,7 +9,7 @@ RSpec.describe Admin::PoisController, type: :controller do
   end
 
   describe "GET #all_pois" do
-    context "with valid params" do
+    context "when an admin" do
       let(:current_user) { admin }
       
       before do
@@ -18,6 +18,17 @@ RSpec.describe Admin::PoisController, type: :controller do
 
       it "returns a success response" do
           expect(response).to have_http_status :ok
+      end
+    end
+    context "when a user" do
+      let(:current_user) { user }
+      
+      before do
+        get :all_pois
+      end
+
+      it "returns a unauthorised response" do
+          expect(response).to have_http_status :unauthorized
       end
     end
   end
@@ -132,10 +143,62 @@ RSpec.describe Admin::PoisController, type: :controller do
         }.to change(Poi, :count).by(0)
       end
     end
+
+    context "when the user is not an admin" do
+
+      let(:current_user) { user }
+
+      it "returns a unauthorised response" do
+        post :create_poi, params: { poi: {} }
+        expect(response).to have_http_status :unauthorized
+      end
+    end
   end
 
   describe "PUT #edit_poi" do
     context "with valid params" do
+      let(:valid_attributes) {
+        {
+          name: "test",
+          description: "A poi",
+          features: ["feature1", "feature2"],
+          latitude: 50,
+          location: "location",
+          longitude: 4
+        }
+      }
+      let(:new_attributes) {
+        {
+          name: "test2",
+          description: "A poinew",
+          features: ["feature1", "feature23"],
+          latitude: 54,
+          location: "testloc2",
+          longitude: 77
+        }
+      }
+
+      let(:current_user) { admin }
+
+      it "updates the poi" do
+        poi = Poi.create! valid_attributes
+        post :edit_poi, params: { id: poi.to_param }.merge(new_attributes)
+        poi.reload
+        expect(poi.name).to eq(new_attributes[:name])
+        expect(poi.description).to eq(new_attributes[:description])
+        expect(poi.features).to eq(new_attributes[:features])
+        expect(poi.latitude).to eq(new_attributes[:latitude])
+        expect(poi.location).to eq(new_attributes[:location])
+        expect(poi.longitude).to eq(new_attributes[:longitude])
+      end
+    end
+    context "with invalid params" do
+    
+    end
+  end
+
+  describe "DELETE #delete_poi" do
+    context "when an admin" do
       let(:valid_attributes) {
         {
           description: "A poi",
@@ -147,35 +210,24 @@ RSpec.describe Admin::PoisController, type: :controller do
           name: "test"
         }
       }
-      let(:new_attributes) {
-        {
-          description: "A poinew",
-          features: ["feature1", "feature23"],
-          latitude: 54,
-          likes: 1002,
-          location: "testloc2",
-          longitude: 77,
-          name: "test2"
-        }
-      }
 
       let(:current_user) { admin }
 
-      it "updates the requested poi" do
+      it "deletes the poi" do
         poi = Poi.create! valid_attributes
-        put :edit_poi, params: { id: poi.to_param, poi: new_attributes }
-        poi.reload
-        expect(poi.description).to eq(new_attributes[:description])
-        expect(poi.features).to eq(new_attributes[:features])
-        expect(poi.latitude).to eq(new_attributes[:latitude])
-        expect(poi.likes).to eq(new_attributes[:likes])
-        expect(poi.location).to eq(new_attributes[:location])
-        expect(poi.longitude).to eq(new_attributes[:longitude])
-        expect(poi.name).to eq(new_attributes[:name])
+        expect {
+          delete :delete_poi, params: { id: poi.to_param }
+        }.to change(Poi, :count).by(-1)
       end
     end
-    context "with invalid params" do
     
+    context "when a user" do
+      let(:current_user) { user }
+
+      it "returns a unauthorised response" do
+        delete :delete_poi, params: { id: 1 }
+        expect(response).to have_http_status :unauthorized
+      end
     end
   end
 end
