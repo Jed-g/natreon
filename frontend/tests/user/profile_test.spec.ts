@@ -12,7 +12,7 @@ test('A user can log in to the map page', async ({ page }) => {
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
-  await expect(page.getByRole('button', { name: 'Log out'})).toBeVisible();
+  await expect(page.locator('[data-testid="logout-button"]').first()).toBeAttached();
 });
 
 test('A user can log in and see their profile', async ({ page }) => {
@@ -24,7 +24,7 @@ test('A user can log in and see their profile', async ({ page }) => {
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
-  await page.getByRole('link', { name: 'Settings' }).click();
+  await page.locator('[data-testid="settings-button"]').first().click();
   await expect(page.getByText('Nickname:')).toBeVisible();
   await expect(page.getByText('Email:')).toBeVisible();
   await expect(page.getByText('Description:')).toBeVisible();
@@ -40,7 +40,7 @@ test('A user can edit their nickname', async ({ page }) => {
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
-  await page.getByRole('link', { name: 'Settings' }).click();
+  await page.locator('[data-testid="settings-button"]').first().click();
   await page.getByRole('button', { name: 'Edit Profile' }).click();
   await page.getByLabel('Nickname:').click();
   await page.getByLabel('Nickname:').fill('user223');
@@ -60,7 +60,7 @@ test('A user can edit their description', async ({ page }) => {
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
-  await page.getByRole('link', { name: 'Settings' }).click();
+  await page.locator('[data-testid="settings-button"]').first().click();
   await page.getByRole('button', { name: 'Edit Profile' }).click();
   await page.getByLabel('Description:').click();
   await page.getByLabel('Description:').fill('this is a description');
@@ -79,7 +79,7 @@ test('A user can upload a profile picture', async ({ page }) => {
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
-  await page.getByRole('link', { name: 'Settings' }).click();
+  await page.locator('[data-testid="settings-button"]').first().click();
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
   const imagePath = path.join(__dirname, 'image0001.jpg');

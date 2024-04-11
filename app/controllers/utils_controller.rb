@@ -5,7 +5,7 @@ class UtilsController < ApplicationController
     ip = request.remote_ip
     results = Geocoder.search(ip)
     coords = results.first&.coordinates
-    return render json: {lat: coords[0], lon: coords[1]} unless coords.empty?
+    return render json: {lat: coords[0], lon: coords[1]} unless coords&.empty?
 
     render json: {message: "Location not found"}, status: :not_found
   end
@@ -16,7 +16,7 @@ class UtilsController < ApplicationController
 
     results = Geocoder.search(ip)
     coords = results.first&.coordinates
-    return render json: {lat: coords[0], lon: coords[1]} unless coords.empty?
+    return render json: {lat: coords[0], lon: coords[1]} unless coords&.empty?
 
     render json: {message: "Location not found"}, status: :not_found
   end

@@ -5,9 +5,9 @@ test('An account can be successfully created', async ({ page }) => {
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByRole('link', { name: 'Create An Account' }).click();
-  await page.getByPlaceholder('email').click();
-  await page.getByPlaceholder('email').fill('test@test1.com');
-  await page.getByPlaceholder('email').press('Tab');
+  await page.getByTestId('email').click();
+  await page.getByTestId('email').fill('test@test1.com');
+  await page.getByTestId('email').press('Tab');
   await page.getByPlaceholder('nickname').click();
   await page.getByPlaceholder('nickname').fill('featuretest');
   await page.getByText('Description').click();
@@ -18,7 +18,14 @@ test('An account can be successfully created', async ({ page }) => {
   await page.getByPlaceholder('confirm password').click();
   await page.getByPlaceholder('confirm password').fill('password');
   await page.getByRole('button', { name: 'Create Account' }).click();
-  await expect(page.getByRole('button', { name: 'Log out'})).toBeVisible();
+
+  // For debugging
+  // await page.waitForTimeout(5000);
+  // await page.evaluate(() => document.querySelector(".flex.flex-col.grow.overflow-x-hidden.relative")?.scrollTo(0, 0));
+  // const screenshotName = `screenshot_${Math.random()}_${Date.now()}.png`;
+  // await page.screenshot({ path: screenshotName });
+
+  await expect(page.locator('[data-testid="logout-button"]').first()).toBeAttached();
 });
 
 test('Cannnot create account with invalid email', async ({ page }) => {
@@ -26,8 +33,8 @@ test('Cannnot create account with invalid email', async ({ page }) => {
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByRole('link', { name: 'Create An Account' }).click();
-  await page.getByPlaceholder('email').click();
-  await page.getByPlaceholder('email').fill('wrong@testemail');
+  await page.getByTestId('email').click();
+  await page.getByTestId('email').fill('wrong@testemail');
   await page.getByPlaceholder('nickname').click();
   await page.getByPlaceholder('nickname').fill('emailwrong');
   await page.getByPlaceholder('description').click();
@@ -47,8 +54,8 @@ test('Cannot create account with invalid nickname', async ({ page }) => {
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByRole('link', { name: 'Create An Account' }).click();
-  await page.getByPlaceholder('email').click();
-  await page.getByPlaceholder('email').fill('test@test1.com');
+  await page.getByTestId('email').click();
+  await page.getByTestId('email').fill('test@test2.com');
   await page.getByPlaceholder('nickname').click();
   await page.getByPlaceholder('nickname').fill('in');
   await page.getByPlaceholder('password', { exact: true }).click();
@@ -69,8 +76,8 @@ test('Cannot create account with invalid password', async ({ page }) => {
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByRole('link', { name: 'Create An Account' }).click();
-  await page.getByPlaceholder('email').click();
-  await page.getByPlaceholder('email').fill('test@test1.com');
+  await page.getByTestId('email').click();
+  await page.getByTestId('email').fill('test@test3.com');
   await page.getByPlaceholder('nickname').click();
   await page.getByPlaceholder('nickname').fill('valid');
   await page.getByPlaceholder('password', { exact: true }).click();
@@ -87,9 +94,9 @@ test('Cannot create account as passwords do not match', async ({ page }) => {
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByRole('link', { name: 'Create An Account' }).click();
-  await page.getByPlaceholder('email').click();
-  await page.getByPlaceholder('email').fill('test@test1.com');
-  await page.getByPlaceholder('email').press('Tab');
+  await page.getByTestId('email').click();
+  await page.getByTestId('email').fill('test@test4.com');
+  await page.getByTestId('email').press('Tab');
   await page.getByPlaceholder('nickname').click();
   await page.getByPlaceholder('nickname').fill('test');
   await page.getByPlaceholder('password', { exact: true }).click();

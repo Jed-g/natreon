@@ -53,6 +53,8 @@
 
 	const getPOIById = (id: string) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
 
+	let mapInitializationCompleted = false;
+
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/utils/geolocation');
@@ -90,38 +92,44 @@
 
 		loading = false;
 		await tick();
-
-		nav = new NavigationControl({
-			visualizePitch: true,
-			showZoom: true,
-			showCompass: true
-		});
-
-		map.addControl(nav, 'bottom-right');
-		nav._container.parentElement!.style.zIndex = '0';
-
-		// Add a geolocate control to the map.
-		geolocate = new GeolocateControl({
-			positionOptions: {
-				enableHighAccuracy: true
-			},
-			trackUserLocation: true
-		});
-
-		map.addControl(geolocate, 'bottom-right');
-
-		scale = new ScaleControl({
-			maxWidth: 160,
-			unit: 'metric'
-		});
-
-		map.addControl(scale, 'bottom-left');
-
-		map.on('load', () => {
-			map.resize();
-			geolocate.trigger();
-		});
 	});
+
+	$: {
+		if (map !== undefined && !mapInitializationCompleted) {
+			nav = new NavigationControl({
+				visualizePitch: true,
+				showZoom: true,
+				showCompass: true
+			});
+
+			map.addControl(nav, 'bottom-right');
+			nav._container.parentElement!.style.zIndex = '0';
+
+			// Add a geolocate control to the map.
+			geolocate = new GeolocateControl({
+				positionOptions: {
+					enableHighAccuracy: true
+				},
+				trackUserLocation: true
+			});
+
+			map.addControl(geolocate, 'bottom-right');
+
+			scale = new ScaleControl({
+				maxWidth: 160,
+				unit: 'metric'
+			});
+
+			map.addControl(scale, 'bottom-left');
+
+			map.on('load', () => {
+				map.resize();
+				geolocate.trigger();
+			});
+
+			mapInitializationCompleted = true;
+		}
+	}
 </script>
 
 <svelte:window on:resize={() => map?.resize()} />
