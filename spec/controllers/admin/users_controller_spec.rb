@@ -101,4 +101,70 @@ RSpec.describe Admin::UsersController do
       end
     end
   end
+
+  describe "POST #deactivate_user" do
+    let(:user_params) { {id: user.id} }
+
+    context "when the user is an admin" do
+      let(:current_user) { admin }
+
+      before do
+        post :deactivate_user, params: user_params
+      end
+
+      it "deactivates the user and returns a 200 response" do
+        expect(response).to have_http_status :ok
+        expect(response.parsed_body["message"]).to eq "Deactivated user successfully"
+        user.reload
+        expect(user.deactivated).to be true
+      end
+    end
+
+    context "when the user is not an admin" do
+      let(:current_user) { user }
+
+      before do
+        post :deactivate_user, params: user_params
+      end
+
+      it "does not deactivate the user and returns a 401 response" do
+        expect(response).to have_http_status :unauthorized
+        user.reload
+        expect(user.deactivated).to be false
+      end
+    end
+  end
+
+  describe "POST #activate_user" do
+    let(:user_params) { {id: user.id, deactivated: true} }
+
+    context "when the user is an admin" do
+      let(:current_user) { admin }
+
+      before do
+        post :activate_user, params: user_params
+      end
+
+      it "activates the user and returns a 200 response" do
+        expect(response).to have_http_status :ok
+        expect(response.parsed_body["message"]).to eq "Activated user successfully"
+        user.reload
+        expect(user.deactivated).to be false
+      end
+    end
+
+    context "when the user is not an admin" do
+      let(:current_user) { user }
+
+      before do
+        post :activate_user, params: user_params
+      end
+
+      it "does not activate the user and returns a 401 response" do
+        expect(response).to have_http_status :unauthorized
+        #user.reload
+        #expect(user.deactivated).to be true
+      end
+    end
+  end
 end

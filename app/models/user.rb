@@ -37,7 +37,12 @@ class User < ApplicationRecord
   EMAIL_REGEX = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
   validates :email, presence: true, format: {with: EMAIL_REGEX}
 
+  validates :nickname, length: { minimum: 3 }
+
   has_one_attached :profile_picture
+
+  validates :profile_picture, content_type: ['image/png', 'image/jpg', 'image/jpeg']
+
   def active_for_authentication?
     super && !deactivated
   end

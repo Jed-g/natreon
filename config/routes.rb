@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  resources :pois
   devise_for :users, path: "api/auth", path_names: {
                                          sign_in:      "login",
                                          sign_out:     "logout",
@@ -49,6 +50,10 @@ Rails.application.routes.draw do
     post "/admin/questions", to: "admin/questions#answer_edit_create_question"
     delete "/admin/questions", to: "admin/questions#delete_question"
     get "/admin/mailinglist", to: "admin/mailing_list#all_emails"
+    get "/admin/pois", to: "admin/pois#all_pois"
+    post "/admin/pois", to: "admin/pois#create_poi"
+    delete "/admin/pois", to: "admin/pois#delete_poi"
+    post "/admin/pois/edit", to: "admin/pois#edit_poi"
 
     get "/admin/stats/globe", to: "admin/stats#globe"
     get "/admin/stats/all-visits", to: "admin/stats#all_visits"
