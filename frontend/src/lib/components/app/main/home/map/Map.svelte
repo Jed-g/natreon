@@ -7,6 +7,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import PoIcard from './POIcard.svelte';
 
 	let map: Map;
 	let nav: NavigationControl;
@@ -43,7 +44,8 @@
 		{ lngLat: { lng: 0.73507, lat: 51.656489 }, name: 'Chelmsford', id: 'chelmsford' },
 		{ lngLat: { lng: 0.478913, lat: 51.584151 }, name: 'Brentwood', id: 'brentwood' },
 		{ lngLat: { lng: 0.267459, lat: 51.588638 }, name: 'Romford', id: 'romford' },
-		{ lngLat: { lng: 0.0799, lat: 51.574244 }, name: 'Dagenham', id: 'dagenham' }
+		{ lngLat: { lng: 0.0799, lat: 51.574244 }, name: 'Dagenham', id: 'dagenham' },
+		{ lngLat: { lng: -1.48985, lat: 53.38247}, name: 'Weston Park', id: 'westonparksheffield'}
 	];
 	let idOfSelectedPOI: string | null = null;
 
@@ -122,6 +124,17 @@
 			geolocate.trigger();
 		});
 	});
+
+	function closePOICard() {
+        console.log("Close POI Card");
+		idOfSelectedPOI = null
+        // Update the state or perform any necessary action
+    }
+
+    function navigate() {
+        console.log("Navigate to the POI");
+        // Perform navigation action
+    }
 </script>
 
 <svelte:window on:resize={() => map?.resize()} />
@@ -158,7 +171,11 @@
 	</MapLibre>
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
-		<div
+		<PoIcard 
+		closePOICard={closePOICard}
+    	navigate={navigate}
+		{poi} />
+		<!-- <div
 			class="absolute w-56 h-64 top-2 right-2 overflow-y-auto flex"
 			transition:fly={{ duration: 300, x: 200, y: 0, opacity: 0, easing: quintOut }}
 		>
@@ -187,6 +204,6 @@
 					>
 				</Card.Footer>
 			</Card.Root>
-		</div>
+		</div> -->
 	{/if}
 {/if}
