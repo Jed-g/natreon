@@ -95,7 +95,6 @@
 		idOfSelectedPOI = null
         // Update the state or perform any necessary action
     }
-
 </script>
 
 <svelte:window on:resize={() => map?.resize()} />

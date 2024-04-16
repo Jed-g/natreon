@@ -3,8 +3,8 @@
     import { Button } from '$lib/components/ui/button';
     import { quintOut } from 'svelte/easing';
     import { fly } from 'svelte/transition';
+    import * as Carousel from "$lib/components/ui/carousel/index.js";
     import ViewDetailsPOI from './ViewDetailsPOI.svelte'; // Assuming the file name is ViewDetailsPOI.svelte
-
 
     export let poi: {
     lngLat: { lng: number; lat: number };
@@ -49,12 +49,31 @@
         <Card.Header class="p-3">
             <Card.Title>{poi.name}</Card.Title>
         </Card.Header>
-        <Card.Content class="grow p-3 flex flex-col overflow-y-auto">
+        <Card.Content class="grow p-3 flex flex-col max-w-xs">   
+            <Carousel.Root class="w-auto">
+                <Carousel.Content>
+                    {#each Array(5) as _, i (i)}
+                    <Carousel.Item>
+                        <div class="p-1">
+                        <Card.Root>
+                            <Card.Content
+                            class="flex aspect-square items-center justify-center p-6"
+                            >
+                            <span class="text-4xl font-semibold">{i + 1}</span>
+                            </Card.Content>
+                        </Card.Root>
+                        </div>
+                    </Carousel.Item>
+                    {/each}
+                </Carousel.Content>
+            </Carousel.Root>
             <p>Description: {poi.description}</p>
             <p>Features:</p>
+            <ul>
             {#each poi.features as feature}
-                <p>{feature}</p>
+                <li>{feature}</li>
             {/each}
+            </ul>
         </Card.Content>
         <Card.Footer class="flex justify-between p-3 grow-0 gap-2">
             <Button
