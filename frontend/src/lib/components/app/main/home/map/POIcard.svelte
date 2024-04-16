@@ -42,14 +42,14 @@
 </script>
 
 <div
-    class="absolute w-70 h-64 top-2 right-2 flex"
+    class="absolute w-auto h-64 top-2 right-2 flex"
     transition:fly={{ duration: 300, x: 200, y: 0, opacity: 0, easing: quintOut }}
 >
     <Card.Root class="flex flex-col grow">
         <Card.Header class="p-3">
             <Card.Title>{poi.name}</Card.Title>
         </Card.Header>
-        <Card.Content class="grow p-3 flex flex-col max-w-xs">   
+        <Card.Content class="grow p-3 flex flex-col overflow-y-auto">   
             <Carousel.Root class="w-auto">
                 <Carousel.Content>
                     {#each Array(5) as _, i (i)}
