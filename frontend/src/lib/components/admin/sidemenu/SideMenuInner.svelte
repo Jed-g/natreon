@@ -7,6 +7,7 @@
 	import messageDrawIcon from '@iconify-icons/mdi/message-draw';
 	import commentQuestionIcon from '@iconify-icons/mdi/comment-question';
 	import cardAccountMailIcon from '@iconify-icons/mdi/card-account-mail';
+	import mapMarkerIcon from '@iconify-icons/mdi/map-marker';
 
 	export let slug: string | undefined;
 
@@ -71,12 +72,12 @@
 	<div class="my-1" />
 	<li>
 		<a
-			class:font-semibold={slug === AdminDashboardUrls.REPORT_RESPONSE}
-			class:active={slug === AdminDashboardUrls.MAILING_LIST}
-			href={`/admin${AdminDashboardUrls.REPORT_RESPONSE ? '/' + AdminDashboardUrls.REPORT_RESPONSE : ''}`}
-			data-testid="mailing-list-button"
+			class:font-semibold={slug === AdminDashboardUrls.MANAGE_POIS}
+			class:active={slug === AdminDashboardUrls.MANAGE_POIS}
+			href={`/admin${AdminDashboardUrls.MANAGE_POIS ? '/' + AdminDashboardUrls.MANAGE_POIS : ''}`}
+			data-testid="manage-pois-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
-			><Icon icon={cardAccountMailIcon} height={24} class="scale-125 mr-2" />Reported Response</a
+			><Icon icon={mapMarkerIcon} height={24} class="scale-125 mr-2" />Manage POIs</a
 		>
 	</li>
 </ul>

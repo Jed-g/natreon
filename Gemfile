@@ -37,6 +37,7 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 gem "activerecord-session_store"
+gem "active_storage_validations"
 gem "cancancan"
 gem "daemons"
 gem "delayed_job"

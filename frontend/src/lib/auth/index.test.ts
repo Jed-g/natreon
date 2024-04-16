@@ -4,6 +4,8 @@ import 'isomorphic-fetch';
 import UserType from '$lib/enums/userType';
 
 const EMAIL = 'test@example.com';
+const NICKNAME = 'nick';
+const DESCRIPTION = 'description';
 const PASSWORD = 'password';
 const mockFetch = vi.fn();
 
@@ -14,11 +16,11 @@ describe('signUp', () => {
 
 	it('returns true when the server responds with 200', async () => {
 		mockFetch.mockResolvedValueOnce({ status: 200 });
-		const result = await signUp(EMAIL, PASSWORD);
+		const result = await signUp(EMAIL, NICKNAME, DESCRIPTION, PASSWORD);
 		expect(result).toBe(true);
 		expect(mockFetch).toHaveBeenCalledWith('/api/auth/signup', {
 			method: 'POST',
-			body: JSON.stringify({ user: { email: EMAIL, password: PASSWORD } }),
+			body: JSON.stringify({ user: { email: EMAIL, nickname: NICKNAME, description: DESCRIPTION, password: PASSWORD } }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -27,11 +29,11 @@ describe('signUp', () => {
 
 	it('returns false when the server responds with an error', async () => {
 		mockFetch.mockResolvedValueOnce({ status: 500 });
-		const result = await signUp(EMAIL, PASSWORD);
+		const result = await signUp(EMAIL, NICKNAME, DESCRIPTION, PASSWORD);
 		expect(result).toBe(false);
 		expect(mockFetch).toHaveBeenCalledWith('/api/auth/signup', {
 			method: 'POST',
-			body: JSON.stringify({ user: { email: EMAIL, password: PASSWORD } }),
+			body: JSON.stringify({ user: { email: EMAIL, nickname: NICKNAME, description: DESCRIPTION, password: PASSWORD } }),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -40,11 +42,11 @@ describe('signUp', () => {
 
 	it('returns false when the server does not respond', async () => {
 		mockFetch.mockRejectedValueOnce(new Error('Network error'));
-		const result = await signUp(EMAIL, PASSWORD);
+		const result = await signUp(EMAIL, NICKNAME, DESCRIPTION, PASSWORD);
 		expect(result).toBe(false);
 		expect(mockFetch).toHaveBeenCalledWith('/api/auth/signup', {
 			method: 'POST',
-			body: JSON.stringify({ user: { email: EMAIL, password: PASSWORD } }),
+			body: JSON.stringify({ user: { email: EMAIL, nickname: NICKNAME, description: DESCRIPTION, password: PASSWORD } }),
 			headers: {
 				'Content-Type': 'application/json'
 			}

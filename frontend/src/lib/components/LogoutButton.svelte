@@ -16,4 +16,4 @@
 	};
 </script>
 
-<Button {variant} {size} on:click={handleLogout}>Log out</Button>
+<Button {variant} {size} on:click={handleLogout} data-testid="logout-button">Log out</Button>

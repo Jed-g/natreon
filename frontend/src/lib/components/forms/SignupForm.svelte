@@ -125,6 +125,7 @@
 				placeholder="email"
 				class="input input-bordered"
 				id="email"
+				data-testid="email"
 				bind:value={formData.email}
 				on:input={() => {
 					if (formValidation.emailValid === null) {
