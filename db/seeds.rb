@@ -31,6 +31,13 @@ when "development"
         user.description = "test_description"
 
       end
+      User.find_or_create_by(email: "test1@user.com") do |user|
+        user.password = "password"
+        user.user_type = 0
+        user.nickname = "test1_user"
+        user.description = "test1_description"
+
+      end
     User.find_or_create_by(email: "test@admin.com") do |user|
         user.password = "password"
         user.user_type = 1
@@ -54,6 +61,13 @@ when "demo"
         user.user_type = 0
         user.nickname = "test_user"
         user.description = "test_description"
+
+      end
+      User.find_or_create_by(email: "test1@user.com") do |user|
+        user.password = "password"
+        user.user_type = 0
+        user.nickname = "test1_user"
+        user.description = "test1_description"
 
       end
     User.find_or_create_by(email: "test@admin.com") do |user|

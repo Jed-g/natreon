@@ -68,4 +68,15 @@
 			><Icon icon={cardAccountMailIcon} height={24} class="scale-125 mr-2" />Mailing List</a
 		>
 	</li>
+	<div class="my-1" />
+	<li>
+		<a
+			class:font-semibold={slug === AdminDashboardUrls.REPORT_RESPONSE}
+			class:active={slug === AdminDashboardUrls.MAILING_LIST}
+			href={`/admin${AdminDashboardUrls.REPORT_RESPONSE ? '/' + AdminDashboardUrls.REPORT_RESPONSE : ''}`}
+			data-testid="mailing-list-button"
+			on:click={() => dispatch('sideMenuItemClicked')}
+			><Icon icon={cardAccountMailIcon} height={24} class="scale-125 mr-2" />Reported Response</a
+		>
+	</li>
 </ul>
