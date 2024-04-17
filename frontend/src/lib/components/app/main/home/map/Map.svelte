@@ -2,15 +2,25 @@
 	import { MapLibre, Popup, Marker } from 'svelte-maplibre';
 	import { Map, NavigationControl, GeolocateControl, ScaleControl } from 'maplibre-gl';
 	import { onMount, tick } from 'svelte';
-	import { PUBLIC_MAPTILER_URI } from '$env/static/public';
-	import PoIcard from './POIcard.svelte';
-    import { pointsOfInterest } from './pointsOfInterest';
+	import POIcard from './POIcard.svelte';
+	import { pointsOfInterest } from './pointsOfInterest';
+	import LayerToggle from '$lib/components/app/main/home/map/LayerToggle.svelte';
+	import layers from '$lib/components/app/main/home/map/layers';
+
+	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
+
+	onMount(() => {
+		const preferredMapLayer = localStorage.getItem('preferredMapLayer');
+
+		if (preferredMapLayer && layers.map(({ value }) => value).includes(preferredMapLayer)) {
+			selectedMapLayer = layers.find(({ value }) => value === preferredMapLayer)!;
+		}
+	});
 
 	let map: Map;
 	let nav: NavigationControl;
 	let geolocate: GeolocateControl;
 	let scale: ScaleControl;
-
 
 	let idOfSelectedPOI: string | null = null;
 
@@ -20,16 +30,16 @@
 
 	const getPOIById = (id: string) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
 
-	let mapInitializationCompleted = false;
-
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/utils/geolocation');
 
 			if (response.ok) {
 				const data = await response.json();
-				[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
-				foundLocationByIP = true;
+				if (!isNaN(parseFloat(data.lon)) && !isNaN(parseFloat(data.lat))) {
+					[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
+					foundLocationByIP = true;
+				}
 			} else {
 				const response = await fetch('https://api.ipify.org?format=json');
 				const data = await response.json();
@@ -47,11 +57,14 @@
 
 				if (!secondResponse.ok) return;
 				const secondData = await secondResponse.json();
-				[defaultCoords.lon, defaultCoords.lat] = [
-					parseFloat(secondData.lon),
-					parseFloat(secondData.lat)
-				];
-				foundLocationByIP = true;
+
+				if (!isNaN(parseFloat(secondData.lon)) && !isNaN(parseFloat(secondData.lat))) {
+					[defaultCoords.lon, defaultCoords.lat] = [
+						parseFloat(secondData.lon),
+						parseFloat(secondData.lat)
+					];
+					foundLocationByIP = true;
+				}
 			}
 		} catch (error) {
 			console.error(error);
@@ -59,50 +72,46 @@
 
 		loading = false;
 		await tick();
+
+		nav = new NavigationControl({
+			visualizePitch: true,
+			showZoom: true,
+			showCompass: true
+		});
+
+		map.addControl(nav, 'bottom-right');
+		nav._container.parentElement!.style.zIndex = '10';
+
+		// Add a geolocate control to the map.
+		geolocate = new GeolocateControl({
+			positionOptions: {
+				enableHighAccuracy: true
+			},
+			trackUserLocation: true
+		});
+
+		map.addControl(geolocate, 'bottom-right');
+		geolocate._container.parentElement!.style.zIndex = '10';
+
+		scale = new ScaleControl({
+			maxWidth: 160,
+			unit: 'metric'
+		});
+
+		map.addControl(scale, 'bottom-left');
+		scale._container.parentElement!.style.zIndex = '10';
+
+		map.on('load', () => {
+			map.resize();
+			geolocate.trigger();
+		});
 	});
 
-	$: {
-		if (map !== undefined && !mapInitializationCompleted) {
-			nav = new NavigationControl({
-				visualizePitch: true,
-				showZoom: true,
-				showCompass: true
-			});
-
-			map.addControl(nav, 'bottom-right');
-			nav._container.parentElement!.style.zIndex = '0';
-
-			// Add a geolocate control to the map.
-			geolocate = new GeolocateControl({
-				positionOptions: {
-					enableHighAccuracy: true
-				},
-				trackUserLocation: true
-			});
-
-			map.addControl(geolocate, 'bottom-right');
-
-			scale = new ScaleControl({
-				maxWidth: 160,
-				unit: 'metric'
-			});
-
-			map.addControl(scale, 'bottom-left');
-
-			map.on('load', () => {
-				map.resize();
-				geolocate.trigger();
-			});
-
-			mapInitializationCompleted = true;
-		}
-	}
-
 	function closePOICard() {
-        console.log("Close POI Card");
-		idOfSelectedPOI = null
-        // Update the state or perform any necessary action
-    }
+		console.log('Close POI Card');
+		idOfSelectedPOI = null;
+		// Update the state or perform any necessary action
+	}
 </script>
 
 <svelte:window on:resize={() => map?.resize()} />
@@ -114,7 +123,7 @@
 {:else}
 	<MapLibre
 		bind:map
-		style={PUBLIC_MAPTILER_URI}
+		style={selectedMapLayer.URI}
 		class="h-full w-full absolute"
 		zoom={foundLocationByIP ? 6 : 1}
 		center={[defaultCoords.lon, defaultCoords.lat]}
@@ -127,7 +136,7 @@
 					idOfSelectedPOI = id;
 					map.flyTo({ center: lngLat });
 				}}
-				class={'grid h-8 w-8 place-items-center rounded-full border border-zinc-600 bg-red-300 text-black shadow-2xl focus:outline-2 focus:outline-black' +
+				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 bg-red-300 text-black shadow-2xl focus:outline-2 focus:outline-black' +
 					(idOfSelectedPOI === id ? ' border-4 box-content' : '')}
 			>
 				<span class="text-xl">🌲</span>
@@ -137,10 +146,11 @@
 			</Marker>
 		{/each}
 	</MapLibre>
+	<div class="z-10 absolute top-2 left-2">
+		<LayerToggle bind:selectedMapLayer />
+	</div>
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
-		<PoIcard 
-		closePOICard={closePOICard}
-		{poi} />
+		<POIcard {closePOICard} {poi} />
 	{/if}
 {/if}

@@ -42,7 +42,7 @@
 </script>
 
 <div
-    class="absolute w-auto h-64 top-2 right-2 flex"
+    class="z-20 absolute w-auto h-64 top-2 right-2 flex"
     transition:fly={{ duration: 300, x: 200, y: 0, opacity: 0, easing: quintOut }}
 >
     <Card.Root class="flex flex-col grow">
