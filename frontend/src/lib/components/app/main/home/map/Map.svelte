@@ -53,16 +53,16 @@
 
 	const getPOIById = (id: string) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
 
-	let mapInitializationCompleted = false;
-
 	onMount(async () => {
 		try {
 			const response = await fetch('/api/utils/geolocation');
 
 			if (response.ok) {
 				const data = await response.json();
-				[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
-				foundLocationByIP = true;
+				if (!isNaN(parseFloat(data.lon)) && !isNaN(parseFloat(data.lat))) {
+					[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
+					foundLocationByIP = true;
+				}
 			} else {
 				const response = await fetch('https://api.ipify.org?format=json');
 				const data = await response.json();
@@ -80,11 +80,14 @@
 
 				if (!secondResponse.ok) return;
 				const secondData = await secondResponse.json();
-				[defaultCoords.lon, defaultCoords.lat] = [
-					parseFloat(secondData.lon),
-					parseFloat(secondData.lat)
-				];
-				foundLocationByIP = true;
+
+				if (!isNaN(parseFloat(secondData.lon)) && !isNaN(parseFloat(secondData.lat))) {
+					[defaultCoords.lon, defaultCoords.lat] = [
+						parseFloat(secondData.lon),
+						parseFloat(secondData.lat)
+					];
+					foundLocationByIP = true;
+				}
 			}
 		} catch (error) {
 			console.error(error);
@@ -92,44 +95,38 @@
 
 		loading = false;
 		await tick();
+
+		nav = new NavigationControl({
+			visualizePitch: true,
+			showZoom: true,
+			showCompass: true
+		});
+
+		map.addControl(nav, 'bottom-right');
+		nav._container.parentElement!.style.zIndex = '0';
+
+		// Add a geolocate control to the map.
+		geolocate = new GeolocateControl({
+			positionOptions: {
+				enableHighAccuracy: true
+			},
+			trackUserLocation: true
+		});
+
+		map.addControl(geolocate, 'bottom-right');
+
+		scale = new ScaleControl({
+			maxWidth: 160,
+			unit: 'metric'
+		});
+
+		map.addControl(scale, 'bottom-left');
+
+		map.on('load', () => {
+			map.resize();
+			geolocate.trigger();
+		});
 	});
-
-	$: {
-		if (map !== undefined && !mapInitializationCompleted) {
-			nav = new NavigationControl({
-				visualizePitch: true,
-				showZoom: true,
-				showCompass: true
-			});
-
-			map.addControl(nav, 'bottom-right');
-			nav._container.parentElement!.style.zIndex = '0';
-
-			// Add a geolocate control to the map.
-			geolocate = new GeolocateControl({
-				positionOptions: {
-					enableHighAccuracy: true
-				},
-				trackUserLocation: true
-			});
-
-			map.addControl(geolocate, 'bottom-right');
-
-			scale = new ScaleControl({
-				maxWidth: 160,
-				unit: 'metric'
-			});
-
-			map.addControl(scale, 'bottom-left');
-
-			map.on('load', () => {
-				map.resize();
-				geolocate.trigger();
-			});
-
-			mapInitializationCompleted = true;
-		}
-	}
 </script>
 
 <svelte:window on:resize={() => map?.resize()} />
