@@ -1,10 +1,13 @@
 <script lang="ts">
+    import * as Dialog from "$lib/components/ui/dialog"
+    
     // Define props with type annotations
     export let id: string;
     export let name: string;
     export let description: string;
     export let features: string[];
     export let comments: { text: string, nickname: string }[];
+    export let onClose: () => void;
 
     let newComment = '';
     let user: {
@@ -96,37 +99,41 @@
 
 </style>
 
-<!-- Display the details using the props -->
-<div class="details-container">
-    
-    <h2>{name}</h2>
-    <p>ID: {id}</p>
-    <p>Description: {description}</p>
-    <p>Features:</p>
-    <ul>
-        {#each features as feature}
-            <li>{feature}</li>
-        {/each}
-    </ul>
-    
-    <!-- Comments container with separate scroll -->
-    <div class="comment-container">
-        <h3>Comments</h3>
-        <div class="comments-scroll">
-            {#each comments as comment}
-                <div class="comment-wrapper">
-                    <div class="comment">{comment}</div>
-                    <button class="report-button" on:click={() => reportComment(comment.text)}>Report</button>
+<Dialog.Root open={true} onOpenChange={(newOpenValue) => newOpenValue || onClose()}>
+    <Dialog.Content>
+        <!-- Display the details using the props -->
+        <div>
+            
+            <h2>{name}</h2>
+            <p>ID: {id}</p>
+            <p>Description: {description}</p>
+            <p>Features:</p>
+            <ul>
+                {#each features as feature}
+                    <li>{feature}</li>
+                {/each}
+            </ul>
+            
+            <!-- Comments container with separate scroll -->
+            <div class="comment-container">
+                <h3>Comments</h3>
+                <div class="comments-scroll">
+                    {#each comments as comment}
+                        <div class="comment-wrapper">
+                            <div class="comment">{comment}</div>
+                            <button class="report-button" on:click={() => reportComment(comment.text)}>Report</button>
+                        </div>
+                    {/each}
                 </div>
-            {/each}
+                
+                <!-- Textarea for user to input comments -->
+                <textarea
+                    class="comment-input"
+                    bind:value={newComment}
+                    placeholder="Type your comment here..."
+                ></textarea>
+                <button on:click={addComment}>Add Comment</button>
+            </div>
         </div>
-        
-        <!-- Textarea for user to input comments -->
-        <textarea
-            class="comment-input"
-            bind:value={newComment}
-            placeholder="Type your comment here..."
-        ></textarea>
-        <button on:click={addComment}>Add Comment</button>
-    </div>
-</div>
+    </Dialog.Content>
+</Dialog.Root>

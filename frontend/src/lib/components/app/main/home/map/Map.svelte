@@ -4,8 +4,8 @@
 	import { onMount, tick } from 'svelte';
 	import POIcard from './POIcard.svelte';
 	import { pointsOfInterest } from './pointsOfInterest';
-	import LayerToggle from '$lib/components/app/main/home/map/LayerToggle.svelte';
-	import layers from '$lib/components/app/main/home/map/layers';
+	import layers from '$lib/components/app/main/home/map/search-bar/layers';
+	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
 
 	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
 
@@ -21,6 +21,9 @@
 	let nav: NavigationControl;
 	let geolocate: GeolocateControl;
 	let scale: ScaleControl;
+
+	let searchBar: HTMLDivElement;
+	let searchBarHeight = 64;
 
 	let idOfSelectedPOI: string | null = null;
 
@@ -105,6 +108,10 @@
 			map.resize();
 			geolocate.trigger();
 		});
+
+		if (searchBar) {
+			searchBarHeight = searchBar.offsetHeight;
+		}
 	});
 
 	function closePOICard() {
@@ -114,7 +121,15 @@
 	}
 </script>
 
-<svelte:window on:resize={() => map?.resize()} />
+<svelte:window
+	on:resize={() => {
+		map?.resize();
+
+		if (searchBar) {
+			searchBarHeight = searchBar.offsetHeight;
+		}
+	}}
+/>
 
 {#if loading}
 	<div class="grow flex items-center justify-center">
@@ -146,11 +161,14 @@
 			</Marker>
 		{/each}
 	</MapLibre>
-	<div class="z-10 absolute top-2 left-2">
-		<LayerToggle bind:selectedMapLayer />
-	</div>
+	<SearchBar bind:searchBar bind:selectedMapLayer />
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
-		<POIcard {closePOICard} {poi} />
+		<div
+			class="absolute w-full max-w-xs sm:max-w-md md:max-w-xl top-2 right-2"
+			style={`margin-top: ${searchBarHeight}px;`}
+		>
+			<POIcard {closePOICard} {poi} />
+		</div>
 	{/if}
 {/if}
