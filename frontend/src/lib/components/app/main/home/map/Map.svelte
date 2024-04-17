@@ -2,11 +2,22 @@
 	import { MapLibre, Popup, Marker } from 'svelte-maplibre';
 	import { Map, NavigationControl, GeolocateControl, ScaleControl } from 'maplibre-gl';
 	import { onMount, tick } from 'svelte';
-	import { PUBLIC_MAPTILER_URI } from '$env/static/public';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import LayerToggle from '$lib/components/app/main/home/map/LayerToggle.svelte';
+	import layers from '$lib/components/app/main/home/map/layers';
+
+	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
+
+	onMount(() => {
+		const preferredMapLayer = localStorage.getItem('preferredMapLayer');
+
+		if (preferredMapLayer && layers.map(({ value }) => value).includes(preferredMapLayer)) {
+			selectedMapLayer = layers.find(({ value }) => value === preferredMapLayer)!;
+		}
+	});
 
 	let map: Map;
 	let nav: NavigationControl;
@@ -103,7 +114,7 @@
 		});
 
 		map.addControl(nav, 'bottom-right');
-		nav._container.parentElement!.style.zIndex = '0';
+		nav._container.parentElement!.style.zIndex = '10';
 
 		// Add a geolocate control to the map.
 		geolocate = new GeolocateControl({
@@ -114,6 +125,7 @@
 		});
 
 		map.addControl(geolocate, 'bottom-right');
+		geolocate._container.parentElement!.style.zIndex = '10';
 
 		scale = new ScaleControl({
 			maxWidth: 160,
@@ -121,6 +133,7 @@
 		});
 
 		map.addControl(scale, 'bottom-left');
+		scale._container.parentElement!.style.zIndex = '10';
 
 		map.on('load', () => {
 			map.resize();
@@ -138,7 +151,7 @@
 {:else}
 	<MapLibre
 		bind:map
-		style={PUBLIC_MAPTILER_URI}
+		style={selectedMapLayer.URI}
 		class="h-full w-full absolute"
 		zoom={foundLocationByIP ? 6 : 1}
 		center={[defaultCoords.lon, defaultCoords.lat]}
@@ -161,10 +174,13 @@
 			</Marker>
 		{/each}
 	</MapLibre>
+	<div class="z-10 absolute top-2 left-2">
+		<LayerToggle bind:selectedMapLayer />
+	</div>
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
 		<div
-			class="z-10 absolute w-56 h-64 top-2 right-2 overflow-y-auto flex"
+			class="z-20 absolute w-56 h-64 top-2 right-2 overflow-y-auto flex"
 			transition:fly={{ duration: 300, x: 200, y: 0, opacity: 0, easing: quintOut }}
 		>
 			<Card.Root class="flex flex-col grow">
