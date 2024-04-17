@@ -151,7 +151,7 @@
 					idOfSelectedPOI = id;
 					map.flyTo({ center: lngLat });
 				}}
-				class={'grid h-8 w-8 place-items-center rounded-full border border-zinc-600 bg-red-300 text-black shadow-2xl focus:outline-2 focus:outline-black' +
+				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 bg-red-300 text-black shadow-2xl focus:outline-2 focus:outline-black' +
 					(idOfSelectedPOI === id ? ' border-4 box-content' : '')}
 			>
 				<span class="text-xl">🌲</span>
@@ -164,7 +164,7 @@
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
 		<div
-			class="absolute w-56 h-64 top-2 right-2 overflow-y-auto flex"
+			class="z-10 absolute w-56 h-64 top-2 right-2 overflow-y-auto flex"
 			transition:fly={{ duration: 300, x: 200, y: 0, opacity: 0, easing: quintOut }}
 		>
 			<Card.Root class="flex flex-col grow">
