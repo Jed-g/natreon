@@ -9,7 +9,7 @@
     export let poi: {
     lngLat: { lng: number; lat: number };
     name: string;
-    id: string;
+    id: number;
     description: string;
     features: string[];
     comments: string[]; // Add the 'comment' variable here

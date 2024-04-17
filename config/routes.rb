@@ -91,5 +91,9 @@ Rails.application.routes.draw do
     post "/users/profile/update-picture", to: "users/profile#update_profile_picture"
 
     post "/mailinglist", to: "mailing_list#submit_email"
+
+    scope "poi" do
+      get "/", to: "users/poi#all"
+    end
   end
 end

@@ -3,9 +3,21 @@
 	import { Map, NavigationControl, GeolocateControl, ScaleControl } from 'maplibre-gl';
 	import { onMount, tick } from 'svelte';
 	import POIcard from './POIcard.svelte';
-	import { pointsOfInterest } from './pointsOfInterest';
 	import layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
+	import * as t from 'io-ts';
+	import { isRight } from 'fp-ts/Either';
+
+	const POIType = t.type({
+		lngLat: t.type({ lng: t.number, lat: t.number }),
+		name: t.string,
+		id: t.number,
+		description: t.string,
+		features: t.array(t.string),
+		comments: t.array(t.string)
+	});
+
+	type POI = t.TypeOf<typeof POIType>;
 
 	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
 
@@ -25,13 +37,71 @@
 	let searchBar: HTMLDivElement;
 	let searchBarHeight = 64;
 
-	let idOfSelectedPOI: string | null = null;
+	let pointsOfInterest: POI[] = [];
+	let idOfSelectedPOI: number | null = null;
 
 	let defaultCoords = { lon: 0, lat: 0 };
 	let foundLocationByIP = false;
 	let loading = true;
 
-	const getPOIById = (id: string) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
+	let previousPOIRequestParams: {
+		north: string;
+		south: string;
+		east: string;
+		west: string;
+	} | null = null;
+
+	const sortedStringify = (obj: Record<string, string>) => {
+		return JSON.stringify(obj, Object.keys(obj).sort());
+	};
+
+	const updatePOIData = async () => {
+		const mapBound = map.getBounds();
+		const north = mapBound._ne.lat;
+		const south = mapBound._sw.lat;
+		const east = mapBound._ne.lng;
+		const west = mapBound._sw.lng;
+
+		const paramsFormatted = {
+			north: north > 90 ? '90' : north.toString(),
+			south: south < -90 ? '-90' : south.toString(),
+			east: east > 180 ? '180' : east.toString(),
+			west: west < -180 ? '-180' : west.toString()
+		};
+
+		if (
+			previousPOIRequestParams !== null &&
+			sortedStringify(previousPOIRequestParams) === sortedStringify(paramsFormatted)
+		) {
+			return;
+		}
+
+		previousPOIRequestParams = paramsFormatted;
+		const params = new URLSearchParams(paramsFormatted);
+
+		const response = await fetch(`/api/poi?${params.toString()}`);
+
+		if (response.ok) {
+			const data = await response.json();
+
+			const newPOIs = data.pois;
+
+			newPOIs.forEach((newPOI: any) => {
+				const validationResult = POIType.decode(newPOI);
+
+				if (isRight(validationResult)) {
+					const newPOI: POI = validationResult.right;
+					if (!pointsOfInterest.some((poi) => poi.id === newPOI.id)) {
+						pointsOfInterest = [...pointsOfInterest, newPOI];
+					}
+				} else {
+					console.error('Invalid POI object received from API: ', validationResult.left);
+				}
+			});
+		}
+	};
+
+	const getPOIById = (id: number) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
 
 	onMount(async () => {
 		try {
@@ -109,6 +179,8 @@
 			geolocate.trigger();
 		});
 
+		map.on('pitchend', updatePOIData);
+
 		if (searchBar) {
 			searchBarHeight = searchBar.offsetHeight;
 		}
@@ -143,6 +215,8 @@
 		zoom={foundLocationByIP ? 6 : 1}
 		center={[defaultCoords.lon, defaultCoords.lat]}
 		attributionControl={false}
+		on:moveend={updatePOIData}
+		on:zoomend={updatePOIData}
 	>
 		{#each pointsOfInterest as { lngLat, name, id } (id)}
 			<Marker
