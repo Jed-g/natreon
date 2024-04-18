@@ -14,8 +14,29 @@
 #  updated_at  :datetime         not null
 #
 class Poi < ApplicationRecord
-    self.table_name = 'pois'
-    validates :latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
-    validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
-    validates :name, length: { minimum: 3 }, format: { with: /\A[a-z0-9 ]+\z/i }
+  self.table_name = 'pois'
+
+  FEATURES = [
+    "Natural Landmark",
+    "Scenic Viewpoint",
+    "Statue",
+    "Historical Site",
+    "Cultural Attraction",
+    "Recreational Area",
+    "Educational Institution",
+    "Shopping District",
+    "Food and Drink",
+    "Entertainment Venue",
+    "Water Fountain"
+  ].freeze
+
+  validates :latitude, numericality: {greater_than_or_equal_to: -90, less_than_or_equal_to: 90}
+  validates :longitude, numericality: {greater_than_or_equal_to: -180, less_than_or_equal_to: 180}
+  validates :name, length: {minimum: 3}, format: {with: /\A[a-z0-9 ]+\z/i}
+
+  validates_each :features do |record, attr, value|
+    value.each do |feature|
+      record.errors.add(attr, 'contains invalid feature') unless FEATURES.include?(feature)
+    end
+  end
 end

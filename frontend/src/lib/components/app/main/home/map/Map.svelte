@@ -1,13 +1,29 @@
+<script lang="ts" context="module">
+	import * as t from 'io-ts';
+
+	export const POIType = t.type({
+		id: t.number,
+		isFavourite: t.boolean,
+		lngLat: t.type({ lng: t.number, lat: t.number }),
+		name: t.string,
+		description: t.string,
+		features: t.array(t.string),
+		likes: t.number,
+		comments: t.array(t.string)
+	});
+
+	export type POI = t.TypeOf<typeof POIType>;
+</script>
+
 <script lang="ts">
 	import { MapLibre, Popup, Marker } from 'svelte-maplibre';
 	import { Map, NavigationControl, GeolocateControl, ScaleControl } from 'maplibre-gl';
 	import { onMount, tick } from 'svelte';
-	import * as Card from '$lib/components/ui/card';
-	import { Button } from '$lib/components/ui/button';
-	import { fly } from 'svelte/transition';
-	import { quintOut } from 'svelte/easing';
-	import LayerToggle from '$lib/components/app/main/home/map/LayerToggle.svelte';
-	import layers from '$lib/components/app/main/home/map/layers';
+	import POIcard from './POIcard.svelte';
+	import layers from '$lib/components/app/main/home/map/search-bar/layers';
+	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
+	import { isRight } from 'fp-ts/Either';
+	import { number } from 'zod';
 
 	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
 
@@ -24,45 +40,133 @@
 	let geolocate: GeolocateControl;
 	let scale: ScaleControl;
 
-	let pointsOfInterest: { lngLat: { lng: number; lat: number }; name: string; id: string }[] = [
-		{ lngLat: { lng: -1.617439, lat: 54.978252 }, name: 'Newcastle upon Tyne', id: 'newcastle' },
-		{ lngLat: { lng: -1.617439, lat: 53.800755 }, name: 'Leeds', id: 'leeds' },
-		{ lngLat: { lng: -1.464544, lat: 53.381129 }, name: 'Sheffield', id: 'sheffield' },
-		{ lngLat: { lng: -2.242631, lat: 53.480759 }, name: 'Manchester', id: 'manchester' },
-		{ lngLat: { lng: -2.978481, lat: 53.408371 }, name: 'Liverpool', id: 'liverpool' },
-		{ lngLat: { lng: -1.890401, lat: 52.486243 }, name: 'Birmingham', id: 'birmingham' },
-		{ lngLat: { lng: -1.254341, lat: 51.752022 }, name: 'Oxford', id: 'oxford' },
-		{ lngLat: { lng: -0.127758, lat: 51.507351 }, name: 'London', id: 'london' },
-		{ lngLat: { lng: 1.297355, lat: 52.630885 }, name: 'Norwich', id: 'norwich' },
-		{ lngLat: { lng: -0.139475, lat: 50.82253 }, name: 'Brighton', id: 'brighton' },
-		{ lngLat: { lng: -1.40435, lat: 50.9097 }, name: 'Southampton', id: 'southampton' },
-		{ lngLat: { lng: -2.58791, lat: 51.454513 }, name: 'Bristol', id: 'bristol' },
-		{ lngLat: { lng: -3.188267, lat: 51.481583 }, name: 'Cardiff', id: 'cardiff' },
-		{ lngLat: { lng: -3.939813, lat: 51.621441 }, name: 'Swansea', id: 'swansea' },
-		{ lngLat: { lng: -4.142671, lat: 50.375456 }, name: 'Plymouth', id: 'plymouth' },
-		{ lngLat: { lng: -3.532631, lat: 50.718412 }, name: 'Exeter', id: 'exeter' },
-		{ lngLat: { lng: -2.361324, lat: 51.10914 }, name: 'Glastonbury', id: 'glastonbury' },
-		{ lngLat: { lng: -1.82621, lat: 51.454264 }, name: 'Reading', id: 'reading' },
-		{ lngLat: { lng: -0.97813, lat: 51.454264 }, name: 'Basingstoke', id: 'basingstoke' },
-		{ lngLat: { lng: -0.75557, lat: 51.335345 }, name: 'Guildford', id: 'guildford' },
-		{ lngLat: { lng: -0.376288, lat: 51.41233 }, name: 'Kingston upon Thames', id: 'kingston' },
-		{ lngLat: { lng: 0.278154, lat: 51.44142 }, name: 'Maidstone', id: 'maidstone' },
-		{ lngLat: { lng: 0.52249, lat: 51.270363 }, name: 'Tunbridge Wells', id: 'tunbridge' },
-		{ lngLat: { lng: 1.07561, lat: 51.278707 }, name: 'Canterbury', id: 'canterbury' },
-		{ lngLat: { lng: 1.17432, lat: 51.35996 }, name: 'Margate', id: 'margate' },
-		{ lngLat: { lng: 1.408852, lat: 50.9097 }, name: 'Dover', id: 'dover' },
-		{ lngLat: { lng: 0.73507, lat: 51.656489 }, name: 'Chelmsford', id: 'chelmsford' },
-		{ lngLat: { lng: 0.478913, lat: 51.584151 }, name: 'Brentwood', id: 'brentwood' },
-		{ lngLat: { lng: 0.267459, lat: 51.588638 }, name: 'Romford', id: 'romford' },
-		{ lngLat: { lng: 0.0799, lat: 51.574244 }, name: 'Dagenham', id: 'dagenham' }
-	];
-	let idOfSelectedPOI: string | null = null;
+	let poiFeatureOptions: string[];
+	let poiFeaturesFilter: string[] = [];
+	let onlyShowFavourites = false;
+	let searchBar: HTMLDivElement;
+	let searchBarHeight = 64;
+
+	let pointsOfInterest: POI[] = [];
+
+	$: filteredPointsOfInterest = pointsOfInterest.filter(({ features, isFavourite, id }) => {
+		if (id === idOfSelectedPOI) {
+			return true;
+		}
+
+		if (
+			poiFeaturesFilter.length > 0 &&
+			!features.some((feature) => poiFeaturesFilter.includes(feature))
+		) {
+			return false;
+		}
+
+		if (onlyShowFavourites && !isFavourite) {
+			return false;
+		}
+
+		return true;
+	});
+
+	let idOfSelectedPOI: number | null = null;
+
+	// $: if (
+	// 	idOfSelectedPOI !== null &&
+	// 	filteredPointsOfInterest.find(({ id }) => id === idOfSelectedPOI) === undefined
+	// ) {
+	// 	idOfSelectedPOI = null;
+	// }
 
 	let defaultCoords = { lon: 0, lat: 0 };
 	let foundLocationByIP = false;
 	let loading = true;
 
-	const getPOIById = (id: string) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
+	let previousPOIRequestParams: {
+		north: string;
+		south: string;
+		east: string;
+		west: string;
+	} | null = null;
+
+	const sortedStringify = (obj: Record<string, string>) => {
+		return JSON.stringify(obj, Object.keys(obj).sort());
+	};
+
+	const updatePOIData = async () => {
+		const mapBound = map.getBounds();
+		const north = mapBound._ne.lat;
+		const south = mapBound._sw.lat;
+		const east = mapBound._ne.lng;
+		const west = mapBound._sw.lng;
+
+		const paramsFormatted = {
+			north: north > 90 ? '90' : north.toString(),
+			south: south < -90 ? '-90' : south.toString(),
+			east: east > 180 ? '180' : east.toString(),
+			west: west < -180 ? '-180' : west.toString()
+		};
+
+		if (
+			previousPOIRequestParams !== null &&
+			sortedStringify(previousPOIRequestParams) === sortedStringify(paramsFormatted)
+		) {
+			return;
+		}
+
+		previousPOIRequestParams = paramsFormatted;
+		const params = new URLSearchParams(paramsFormatted);
+
+		const response = await fetch(`/api/poi?${params.toString()}`);
+
+		if (response.ok) {
+			const data = await response.json();
+
+			// To be changed...
+			const newPOIs = data.pois.map((poi: any) => ({ ...poi, isFavourite: false }));
+			// const newPOIs = data.pois;
+
+			newPOIs.forEach((newPOI: any) => {
+				const validationResult = POIType.decode(newPOI);
+
+				if (isRight(validationResult)) {
+					const newPOI: POI = validationResult.right;
+					if (!pointsOfInterest.some((poi) => poi.id === newPOI.id)) {
+						pointsOfInterest = [...pointsOfInterest, newPOI];
+					}
+				} else {
+					console.error('Invalid POI object received from API: ', validationResult.left);
+				}
+			});
+		}
+	};
+
+	const fetchPOIById = async (poiId: number) => {
+		// Potential early reject if POI has already been in viewport/lazily-loaded
+		if (pointsOfInterest.some((poi) => poi.id === poiId)) return;
+
+		const params = new URLSearchParams({ id: poiId.toString() });
+
+		const response = await fetch(`/api/poi/get-by-id?${params.toString()}`);
+
+		if (response.ok) {
+			const data = await response.json();
+
+			// To be changed...
+			const fetchedPOI = { ...data, isFavourite: false };
+
+			const validationResult = POIType.decode(fetchedPOI);
+			if (isRight(validationResult)) {
+				const newPOI: POI = validationResult.right;
+				if (!pointsOfInterest.some((poi) => poi.id === newPOI.id)) {
+					pointsOfInterest = [...pointsOfInterest, newPOI];
+					idOfSelectedPOI = newPOI.id;
+				}
+			} else {
+				console.error('Invalid POI object received from API: ', validationResult.left);
+			}
+		}
+	};
+
+	const getPOIById = (id: number) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
 
 	onMount(async () => {
 		try {
@@ -104,6 +208,14 @@
 			console.error(error);
 		}
 
+		try {
+			const response = await fetch('/api/poi/features');
+			const data = await response.json();
+			poiFeatureOptions = data.allPOIFeatures;
+		} catch (error) {
+			console.error(error);
+		}
+
 		loading = false;
 		await tick();
 
@@ -139,10 +251,30 @@
 			map.resize();
 			geolocate.trigger();
 		});
+
+		map.on('pitchend', updatePOIData);
+
+		if (searchBar) {
+			searchBarHeight = searchBar.offsetHeight;
+		}
 	});
+
+	function closePOICard() {
+		console.log('Close POI Card');
+		idOfSelectedPOI = null;
+		// Update the state or perform any necessary action
+	}
 </script>
 
-<svelte:window on:resize={() => map?.resize()} />
+<svelte:window
+	on:resize={() => {
+		map?.resize();
+
+		if (searchBar) {
+			searchBarHeight = searchBar.offsetHeight;
+		}
+	}}
+/>
 
 {#if loading}
 	<div class="grow flex items-center justify-center">
@@ -156,8 +288,10 @@
 		zoom={foundLocationByIP ? 6 : 1}
 		center={[defaultCoords.lon, defaultCoords.lat]}
 		attributionControl={false}
+		on:moveend={updatePOIData}
+		on:zoomend={updatePOIData}
 	>
-		{#each pointsOfInterest as { lngLat, name, id } (id)}
+		{#each filteredPointsOfInterest as { lngLat, name, id } (id)}
 			<Marker
 				{lngLat}
 				on:click={() => {
@@ -174,40 +308,22 @@
 			</Marker>
 		{/each}
 	</MapLibre>
-	<div class="z-10 absolute top-2 left-2">
-		<LayerToggle bind:selectedMapLayer />
-	</div>
+	<SearchBar
+		bind:searchBar
+		bind:selectedMapLayer
+		{poiFeatureOptions}
+		bind:poiFeaturesFilter
+		bind:onlyShowFavourites
+		{map}
+		on:poiSelected={({ detail: poiId }) => fetchPOIById(poiId)}
+	/>
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
 		<div
-			class="z-20 absolute w-56 h-64 top-2 right-2 overflow-y-auto flex"
-			transition:fly={{ duration: 300, x: 200, y: 0, opacity: 0, easing: quintOut }}
+			class="absolute w-full max-w-xs sm:max-w-md md:max-w-xl top-2 right-2"
+			style={`margin-top: ${searchBarHeight}px;`}
 		>
-			<Card.Root class="flex flex-col grow">
-				<Card.Header class="p-3">
-					<Card.Title>{poi.name}</Card.Title>
-				</Card.Header>
-				<Card.Content class="grow p-3 flex flex-col">
-					<p>ID: {poi.id}</p>
-					<p>Longitude: {poi.lngLat.lng}</p>
-					<p>Latitude: {poi.lngLat.lat}</p>
-				</Card.Content>
-				<Card.Footer class="flex justify-between p-3 grow-0 gap-2">
-					<Button
-						size="sm"
-						class="basis-1/2"
-						on:click={() => {
-							console.log('Open up Google Maps and do other stuff...');
-						}}>Navigate</Button
-					>
-					<Button
-						variant="secondary"
-						size="sm"
-						class="basis-1/2"
-						on:click={() => (idOfSelectedPOI = null)}>Close</Button
-					>
-				</Card.Footer>
-			</Card.Root>
+			<POIcard {closePOICard} {poi} />
 		</div>
 	{/if}
 {/if}
