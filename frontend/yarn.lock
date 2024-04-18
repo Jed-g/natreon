@@ -935,10 +935,10 @@ bits-ui@^0.16.0:
     "@melt-ui/svelte" "0.68.0"
     nanoid "^5.0.4"
 
-bits-ui@^0.20.0:
-  version "0.20.1"
-  resolved "https://registry.yarnpkg.com/bits-ui/-/bits-ui-0.20.1.tgz#0a97470ee52f4e4a5a02e3508de3ac80dedf8632"
-  integrity sha512-P0JRuWn+XpFYsAbGnPlyPVKab88v2S8Q57cUI3LZdh0nulO7fgxbXgBHgEAmmgNk63XxyvhmfYz44kZFRrHtLA==
+bits-ui@^0.21.3:
+  version "0.21.3"
+  resolved "https://registry.yarnpkg.com/bits-ui/-/bits-ui-0.21.3.tgz#3955608761b8964ffae29740143a83776ce3910f"
+  integrity sha512-VMQVXwYIjYmDoudIRm2ZlS2guy97lUQk73DwSfTnaS0dhldImbDFMATNxjLSLsTDj8FqJ8Dv78wSctdxcloIbQ==
   dependencies:
     "@internationalized/date" "^3.5.1"
     "@melt-ui/svelte" "0.76.2"
@@ -1296,6 +1296,24 @@ electron-to-chromium@^1.4.668:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.740.tgz#89c82421332ee425e5b193e3db2dea019d423419"
   integrity sha512-Yvg5i+iyv7Xm18BRdVPVm8lc7kgxM3r6iwqCH2zB7QZy1kZRNmd0Zqm0zcD9XoFREE5/5rwIuIAOT+/mzGcnZg==
 
+embla-carousel-reactive-utils@8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/embla-carousel-reactive-utils/-/embla-carousel-reactive-utils-8.0.2.tgz#cd48cbe46198d9a64b0a8d62ce6832ae97c9fe70"
+  integrity sha512-nLZqDkQdO0hvOP49/dUwjkkepMnUXgIzhyRuDjwGqswpB4Ibnc5M+w7rSQQAM+uMj0cPaXnYOTlv8XD7I/zVNw==
+
+embla-carousel-svelte@^8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/embla-carousel-svelte/-/embla-carousel-svelte-8.0.2.tgz#872e1319678bab9446d4f34a062e49ac3a0f913f"
+  integrity sha512-pJ4mXcyqvd3sLVyeLTOjz9XuIuhlBe1mHLqJ7X7llpc55B4xs/HZT5qof6IfETCN5rtE+cQdsNEkxI6el7uJxQ==
+  dependencies:
+    embla-carousel "8.0.2"
+    embla-carousel-reactive-utils "8.0.2"
+
+embla-carousel@8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/embla-carousel/-/embla-carousel-8.0.2.tgz#31546bcdff7971d44d29cf6bb824ebe923317233"
+  integrity sha512-bogsDO8xosuh/l3PxIvA5AMl3+BnRVAse9sDW/60amzj4MbGS5re4WH5eVEXiuH8G1/3G7QUAX2QNr3Yx8z5rA==
+
 emoji-regex@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
@@ -1602,6 +1620,11 @@ formsnap@^0.5.1:
   dependencies:
     nanoid "^5.0.5"
 
+fp-ts@^2.16.5:
+  version "2.16.5"
+  resolved "https://registry.yarnpkg.com/fp-ts/-/fp-ts-2.16.5.tgz#d79b97168aeafcf9612f18bbc017f513ecb20ac9"
+  integrity sha512-N8T8PwMSeTKKtkm9lkj/zSTAnPC/aJIIrQhnHxxkL0KLsRCNUPANksJOlMXxcKKCo7H1ORP3No9EMD+fP0tsdA==
+
 fraction.js@^4.3.7:
   version "4.3.7"
   resolved "https://registry.yarnpkg.com/fraction.js/-/fraction.js-4.3.7.tgz#06ca0085157e42fda7f9e726e79fefc4068840f7"
@@ -1809,6 +1832,11 @@ ini@^1.3.5:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/internmap/-/internmap-2.0.3.tgz#6685f23755e43c524e251d29cbc97248e3061009"
   integrity sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg==
+
+io-ts@^2.2.21:
+  version "2.2.21"
+  resolved "https://registry.yarnpkg.com/io-ts/-/io-ts-2.2.21.tgz#4ef754176f7082a1099d04c7d5c4ea53267c530a"
+  integrity sha512-zz2Z69v9ZIC3mMLYWIeoUcwWD6f+O7yP92FMVVaXEOSZH1jnVBmET/urd/uoarD1WGBY4rCj8TAyMPzsGNzMFQ==
 
 is-binary-path@~2.1.0:
   version "2.1.0"
@@ -2068,10 +2096,10 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
-lucide-svelte@^0.363.0:
-  version "0.363.0"
-  resolved "https://registry.yarnpkg.com/lucide-svelte/-/lucide-svelte-0.363.0.tgz#cea00579a2e0c09dd0257e8a01e6b4d08dd21c6c"
-  integrity sha512-zpUBFtMEEOOjILgiDX48ijibUww3JUCLrMo5YDGX/De/m6I+vn+oWIGvdyZtuc8nz/P8xHW9vWLKzIWeMrRYbA==
+lucide-svelte@^0.368.0:
+  version "0.368.0"
+  resolved "https://registry.yarnpkg.com/lucide-svelte/-/lucide-svelte-0.368.0.tgz#4cbe2d396d67efb0f7fc5a1dcce7cdaf7dfe6d34"
+  integrity sha512-/uSazMXmY0cZzehGaE1SHQDtQrQBvAVR8UCEpNEjRKSy3yluSqtlGj7T5KvewJpP9kBDCKPgKVcKgdJgEzpRlw==
 
 magic-string@^0.30.0, magic-string@^0.30.3, magic-string@^0.30.4, magic-string@^0.30.5:
   version "0.30.10"
@@ -2812,6 +2840,7 @@ std-env@^3.3.3:
   integrity sha512-JPbdCEQLj1w5GilpiHAx3qJvFndqybBysA3qUOnznweH4QbNYUsW/ea8QzSrnh0vNsezMMw5bcVool8lM0gwzg==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -2978,6 +3007,11 @@ svelte-preprocess@^5.1.3:
     magic-string "^0.30.5"
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
+
+svelte-radix@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/svelte-radix/-/svelte-radix-1.1.0.tgz#5fb0c8d37422ea4863649180f6277af2d8b70dd3"
+  integrity sha512-kyE9wZiJV937INGb+wiBkAjmGtQUUYRPkVL2Q+/gj+9Vog1Ewd2wNvNmpNMUd+c+euxoc5u5YZMuCUgky9EUPw==
 
 svelte-render@^2.0.1:
   version "2.0.1"
