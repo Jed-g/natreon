@@ -36,10 +36,6 @@
 			likes: number;
 		};
 	} | null = null;
-	// let currentlyViewed: {
-	// 	id: number;
-	// 	values: Record<string, string | number | string[]>;
-	// } | null = null;
 	let items: itemType[];
 
 	//Form validation
@@ -51,11 +47,15 @@
 		nameValid: FormValidation;
 		latitudeValid: FormValidation;
 		longitudeValid: FormValidation;
+		featuresValid: FormValidation;
+		locationValid: FormValidation;
 	} = {
 		nameMin3: null,
 		nameValid: null,
 		latitudeValid: null,
-		longitudeValid: null
+		longitudeValid: null,
+		featuresValid: null,
+		locationValid: null
 	};
 
 	let editFormValidation: {
@@ -63,11 +63,15 @@
 		nameValid: FormValidation;
 		latitudeValid: FormValidation;
 		longitudeValid: FormValidation;
+		featuresValid: FormValidation;
+		locationValid: FormValidation;
 	} = {
 		nameMin3: null,
 		nameValid: null,
 		latitudeValid: null,
-		longitudeValid: null
+		longitudeValid: null,
+		featuresValid: null,
+		locationValid: null
 	};
 
 	const nameRegex = /^[a-z0-9 ]+$/i;
@@ -85,10 +89,10 @@
 			formValidation.nameValid = false;
 		}
 
-		//if (poi.features.length == 0) {
-		//	isOk = false;
-		//	formValidation.featuresValid = false;
-		//}
+		if (poi.features.length === 0) {
+			isOk = false;
+			formValidation.featuresValid = false;
+		}
 
 		const parsedLatitude = parseFloat(poi.latitude);
 		if (
@@ -112,6 +116,11 @@
 			formValidation.longitudeValid = false;
 		}
 
+		if (poi.location === null || poi.location === '') {
+			isOk = false;
+			formValidation.locationValid = false;
+		}
+
 		return isOk;
 	};
 
@@ -124,9 +133,9 @@
 			formValidation.nameValid = nameRegex.test(poi.name);
 		}
 
-		//if (formValidation.featuresValid !== null) {
-		//	formValidation.featuresValid = poi.features.length != 0;
-		//}
+		if (formValidation.featuresValid !== null) {
+			formValidation.featuresValid = poi.features.length != 0;
+		}
 
 		if (formValidation.latitudeValid !== null) {
 			const parsed = parseFloat(poi.latitude);
@@ -156,10 +165,10 @@
 			editFormValidation.nameValid = false;
 		}
 
-		//if (currentlyViewed.values.features.length == 0) {
-		//	isOk = false;
-		//	editFormValidation.featuresValid = false;
-		//}
+		if (currentlyViewed.values.features.length === 0) {
+			isOk = false;
+			editFormValidation.featuresValid = false;
+		}
 
 		const parsedLatitude = parseFloat(currentlyViewed.values.latitude);
 		if (
@@ -196,9 +205,9 @@
 				editFormValidation.nameValid = nameRegex.test(currentlyViewed.values.name);
 			}
 
-			//if (editFormValidation.featuresValid !== null) {
-			//	editFormValidation.featuresValid = currentlyViewed.values.features.length != 0;
-			//}
+			if (editFormValidation.featuresValid !== null) {
+				editFormValidation.featuresValid = currentlyViewed.values.features.length !== 0;
+			}
 
 			if (editFormValidation.latitudeValid !== null) {
 				const parsed = parseFloat(currentlyViewed.values.latitude);
@@ -219,26 +228,25 @@
 	let poi = {
 		name: '',
 		description: '',
-		features: ['Water Feature'],
-		location: 'Sheffield',
+		features: [''],
+		location: '',
 		latitude: '0',
 		longitude: '0',
 		likes: 0
 	};
-	let features = ['Water Feature'];
+	let features = [''];
 
 	function addFeature() {
 		//features.push('');
-		features = [...features, 'Water Feature'];
+		features = [...features, ''];
 	}
 
 	const createNewPoi = () => {
 		resetPoi();
 		creatingNewPoi = true;
+		currentlyViewed = null;
+		editing = false;
 	};
-
-	let defaultFeature = 'Water Feature';
-	features = features.length ? features : [defaultFeature];
 
 	let editing = false;
 
@@ -246,8 +254,8 @@
 		poi = {
 			name: '',
 			description: '',
-			features: ['Water Feature'],
-			location: 'Sheffield',
+			features: [''],
+			location: '',
 			latitude: '0',
 			longitude: '0',
 			likes: 0
@@ -257,7 +265,9 @@
 			nameMin3: null,
 			nameValid: null,
 			latitudeValid: null,
-			longitudeValid: null
+			longitudeValid: null,
+			featuresValid: null,
+			locationValid: null
 		};
 	}
 	function startEditing() {
@@ -265,14 +275,34 @@
 			nameMin3: null,
 			nameValid: null,
 			latitudeValid: null,
-			longitudeValid: null
+			longitudeValid: null,
+			featuresValid: null,
+			locationValid: null
 		};
 		editing = true;
 	}
 
 	function stopEditing() {
 		editing = false;
+		refreshCurrentlyViewedData();
 	}
+
+	const refreshCurrentlyViewedData = async () => {
+		if (currentlyViewed === null) {
+			return;
+		}
+
+		loading = true;
+		const itemId = currentlyViewed.id;
+
+		const latestData = await getItemsAction();
+		const latestCurrentlyViewedData = latestData.find(({ id }) => id === itemId);
+
+		if (latestCurrentlyViewedData !== undefined) {
+			currentlyViewed.values = removeIdFromItem(latestCurrentlyViewedData);
+		}
+		loading = false;
+	};
 
 	const updateTableUiState = async () => {
 		loading = true;
@@ -297,12 +327,16 @@
 		};
 
 	onMount(updateTableUiState);
+
+	$: {
+		if (!creatingNewPoi) {
+			features = [''];
+		}
+	}
 </script>
 
 <div class="flex">
-	<button type="button" class="ml-auto btn btn-primary" on:click={createNewPoi}
-		>Create New POI</button
-	>
+	<button class="ml-auto btn btn-primary" on:click={createNewPoi}>Create New POI</button>
 </div>
 
 <div class="flex"><h1 class="text-2xl">{tableName}</h1></div>
@@ -329,20 +363,17 @@
 					class="flex flex-col grow"
 					on:submit|preventDefault={() => {
 						if (currentlyViewed) {
-							if (!validateEditData()) {
-								return false;
-							} else {
-								const poiWithParsedCoords = {
-									...currentlyViewed.values,
-									latitude: parseFloat(currentlyViewed.values.latitude),
-									longitude: parseFloat(currentlyViewed.values.longitude)
-								};
+							if (!validateEditData()) return;
 
-								editAction(currentlyViewed.id, poiWithParsedCoords);
-							}
+							const poiWithParsedCoords = {
+								...currentlyViewed.values,
+								latitude: parseFloat(currentlyViewed.values.latitude),
+								longitude: parseFloat(currentlyViewed.values.longitude)
+							};
+
+							editAction(currentlyViewed.id, poiWithParsedCoords);
+							stopEditing();
 						}
-						stopEditing();
-						return false;
 					}}
 				>
 					<label>
@@ -380,14 +411,48 @@
 							class="input input-bordered"
 						/>
 					</label>
-					<label>
-						<span>Features</span>
-						<input
-							type="text"
-							bind:value={currentlyViewed.values.features}
-							class="input input-bordered"
-						/>
-					</label>
+					{#if Array.isArray(currentlyViewed.values.features)}
+						{#each currentlyViewed.values.features as feature, i}
+							<label class="flex flex-col space-y-1">
+								<span>Feature {i + 1}</span>
+								<div class="flex gap-2">
+									<input type="text" bind:value={feature} class="input input-bordered grow" />
+									{#if currentlyViewed.values.features.length > 1}
+										<button
+											type="button"
+											class="btn btn-error"
+											on:click={() => {
+												if (Array.isArray(currentlyViewed?.values.features)) {
+													currentlyViewed.values.features.splice(i, 1);
+													currentlyViewed.values.features = currentlyViewed.values.features;
+												}
+											}}>Delete</button
+										>
+									{/if}
+								</div>
+							</label>
+						{/each}
+						{#if editFormValidation.featuresValid === false}
+							<div class="flex">
+								<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+								<p class="ml-3">Features Not Valid</p>
+							</div>
+						{:else if editFormValidation.featuresValid === true}
+							<div class="flex">
+								<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+								<p class="ml-3">Features Valid</p>
+							</div>
+						{/if}
+					{/if}
+					<button
+						type="button"
+						on:click={() => {
+							if (Array.isArray(currentlyViewed?.values.features)) {
+								currentlyViewed.values.features = [...currentlyViewed.values.features, ''];
+							}
+						}}
+						class="btn btn-primary w-auto">Add Feature</button
+					>
 					<label>
 						<span>Location</span>
 						<input
@@ -396,6 +461,17 @@
 							class="input input-bordered"
 						/>
 					</label>
+					{#if editFormValidation.locationValid === false}
+						<div class="flex">
+							<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+							<p class="ml-3">Location Not Valid</p>
+						</div>
+					{:else if editFormValidation.locationValid === true}
+						<div class="flex">
+							<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+							<p class="ml-3">Location Valid</p>
+						</div>
+					{/if}
 					<label>
 						<span>Latitude</span>
 						<input
@@ -479,11 +555,16 @@
 							<label class="label">
 								<span class="label-text">Features</span>
 							</label>
-							<textarea
-								class="textarea textarea-bordered h-16"
-								disabled
-								value={currentlyViewed.values.features}
-							/>
+							{#if Array.isArray(currentlyViewed.values.features)}
+								{#each currentlyViewed.values.features as feature, i}
+									<label class="flex flex-col space-y-1">
+										<div class="flex gap-2 items-center">
+											<p class="text-xs">Feature {i + 1}:</p>
+											<input value={feature} readonly class="input input-bordered grow" />
+										</div>
+									</label>
+								{/each}
+							{/if}
 						</div>
 						<div class="divider" />
 						<div class="form-control">
@@ -504,7 +585,6 @@
 								<span class="label-text">Coordinates</span>
 							</label>
 							<input
-								type="Integer"
 								class="input input-bordered"
 								disabled
 								value="{currentlyViewed.values.latitude}, {currentlyViewed.values.longitude}"
@@ -513,13 +593,20 @@
 					</div>
 					<div class="divider" />
 					<div class="flex justify-between">
-						<button class="btn" on:click={() => (currentlyViewed = null)}>Back</button>
+						<button
+							class="btn"
+							on:click={() => {
+								currentlyViewed = null;
+								updateTableUiState();
+							}}>Back</button
+						>
 						<button
 							class="btn btn-error"
 							on:click={() => {
 								if (currentlyViewed !== null) {
 									deleteAction(currentlyViewed.id);
 									currentlyViewed = null;
+									updateTableUiState();
 								}
 							}}>Delete</button
 						>
@@ -538,21 +625,18 @@
 			<form
 				class="flex flex-col grow space-y-4"
 				on:submit|preventDefault={() => {
-					poi.features = features.filter((feature) => feature.trim() !== '');
-					if (!validateData()) {
-						return false;
-					} else {
-						const poiWithParsedCoords = {
-							...poi,
-							latitude: parseFloat(poi.latitude),
-							longitude: parseFloat(poi.longitude)
-						};
-						createAction(poiWithParsedCoords);
-						creatingNewPoi = false;
-						resetPoi();
-						updateTableUiState();
-						return false;
-					}
+					poi.features = features;
+					if (!validateData()) return;
+
+					const poiWithParsedCoords = {
+						...poi,
+						latitude: parseFloat(poi.latitude),
+						longitude: parseFloat(poi.longitude)
+					};
+					createAction(poiWithParsedCoords);
+					creatingNewPoi = false;
+					resetPoi();
+					updateTableUiState();
 				}}
 			>
 				<div>
@@ -598,23 +682,47 @@
 				{#each features as feature, i}
 					<label class="flex flex-col space-y-1">
 						<span>Feature {i + 1}</span>
-						<select bind:value={features[i]} class="input input-bordered">
-							<option value="Water Feature">Water Feature</option>
-							<option value="Statue">Statue</option>
-							<option value="Feature3">Further options to be added</option>
-						</select>
+						<div class="flex gap-2">
+							<input type="text" bind:value={feature} class="input input-bordered grow" />
+							{#if features.length > 1}
+								<button
+									type="button"
+									class="btn btn-error"
+									on:click={() => {
+										features.splice(i, 1);
+										features = features;
+									}}>Delete</button
+								>
+							{/if}
+						</div>
 					</label>
 				{/each}
+				{#if formValidation.featuresValid === false}
+					<div class="flex">
+						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+						<p class="ml-3">Features Not Valid</p>
+					</div>
+				{:else if formValidation.featuresValid === true}
+					<div class="flex">
+						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+						<p class="ml-3">Features Valid</p>
+					</div>
+				{/if}
 				<button type="button" on:click={addFeature} class="btn btn-primary w-auto"
 					>Add Feature</button
 				>
 				<label class="flex flex-col space-y-1">
 					<span>Location</span>
-					<select bind:value={poi.location} class="input input-bordered">
-						<option value="Sheffield">Sheffield</option>
-						<option value="Manchester">Manchester</option>
-						<option value="Location3">Further locations to be added</option>
-					</select>
+					<input
+						type="text"
+						bind:value={poi.location}
+						on:input={() => {
+							if (formValidation.locationValid === null) {
+								formValidation.locationValid = false;
+							}
+						}}
+						class="input input-bordered"
+					/>
 				</label>
 				<label class="flex flex-col space-y-1">
 					<span>Latitude</span>
@@ -663,12 +771,15 @@
 					</div>
 				{/if}
 				<button type="submit" class="btn btn-primary mt-4">Create</button>
-				<button type="button" class="btn btn-error" on:click={() => (creatingNewPoi = false)}
-					>Back</button
+				<button
+					type="button"
+					class="btn btn-error"
+					on:click={() => {
+						creatingNewPoi = false;
+						editing = false;
+						updateTableUiState();
+					}}>Back</button
 				>
-				<!-- {#if formValidation.nameValid !== null}
-					<div class="divider my-1" />
-				{/if} -->
 			</form>
 		</div>
 	</div>
@@ -715,7 +826,8 @@
 								: item.features}</td
 						>
 						<td>{item.likes}</td>
-						<td>{item.latitude},{item.longitude}</td>
+						<td>{item.latitude}</td>
+						<td>{item.longitude}</td>
 						<td class="flex items-center justify-center">
 							<button
 								class="btn btn-primary mr-4"
