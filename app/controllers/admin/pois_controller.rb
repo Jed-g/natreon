@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
-module Admin  
+module Admin
   class PoisController < ApplicationController
     before_action :authorize_admin_controllers
+
+    def all_poi_feature_options
+      render json: {allPOIFeatureOptions: Poi::FEATURES}
+    end
 
     # GET /pois
     def index
@@ -12,8 +16,8 @@ module Admin
     end
 
     def all_pois
-      render json: Poi.order(created_at: :desc).select(:id, :name, :description, :location, 
-                    :features, :likes, :latitude, :longitude)
+      render json: Poi.order(created_at: :desc).select(:id, :name, :description, :location,
+                                                       :features, :likes, :latitude, :longitude)
     end
 
     def create_poi
@@ -39,7 +43,6 @@ module Admin
 
       @poi.save
       render json: {message: "Updated poi successfully"}
-
     end
 
     def delete_poi
@@ -83,44 +86,44 @@ module Admin
     end
 
     private
-      # Use callbacks to share common setup or constraints between actions.
-      def set_poi
-        @poi = Poi.find(params[:id])
-      end
 
-      # Only allow a list of trusted parameters through.
-      def poi_params
-        params.require(:poi).permit(:name, :description, :location, :likes, :latitude, :longitude, features: [])
-      end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_poi
+      @poi = Poi.find(params[:id])
+    end
 
-      def read_id_param
-        @id = params[:id]
-        render_bad_request if @id.nil?
-      end
+    # Only allow a list of trusted parameters through.
+    def poi_params
+      params.require(:poi).permit(:name, :description, :location, :likes, :latitude, :longitude, features: [])
+    end
 
-      def update_name?
-        !params[:name].nil?
-      end
+    def read_id_param
+      @id = params[:id]
+      render_bad_request if @id.nil?
+    end
 
-      def update_description?
-        !params[:description].nil?
-      end
+    def update_name?
+      !params[:name].nil?
+    end
 
-      def update_features?
-        !params[:features].nil?
-      end
+    def update_description?
+      !params[:description].nil?
+    end
 
-      def update_location?
-        !params[:location].nil?
-      end
+    def update_features?
+      !params[:features].nil?
+    end
 
-      def update_latitude?
-        !params[:latitude].nil?
-      end
+    def update_location?
+      !params[:location].nil?
+    end
 
-      def update_longitude?
-        !params[:longitude].nil?
-      end
+    def update_latitude?
+      !params[:latitude].nil?
+    end
 
+    def update_longitude?
+      !params[:longitude].nil?
+    end
   end
 end

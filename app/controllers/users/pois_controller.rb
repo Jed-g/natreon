@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module Users
-  class PoiController < ApplicationController
-    before_action :validate_params
+  class PoisController < ApplicationController
+    before_action :validate_params, only: [:all]
 
     def all
       pois = Poi.where(latitude: @south..@north, longitude: @west..@east)
@@ -18,6 +18,10 @@ module Users
       end
 
       render json: {pois: pois_formatted}
+    end
+
+    def all_poi_features
+      render json: {allPOIFeatures: Poi::FEATURES}
     end
 
     private

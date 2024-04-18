@@ -1,5 +1,16 @@
 <script lang="ts">
 	import ManagementTable from '$lib/components/admin/main/managepois/ManagementTable.svelte';
+	import { onMount } from 'svelte';
+
+	let loading = true;
+	let allPOIFeatureOptions: string[];
+
+	onMount(async () => {
+		const response = await fetch('/api/admin/pois/features');
+		const data = await response.json();
+		allPOIFeatureOptions = data.allPOIFeatureOptions;
+		loading = false;
+	});
 
 	const getAllPois = async () => {
 		const response = await fetch('/api/admin/pois');
@@ -60,23 +71,32 @@
 	};
 </script>
 
-<div class="relative p-6 h-full w-full">
-	<div class="relative card flex bg-base-100 shadow-xl p-6 flex-col h-full w-full overflow-x-auto">
-		<ManagementTable
-			getItemsAction={getAllPois}
-			deleteAction={deletePoi}
-			createAction={createPoi}
-			editAction={editPoi}
-			tableHeaders={[
-				'Name',
-				'Description',
-				'Location',
-				'Features',
-				'Likes',
-				'Latitude',
-				'Longitude'
-			]}
-			tableName={'POI Management'}
-		/>
+{#if loading}
+	<div class="grow flex items-center justify-center">
+		<span class="loading loading-ring loading-lg" />
 	</div>
-</div>
+{:else}
+	<div class="relative p-6 h-full w-full">
+		<div
+			class="relative card flex bg-base-100 shadow-xl p-6 flex-col h-full w-full overflow-x-auto"
+		>
+			<ManagementTable
+				{allPOIFeatureOptions}
+				getItemsAction={getAllPois}
+				deleteAction={deletePoi}
+				createAction={createPoi}
+				editAction={editPoi}
+				tableHeaders={[
+					'Name',
+					'Description',
+					'Location',
+					'Features',
+					'Likes',
+					'Latitude',
+					'Longitude'
+				]}
+				tableName={'POI Management'}
+			/>
+		</div>
+	</div>
+{/if}

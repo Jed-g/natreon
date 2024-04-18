@@ -61,6 +61,7 @@ Rails.application.routes.draw do
     post "/admin/pois", to: "admin/pois#create_poi"
     delete "/admin/pois", to: "admin/pois#delete_poi"
     post "/admin/pois/edit", to: "admin/pois#edit_poi"
+    get "/admin/pois/features", to: "admin/pois#all_poi_feature_options"
 
     get "/admin/stats/globe", to: "admin/stats#globe"
     get "/admin/stats/all-visits", to: "admin/stats#all_visits"
@@ -93,7 +94,8 @@ Rails.application.routes.draw do
     post "/mailinglist", to: "mailing_list#submit_email"
 
     scope "poi" do
-      get "/", to: "users/poi#all"
+      get "/", to: "users/pois#all"
+      get "/features", to: "users/pois#all_poi_features"
     end
   end
 end

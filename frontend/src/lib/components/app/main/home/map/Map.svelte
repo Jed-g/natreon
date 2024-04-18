@@ -9,9 +9,10 @@
 	import { isRight } from 'fp-ts/Either';
 
 	const POIType = t.type({
+		id: t.number,
+		isFavourite: t.boolean,
 		lngLat: t.type({ lng: t.number, lat: t.number }),
 		name: t.string,
-		id: t.number,
 		description: t.string,
 		features: t.array(t.string),
 		comments: t.array(t.string)
@@ -34,11 +35,40 @@
 	let geolocate: GeolocateControl;
 	let scale: ScaleControl;
 
+	let poiFeatureOptions: string[];
+	let searchFieldValue = '';
+	let poiFeaturesFilter: string[] = [];
+	let onlyShowFavourites = false;
 	let searchBar: HTMLDivElement;
 	let searchBarHeight = 64;
 
 	let pointsOfInterest: POI[] = [];
+
+	$: filteredPointsOfInterest = pointsOfInterest.filter(({ features, isFavourite, name }) => {
+		if (
+			poiFeaturesFilter.length > 0 &&
+			!features.some((feature) => poiFeaturesFilter.includes(feature))
+		) {
+			return false;
+		}
+
+		if (onlyShowFavourites && !isFavourite) {
+			return false;
+		}
+
+		// TODO
+		if (searchFieldValue && !name.toLowerCase().includes(searchFieldValue.toLowerCase())) {
+			return false;
+		}
+
+		return true;
+	});
+
 	let idOfSelectedPOI: number | null = null;
+
+	$: if (filteredPointsOfInterest.find(({ id }) => id === idOfSelectedPOI) === undefined) {
+		idOfSelectedPOI = null;
+	}
 
 	let defaultCoords = { lon: 0, lat: 0 };
 	let foundLocationByIP = false;
@@ -84,7 +114,9 @@
 		if (response.ok) {
 			const data = await response.json();
 
-			const newPOIs = data.pois;
+			// To be changed...
+			const newPOIs = data.pois.map((poi: POI) => ({ ...poi, isFavourite: false }));
+			// const newPOIs = data.pois;
 
 			newPOIs.forEach((newPOI: any) => {
 				const validationResult = POIType.decode(newPOI);
@@ -139,6 +171,14 @@
 					foundLocationByIP = true;
 				}
 			}
+		} catch (error) {
+			console.error(error);
+		}
+
+		try {
+			const response = await fetch('/api/poi/features');
+			const data = await response.json();
+			poiFeatureOptions = data.allPOIFeatures;
 		} catch (error) {
 			console.error(error);
 		}
@@ -218,7 +258,7 @@
 		on:moveend={updatePOIData}
 		on:zoomend={updatePOIData}
 	>
-		{#each pointsOfInterest as { lngLat, name, id } (id)}
+		{#each filteredPointsOfInterest as { lngLat, name, id } (id)}
 			<Marker
 				{lngLat}
 				on:click={() => {
@@ -235,7 +275,14 @@
 			</Marker>
 		{/each}
 	</MapLibre>
-	<SearchBar bind:searchBar bind:selectedMapLayer />
+	<SearchBar
+		bind:searchBar
+		bind:selectedMapLayer
+		{poiFeatureOptions}
+		bind:poiFeaturesFilter
+		bind:searchFieldValue
+		bind:onlyShowFavourites
+	/>
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
 		<div

@@ -3,15 +3,15 @@
 	import { Toggle } from '$lib/components/ui/toggle';
 	import { Heart } from 'lucide-svelte';
 	import FacetedPoiFilter from '$lib/components/app/main/home/map/search-bar/faceted-poi-filter/FacetedPOIFilter.svelte';
-	import poiCategories from '$lib/components/app/main/home/map/search-bar/faceted-poi-filter/options';
 	import type layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import LayerToggle from '$lib/components/app/main/home/map/search-bar/LayerToggle.svelte';
 	import * as HoverCard from '$lib/components/ui/hover-card';
 
 	export let selectedMapLayer: (typeof layers)[0];
-
-	let poiCategoriesFilter: string[] = [];
-	let onlyShowFavourites = false;
+	export let poiFeatureOptions: string[];
+	export let poiFeaturesFilter: string[];
+	export let onlyShowFavourites: boolean;
+	export let searchFieldValue: string;
 
 	let hoverCardsOpened = [false, false, false, false];
 
@@ -20,7 +20,7 @@
 	};
 </script>
 
-<div class="flex gap-2 max-sm:flex-wrap w-full">
+<div class="flex gap-2 max-sm:flex-col w-full">
 	<HoverCard.Root
 		bind:open={hoverCardsOpened[0]}
 		openDelay={0}
@@ -32,9 +32,9 @@
 	>
 		<HoverCard.Trigger>
 			<Input
-				id="name-location-search"
 				placeholder="Search by name/location..."
-				class="w-full sm:max-w-md bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground"
+				bind:value={searchFieldValue}
+				class="placeholder:text-inherit placeholder:text-sm w-full sm:max-w-md bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground"
 			/>
 		</HoverCard.Trigger>
 		<HoverCard.Content class="w-fit h-fit py-2 px-2.5">
@@ -54,13 +54,13 @@
 			>
 				<HoverCard.Trigger>
 					<FacetedPoiFilter
-						title="Category"
-						bind:filterValues={poiCategoriesFilter}
-						options={poiCategories}
+						title="POI Features"
+						bind:filterValues={poiFeaturesFilter}
+						{poiFeatureOptions}
 					/>
 				</HoverCard.Trigger>
 				<HoverCard.Content class="w-fit h-fit py-2 px-2.5">
-					<div class="text-xs flex items-center">Filter By POI Category</div>
+					<div class="text-xs flex items-center">Filter By POI Features</div>
 				</HoverCard.Content>
 			</HoverCard.Root>
 			<HoverCard.Root

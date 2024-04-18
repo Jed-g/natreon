@@ -6,6 +6,7 @@
 
 	//type TypeFromVar<T> = T[keyof T][];
 	type itemType = Record<string, string> & { id: number };
+	export let allPOIFeatureOptions: string[];
 	export let getItemsAction: () => Promise<itemType[]>;
 	export let deleteAction: (id: number) => Promise<void>;
 	export let tableName: string;
@@ -94,6 +95,16 @@
 			formValidation.featuresValid = false;
 		}
 
+		if (!poi.features.every((feature) => allPOIFeatureOptions.includes(feature))) {
+			isOk = false;
+			formValidation.featuresValid = false;
+		}
+
+		if (new Set(poi.features).size !== poi.features.length) {
+			isOk = false;
+			formValidation.featuresValid = false;
+		}
+
 		const parsedLatitude = parseFloat(poi.latitude);
 		if (
 			isNaN(parsedLatitude) ||
@@ -134,7 +145,10 @@
 		}
 
 		if (formValidation.featuresValid !== null) {
-			formValidation.featuresValid = poi.features.length != 0;
+			formValidation.featuresValid =
+				poi.features.length !== 0 &&
+				poi.features.every((feature) => allPOIFeatureOptions.includes(feature)) &&
+				new Set(poi.features).size === poi.features.length;
 		}
 
 		if (formValidation.latitudeValid !== null) {
@@ -147,6 +161,10 @@
 			const parsed = parseFloat(poi.longitude);
 			formValidation.longitudeValid =
 				!isNaN(parsed) && parsed >= -180 && parsed <= 180 && parsed !== null;
+		}
+
+		if (formValidation.locationValid !== null) {
+			formValidation.locationValid = poi.location !== null && poi.location.length > 0;
 		}
 	}
 
@@ -166,6 +184,18 @@
 		}
 
 		if (currentlyViewed.values.features.length === 0) {
+			isOk = false;
+			editFormValidation.featuresValid = false;
+		}
+
+		if (
+			!currentlyViewed.values.features.every((feature) => allPOIFeatureOptions.includes(feature))
+		) {
+			isOk = false;
+			editFormValidation.featuresValid = false;
+		}
+
+		if (new Set(currentlyViewed.values.features).size !== currentlyViewed.values.features.length) {
 			isOk = false;
 			editFormValidation.featuresValid = false;
 		}
@@ -192,6 +222,11 @@
 			editFormValidation.longitudeValid = false;
 		}
 
+		if (currentlyViewed.values.location === null || currentlyViewed.values.location === '') {
+			isOk = false;
+			formValidation.locationValid = false;
+		}
+
 		return isOk;
 	};
 
@@ -206,7 +241,12 @@
 			}
 
 			if (editFormValidation.featuresValid !== null) {
-				editFormValidation.featuresValid = currentlyViewed.values.features.length !== 0;
+				editFormValidation.featuresValid =
+					currentlyViewed.values.features.length !== 0 &&
+					currentlyViewed.values.features.every((feature) =>
+						allPOIFeatureOptions.includes(feature)
+					) &&
+					new Set(currentlyViewed.values.features).size === currentlyViewed.values.features.length;
 			}
 
 			if (editFormValidation.latitudeValid !== null) {
@@ -220,6 +260,11 @@
 				editFormValidation.longitudeValid =
 					!isNaN(parsed) && parsed >= -180 && parsed <= 180 && parsed !== null;
 			}
+
+			if (editFormValidation.locationValid !== null) {
+				editFormValidation.locationValid =
+					currentlyViewed.values.location !== null && currentlyViewed.values.location.length > 0;
+			}
 		}
 	}
 
@@ -228,17 +273,22 @@
 	let poi = {
 		name: '',
 		description: '',
-		features: [''],
+		features: [allPOIFeatureOptions[0]],
 		location: '',
 		latitude: '0',
 		longitude: '0',
 		likes: 0
 	};
-	let features = [''];
+	let features = [allPOIFeatureOptions[0]];
 
 	function addFeature() {
 		//features.push('');
-		features = [...features, ''];
+		if (allPOIFeatureOptions.filter((option) => !features.includes(option)).length > 0) {
+			features = [
+				...features,
+				allPOIFeatureOptions.filter((option) => !features.includes(option))[0]
+			];
+		}
 	}
 
 	const createNewPoi = () => {
@@ -254,13 +304,13 @@
 		poi = {
 			name: '',
 			description: '',
-			features: [''],
+			features: [allPOIFeatureOptions[0]],
 			location: '',
 			latitude: '0',
 			longitude: '0',
 			likes: 0
 		};
-		features = [''];
+		features = [allPOIFeatureOptions[0]];
 		formValidation = {
 			nameMin3: null,
 			nameValid: null,
@@ -330,16 +380,17 @@
 
 	$: {
 		if (!creatingNewPoi) {
-			features = [''];
+			features = [allPOIFeatureOptions[0]];
 		}
 	}
 </script>
 
-<div class="flex">
-	<button class="ml-auto btn btn-primary" on:click={createNewPoi}>Create New POI</button>
+<div class="flex justify-between items-center">
+	<h1 class="text-2xl">{tableName}</h1>
+	{#if !loading}
+		<button class="ml-auto btn btn-primary" on:click={createNewPoi}>Create New POI</button>
+	{/if}
 </div>
-
-<div class="flex"><h1 class="text-2xl">{tableName}</h1></div>
 <div class="divider my-2" />
 {#if loading}
 	<div class="grow flex items-center justify-center">
@@ -361,7 +412,7 @@
 			{#if editing}
 				<form
 					class="flex flex-col grow"
-					on:submit|preventDefault={() => {
+					on:submit|preventDefault={async () => {
 						if (currentlyViewed) {
 							if (!validateEditData()) return;
 
@@ -371,7 +422,7 @@
 								longitude: parseFloat(currentlyViewed.values.longitude)
 							};
 
-							editAction(currentlyViewed.id, poiWithParsedCoords);
+							await editAction(currentlyViewed.id, poiWithParsedCoords);
 							stopEditing();
 						}
 					}}
@@ -416,7 +467,16 @@
 							<label class="flex flex-col space-y-1">
 								<span>Feature {i + 1}</span>
 								<div class="flex gap-2">
-									<input type="text" bind:value={feature} class="input input-bordered grow" />
+									{#if allPOIFeatureOptions.filter((option) => currentlyViewed && !currentlyViewed.values.features.includes(option)).length > 0}
+										<select bind:value={feature} class="select select-bordered grow">
+											<option value={feature} hidden>{feature}</option>
+											{#each allPOIFeatureOptions.filter((option) => currentlyViewed && !currentlyViewed.values.features.includes(option)) as option (option)}
+												<option value={option}>{option}</option>
+											{/each}
+										</select>
+									{:else}
+										<input value={feature} readonly class="input input-bordered grow" />
+									{/if}
 									{#if currentlyViewed.values.features.length > 1}
 										<button
 											type="button"
@@ -444,20 +504,38 @@
 							</div>
 						{/if}
 					{/if}
-					<button
-						type="button"
-						on:click={() => {
-							if (Array.isArray(currentlyViewed?.values.features)) {
-								currentlyViewed.values.features = [...currentlyViewed.values.features, ''];
-							}
-						}}
-						class="btn btn-primary w-auto">Add Feature</button
-					>
+					{#if allPOIFeatureOptions.filter((option) => currentlyViewed && !currentlyViewed.values.features.includes(option)).length > 0}
+						<button
+							type="button"
+							on:click={() => {
+								if (
+									Array.isArray(currentlyViewed?.values.features) &&
+									allPOIFeatureOptions.filter(
+										(option) => currentlyViewed && !currentlyViewed.values.features.includes(option)
+									).length > 0
+								) {
+									currentlyViewed.values.features = [
+										...currentlyViewed.values.features,
+										allPOIFeatureOptions.filter(
+											(option) =>
+												currentlyViewed && !currentlyViewed.values.features.includes(option)
+										)[0]
+									];
+								}
+							}}
+							class="btn btn-primary w-auto">Add Feature</button
+						>
+					{/if}
 					<label>
 						<span>Location</span>
 						<input
 							type="text"
 							bind:value={currentlyViewed.values.location}
+							on:input={() => {
+								if (editFormValidation.locationValid === null) {
+									editFormValidation.locationValid = false;
+								}
+							}}
 							class="input input-bordered"
 						/>
 					</label>
@@ -624,7 +702,7 @@
 			<div class="divider my-2" />
 			<form
 				class="flex flex-col grow space-y-4"
-				on:submit|preventDefault={() => {
+				on:submit|preventDefault={async () => {
 					poi.features = features;
 					if (!validateData()) return;
 
@@ -633,7 +711,7 @@
 						latitude: parseFloat(poi.latitude),
 						longitude: parseFloat(poi.longitude)
 					};
-					createAction(poiWithParsedCoords);
+					await createAction(poiWithParsedCoords);
 					creatingNewPoi = false;
 					resetPoi();
 					updateTableUiState();
@@ -683,7 +761,16 @@
 					<label class="flex flex-col space-y-1">
 						<span>Feature {i + 1}</span>
 						<div class="flex gap-2">
-							<input type="text" bind:value={feature} class="input input-bordered grow" />
+							{#if allPOIFeatureOptions.filter((option) => !features.includes(option)).length > 0}
+								<select bind:value={feature} class="select select-bordered grow">
+									<option value={feature} hidden>{feature}</option>
+									{#each allPOIFeatureOptions.filter((option) => !features.includes(option)) as option (option)}
+										<option value={option}>{option}</option>
+									{/each}
+								</select>
+							{:else}
+								<input value={feature} readonly class="input input-bordered grow" />
+							{/if}
 							{#if features.length > 1}
 								<button
 									type="button"
@@ -708,9 +795,11 @@
 						<p class="ml-3">Features Valid</p>
 					</div>
 				{/if}
-				<button type="button" on:click={addFeature} class="btn btn-primary w-auto"
-					>Add Feature</button
-				>
+				{#if allPOIFeatureOptions.filter((option) => !features.includes(option)).length > 0}
+					<button type="button" on:click={addFeature} class="btn btn-primary w-auto"
+						>Add Feature</button
+					>
+				{/if}
 				<label class="flex flex-col space-y-1">
 					<span>Location</span>
 					<input
@@ -724,6 +813,17 @@
 						class="input input-bordered"
 					/>
 				</label>
+				{#if formValidation.locationValid === false}
+					<div class="flex">
+						<Icon icon={errorIcon} height={24} class="scale-125" color="oklch(var(--er))" />
+						<p class="ml-3">Location Not Valid</p>
+					</div>
+				{:else if formValidation.locationValid === true}
+					<div class="flex">
+						<Icon icon={validIcon} height={24} class="scale-125" color="oklch(var(--su))" />
+						<p class="ml-3">Location Valid</p>
+					</div>
+				{/if}
 				<label class="flex flex-col space-y-1">
 					<span>Latitude</span>
 					<input

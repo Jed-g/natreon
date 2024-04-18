@@ -33,7 +33,7 @@
 		<Button builders={[builder]} variant="outline" role="combobox" aria-expanded={open}>
 			<div class="flex gap-2">
 				<LayersIcon class="h-5 w-5" />
-				<p class="max-lg:hidden">{selectedMapLayer.label}</p>
+				<p class="max-lg:hidden text-sm">{selectedMapLayer.label}</p>
 			</div>
 			<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
 		</Button>

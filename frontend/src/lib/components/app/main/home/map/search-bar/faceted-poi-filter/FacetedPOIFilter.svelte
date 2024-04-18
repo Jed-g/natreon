@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { PlusCircled, Check } from 'svelte-radix';
-	import type poiCategories from './options';
 	import * as Command from '$lib/components/new-york/ui/command';
 	import * as Popover from '$lib/components/new-york/ui/popover';
 	import { Button } from '$lib/components/new-york/ui/button';
 	import { cn } from '$lib/utils/ui';
 	import { Separator } from '$lib/components/ui/separator';
 	import { Badge } from '$lib/components/new-york/ui/badge';
+	import { Glasses } from 'lucide-svelte';
 
 	export let filterValues: string[] = [];
 	export let title: string;
-	export let options = [] as typeof poiCategories;
+	export let poiFeatureOptions: string[];
 	export let counts: { [index: string]: number } = {};
 
 	let open = false;
@@ -29,10 +29,10 @@
 		<Button
 			builders={[builder]}
 			variant="outline"
-			class="h-auto bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground"
+			class="h-10 bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground"
 		>
 			<PlusCircled class="mr-2 h-4 w-4" />
-			{title}
+			<p class="text-sm">{title}</p>
 			{#if filterValues.length > 0}
 				<Separator orientation="vertical" class="mx-2 h-4" />
 				<Badge variant="secondary" class="rounded-sm px-1 font-normal lg:hidden">
@@ -60,10 +60,9 @@
 			<Command.List>
 				<Command.Empty>No results found.</Command.Empty>
 				<Command.Group>
-					{#each options as option}
-						{@const Icon = option.icon}
+					{#each poiFeatureOptions as option}
 						<Command.Item
-							value={option.value}
+							value={option}
 							onSelect={(currentValue) => {
 								handleSelect(currentValue);
 							}}
@@ -71,20 +70,20 @@
 							<div
 								class={cn(
 									'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-									filterValues.includes(option.value)
+									filterValues.includes(option)
 										? 'bg-primary text-primary-foreground'
 										: 'opacity-50 [&_svg]:invisible'
 								)}
 							>
 								<Check className={cn('h-4 w-4')} />
 							</div>
-							<Icon class="mr-2 h-4 w-4 text-muted-foreground" />
+							<Glasses class="mr-2 h-4 w-4 text-muted-foreground" />
 							<span>
-								{option.label}
+								{option}
 							</span>
-							{#if counts[option.value]}
+							{#if counts[option]}
 								<span class="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
-									{counts[option.value]}
+									{counts[option]}
 								</span>
 							{/if}
 						</Command.Item>

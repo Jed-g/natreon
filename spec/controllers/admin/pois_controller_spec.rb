@@ -38,7 +38,7 @@ RSpec.describe Admin::PoisController, type: :controller do
       let(:valid_attributes) {
         {
           description: "A poi",
-          features: ["feature1", "feature2"],
+          features: Poi::FEATURES,
           latitude: 50,
           likes: 100,
           location: "location",
@@ -60,7 +60,7 @@ RSpec.describe Admin::PoisController, type: :controller do
       let(:invalid_attributes) {
         {
           description: "A poi",
-          features: ["feature1", "feature2"],
+          features: Poi::FEATURES,
           latitude: 80,
           likes: 10,
           location: "location",
@@ -82,7 +82,7 @@ RSpec.describe Admin::PoisController, type: :controller do
       let(:invalid_attributes) {
         {
           description: "A poi",
-          features: ["feature1", "feature2"],
+          features: Poi::FEATURES,
           latitude: 100,
           likes: 10,
           location: "location",
@@ -104,7 +104,7 @@ RSpec.describe Admin::PoisController, type: :controller do
       let(:invalid_attributes) {
         {
           description: "A poi",
-          features: ["feature1", "feature2"],
+          features: Poi::FEATURES,
           latitude: 100,
           likes: 10,
           location: "location",
@@ -126,7 +126,7 @@ RSpec.describe Admin::PoisController, type: :controller do
       let(:invalid_attributes) {
         {
           description: "A poi",
-          features: ["feature1", "feature2"],
+          features: Poi::FEATURES,
           latitude: 100,
           likes: 10,
           location: "location",
@@ -161,7 +161,7 @@ RSpec.describe Admin::PoisController, type: :controller do
         {
           name: "test",
           description: "A poi",
-          features: ["feature1", "feature2"],
+          features: Poi::FEATURES,
           latitude: 50,
           location: "location",
           longitude: 4
@@ -171,7 +171,7 @@ RSpec.describe Admin::PoisController, type: :controller do
         {
           name: "test2",
           description: "A poinew",
-          features: ["feature1", "feature23"],
+          features: Poi::FEATURES.slice(0, 1),
           latitude: 54,
           location: "testloc2",
           longitude: 77
@@ -202,7 +202,7 @@ RSpec.describe Admin::PoisController, type: :controller do
       let(:valid_attributes) {
         {
           description: "A poi",
-          features: ["feature1", "feature2"],
+          features: Poi::FEATURES,
           latitude: 50,
           likes: 100,
           location: "location",
