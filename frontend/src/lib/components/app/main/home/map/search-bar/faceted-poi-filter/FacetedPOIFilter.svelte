@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { PlusCircled, Check } from 'svelte-radix';
+	import { Check } from 'svelte-radix';
 	import * as Command from '$lib/components/new-york/ui/command';
 	import * as Popover from '$lib/components/new-york/ui/popover';
 	import { Button } from '$lib/components/new-york/ui/button';
 	import { cn } from '$lib/utils/ui';
 	import { Separator } from '$lib/components/ui/separator';
 	import { Badge } from '$lib/components/new-york/ui/badge';
-	import { Glasses } from 'lucide-svelte';
+	import { Glasses, Filter } from 'lucide-svelte';
 
 	export let filterValues: string[] = [];
 	export let title: string;
@@ -14,6 +14,7 @@
 	export let counts: { [index: string]: number } = {};
 
 	let open = false;
+	export const forceClosePopover: () => void = () => (open = false);
 
 	function handleSelect(currentValue: string) {
 		if (Array.isArray(filterValues) && filterValues.includes(currentValue)) {
@@ -24,14 +25,14 @@
 	}
 </script>
 
-<Popover.Root bind:open>
+<Popover.Root bind:open disableFocusTrap={true} onOutsideClick={forceClosePopover}>
 	<Popover.Trigger asChild let:builder>
 		<Button
 			builders={[builder]}
 			variant="outline"
 			class="h-10 bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground"
 		>
-			<PlusCircled class="mr-2 h-4 w-4" />
+			<Filter class="mr-2 h-5 w-5" />
 			<p class="text-sm">{title}</p>
 			{#if filterValues.length > 0}
 				<Separator orientation="vertical" class="mx-2 h-4" />
@@ -55,13 +56,14 @@
 		</Button>
 	</Popover.Trigger>
 	<Popover.Content class="w-[200px] p-0" align="start" side="bottom">
-		<Command.Root>
+		<Command.Root loop>
 			<Command.Input placeholder={title} />
 			<Command.List>
 				<Command.Empty>No results found.</Command.Empty>
 				<Command.Group>
 					{#each poiFeatureOptions as option}
 						<Command.Item
+							class="cursor-pointer"
 							value={option}
 							onSelect={(currentValue) => {
 								handleSelect(currentValue);
@@ -92,12 +94,12 @@
 				{#if filterValues.length > 0}
 					<Command.Separator />
 					<Command.Item
-						class="justify-center text-center"
+						class="justify-center text-center cursor-pointer"
 						onSelect={() => {
 							filterValues = [];
 						}}
 					>
-						Clear filters
+						Clear Filter
 					</Command.Item>
 				{/if}
 			</Command.List>

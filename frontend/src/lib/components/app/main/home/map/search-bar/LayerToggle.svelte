@@ -9,6 +9,7 @@
 
 	export let selectedMapLayer: (typeof layers)[0];
 	let open = false;
+	export const forceClosePopover: () => void = () => (open = false);
 	let value = '';
 
 	$: {
@@ -28,7 +29,7 @@
 	}
 </script>
 
-<Popover.Root bind:open let:ids>
+<Popover.Root bind:open let:ids disableFocusTrap={true} onOutsideClick={forceClosePopover}>
 	<Popover.Trigger asChild let:builder>
 		<Button builders={[builder]} variant="outline" role="combobox" aria-expanded={open}>
 			<div class="flex gap-2">
@@ -40,11 +41,12 @@
 	</Popover.Trigger>
 	<Popover.Content class="w-[200px] p-0 mt-1" align="end">
 		<Command.Root>
-			<Command.Input placeholder="Search map layer..." />
+			<Command.Input placeholder="Search map layers…" />
 			<Command.Empty>No map layer found.</Command.Empty>
 			<Command.Group>
 				{#each layers as layer}
 					<Command.Item
+						class="cursor-pointer"
 						value={layer.value}
 						onSelect={(currentValue) => {
 							value = currentValue;
