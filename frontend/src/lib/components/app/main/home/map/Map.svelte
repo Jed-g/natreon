@@ -23,7 +23,6 @@
 	import layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
 	import { isRight } from 'fp-ts/Either';
-	import { number } from 'zod';
 
 	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
 
@@ -141,7 +140,10 @@
 
 	const fetchPOIById = async (poiId: number) => {
 		// Potential early reject if POI has already been in viewport/lazily-loaded
-		if (pointsOfInterest.some((poi) => poi.id === poiId)) return;
+		if (pointsOfInterest.some((poi) => poi.id === poiId)) {
+			idOfSelectedPOI = poiId;
+			return;
+		}
 
 		const params = new URLSearchParams({ id: poiId.toString() });
 

@@ -15,6 +15,8 @@
 	$: {
 		if (layers.find((f) => f.value === value)) {
 			selectedMapLayer = layers.find((f) => f.value === value)!;
+		} else {
+			value = selectedMapLayer.value;
 		}
 	}
 
