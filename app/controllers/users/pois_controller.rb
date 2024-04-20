@@ -13,6 +13,7 @@ module Users
           id:          poi.id,
           description: poi.description,
           features:    poi.features,
+          likes:       poi.likes,
           comments:    [] # Add later...
         }
       end
@@ -20,8 +21,56 @@ module Users
       render json: {pois: pois_formatted}
     end
 
+    def single_poi_by_id
+      poi_id = params[:id]
+
+      return render_bad_request if poi_id.blank?
+
+      poi = Poi.find(poi_id)
+
+      return render_bad_request if poi.nil?
+
+      poi_formatted = {
+        lngLat:      {lng: poi.longitude, lat: poi.latitude},
+        name:        poi.name,
+        id:          poi.id,
+        description: poi.description,
+        features:    poi.features,
+        likes:       poi.likes,
+        comments:    [] # Add later...
+      }
+
+      render json: poi_formatted
+    end
+
     def all_poi_features
       render json: {allPOIFeatures: Poi::FEATURES}
+    end
+
+    SIMILARITY_THRESHOLD = 0.3
+    MAXIMUM_NUMBER_OF_POI_SEARCH_RESULTS = 30
+    def search_by_name
+      poi_name_query_string = params[:name]
+
+      return render_bad_request if poi_name_query_string.blank?
+
+      pois = Poi.where("similarity(name, ?) > #{SIMILARITY_THRESHOLD}", poi_name_query_string)
+                .order(Arel.sql('similarity(name, ' + ActiveRecord::Base.connection.quote(poi_name_query_string) + ') DESC'))
+                .limit(MAXIMUM_NUMBER_OF_POI_SEARCH_RESULTS)
+
+      pois_formatted = pois.map do |poi|
+        {
+          lngLat:      {lng: poi.longitude, lat: poi.latitude},
+          name:        poi.name,
+          id:          poi.id,
+          description: poi.description,
+          features:    poi.features,
+          likes:       poi.likes,
+          comments:    [] # Add later...
+        }
+      end
+
+      render json: pois_formatted
     end
 
     private

@@ -1,3 +1,20 @@
+<script lang="ts" context="module">
+	import * as t from 'io-ts';
+
+	export const POIType = t.type({
+		id: t.number,
+		isFavourite: t.boolean,
+		lngLat: t.type({ lng: t.number, lat: t.number }),
+		name: t.string,
+		description: t.string,
+		features: t.array(t.string),
+		likes: t.number,
+		comments: t.array(t.string)
+	});
+
+	export type POI = t.TypeOf<typeof POIType>;
+</script>
+
 <script lang="ts">
 	import { MapLibre, Popup, Marker } from 'svelte-maplibre';
 	import { Map, NavigationControl, GeolocateControl, ScaleControl } from 'maplibre-gl';
@@ -5,20 +22,7 @@
 	import POIcard from './POIcard.svelte';
 	import layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
-	import * as t from 'io-ts';
 	import { isRight } from 'fp-ts/Either';
-
-	const POIType = t.type({
-		id: t.number,
-		isFavourite: t.boolean,
-		lngLat: t.type({ lng: t.number, lat: t.number }),
-		name: t.string,
-		description: t.string,
-		features: t.array(t.string),
-		comments: t.array(t.string)
-	});
-
-	type POI = t.TypeOf<typeof POIType>;
 
 	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
 
@@ -36,7 +40,6 @@
 	let scale: ScaleControl;
 
 	let poiFeatureOptions: string[];
-	let searchFieldValue = '';
 	let poiFeaturesFilter: string[] = [];
 	let onlyShowFavourites = false;
 	let searchBar: HTMLDivElement;
@@ -44,7 +47,11 @@
 
 	let pointsOfInterest: POI[] = [];
 
-	$: filteredPointsOfInterest = pointsOfInterest.filter(({ features, isFavourite, name }) => {
+	$: filteredPointsOfInterest = pointsOfInterest.filter(({ features, isFavourite, id }) => {
+		if (id === idOfSelectedPOI) {
+			return true;
+		}
+
 		if (
 			poiFeaturesFilter.length > 0 &&
 			!features.some((feature) => poiFeaturesFilter.includes(feature))
@@ -56,19 +63,17 @@
 			return false;
 		}
 
-		// TODO
-		if (searchFieldValue && !name.toLowerCase().includes(searchFieldValue.toLowerCase())) {
-			return false;
-		}
-
 		return true;
 	});
 
 	let idOfSelectedPOI: number | null = null;
 
-	$: if (filteredPointsOfInterest.find(({ id }) => id === idOfSelectedPOI) === undefined) {
-		idOfSelectedPOI = null;
-	}
+	// $: if (
+	// 	idOfSelectedPOI !== null &&
+	// 	filteredPointsOfInterest.find(({ id }) => id === idOfSelectedPOI) === undefined
+	// ) {
+	// 	idOfSelectedPOI = null;
+	// }
 
 	let defaultCoords = { lon: 0, lat: 0 };
 	let foundLocationByIP = false;
@@ -115,7 +120,7 @@
 			const data = await response.json();
 
 			// To be changed...
-			const newPOIs = data.pois.map((poi: POI) => ({ ...poi, isFavourite: false }));
+			const newPOIs = data.pois.map((poi: any) => ({ ...poi, isFavourite: false }));
 			// const newPOIs = data.pois;
 
 			newPOIs.forEach((newPOI: any) => {
@@ -130,6 +135,36 @@
 					console.error('Invalid POI object received from API: ', validationResult.left);
 				}
 			});
+		}
+	};
+
+	const fetchPOIById = async (poiId: number) => {
+		// Potential early reject if POI has already been in viewport/lazily-loaded
+		if (pointsOfInterest.some((poi) => poi.id === poiId)) {
+			idOfSelectedPOI = poiId;
+			return;
+		}
+
+		const params = new URLSearchParams({ id: poiId.toString() });
+
+		const response = await fetch(`/api/poi/get-by-id?${params.toString()}`);
+
+		if (response.ok) {
+			const data = await response.json();
+
+			// To be changed...
+			const fetchedPOI = { ...data, isFavourite: false };
+
+			const validationResult = POIType.decode(fetchedPOI);
+			if (isRight(validationResult)) {
+				const newPOI: POI = validationResult.right;
+				if (!pointsOfInterest.some((poi) => poi.id === newPOI.id)) {
+					pointsOfInterest = [...pointsOfInterest, newPOI];
+					idOfSelectedPOI = newPOI.id;
+				}
+			} else {
+				console.error('Invalid POI object received from API: ', validationResult.left);
+			}
 		}
 	};
 
@@ -280,8 +315,9 @@
 		bind:selectedMapLayer
 		{poiFeatureOptions}
 		bind:poiFeaturesFilter
-		bind:searchFieldValue
 		bind:onlyShowFavourites
+		{map}
+		on:poiSelected={({ detail: poiId }) => fetchPOIById(poiId)}
 	/>
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}

@@ -95,7 +95,9 @@ Rails.application.routes.draw do
 
     scope "poi" do
       get "/", to: "users/pois#all"
+      get "/get-by-id", to: "users/pois#single_poi_by_id"
       get "/features", to: "users/pois#all_poi_features"
+      get "/search", to: "users/pois#search_by_name"
     end
   end
 end

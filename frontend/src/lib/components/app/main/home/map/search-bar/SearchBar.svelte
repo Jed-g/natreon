@@ -1,13 +1,14 @@
 <script lang="ts">
 	import type layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import SearchBarInner from '$lib/components/app/main/home/map/search-bar/SearchBarInner.svelte';
+	import type { Map } from 'maplibre-gl';
 
 	export let selectedMapLayer: (typeof layers)[0];
 	export let searchBar: HTMLDivElement;
 	export let poiFeatureOptions: string[];
 	export let poiFeaturesFilter: string[];
 	export let onlyShowFavourites: boolean;
-	export let searchFieldValue: string;
+	export let map: Map;
 </script>
 
 <div
@@ -19,6 +20,7 @@
 		{poiFeatureOptions}
 		bind:poiFeaturesFilter
 		bind:onlyShowFavourites
-		bind:searchFieldValue
+		{map}
+		on:poiSelected
 	/>
 </div>
