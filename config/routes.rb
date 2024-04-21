@@ -106,6 +106,7 @@ Rails.application.routes.draw do
 
     scope "favourites" do
       get "/", to: "customer/favourite_pois#all"
+      get "/single", to: "customer/favourite_pois#single_poi_favourite_status"
       post "/", to: "customer/favourite_pois#add"
       delete "/", to: "customer/favourite_pois#remove"
     end

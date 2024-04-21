@@ -23,6 +23,7 @@
 	import layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
 	import { isRight } from 'fp-ts/Either';
+	import { Heart, TreePine } from 'lucide-svelte';
 
 	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
 
@@ -300,17 +301,22 @@
 		on:moveend={updatePOIData}
 		on:zoomend={updatePOIData}
 	>
-		{#each filteredPointsOfInterest as { lngLat, name, id } (id)}
+		{#each filteredPointsOfInterest as { lngLat, name, id, isFavourite } (id)}
 			<Marker
 				{lngLat}
 				on:click={() => {
 					idOfSelectedPOI = id;
 					map.flyTo({ center: lngLat });
 				}}
-				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 bg-red-300 text-black shadow-2xl focus:outline-2 focus:outline-black' +
-					(idOfSelectedPOI === id ? ' border-4 box-content' : '')}
+				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 text-black shadow-2xl focus:outline-2 focus:outline-black' +
+					(idOfSelectedPOI === id ? ' border-4 box-content' : '') +
+					(isFavourite ? ' bg-green-300' : ' bg-red-300')}
 			>
-				<span class="text-xl">🌲</span>
+				{#if isFavourite}
+					<span class="text-xl"><Heart class="h-5 w-5" /></span>
+				{:else}
+					<span class="text-xl"><TreePine class="h-5 w-5" /></span>
+				{/if}
 				<Popup openOn="hover" offset={[0, -10]}>
 					<div class="text-lg font-bold text-black">{name}</div>
 				</Popup>
@@ -332,7 +338,12 @@
 			class="absolute w-full max-w-xs sm:max-w-md md:max-w-xl top-2 right-2"
 			style={`margin-top: ${searchBarHeight}px;`}
 		>
-			<POIcard closePOICard={() => (idOfSelectedPOI = null)} {poi} {userNickname} />
+			<POIcard
+				closePOICard={() => (idOfSelectedPOI = null)}
+				{poi}
+				{userNickname}
+				refreshPOIs={() => (pointsOfInterest = [...pointsOfInterest])}
+			/>
 		</div>
 	{/if}
 {/if}

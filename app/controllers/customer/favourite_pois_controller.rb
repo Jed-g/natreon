@@ -8,6 +8,18 @@ module Customer
       render json: @user.favourite_pois
     end
 
+    def single_poi_favourite_status
+      poi_id = params[:poi_id]
+
+      return render_bad_request if poi_id.blank?
+
+      poi = Poi.find(poi_id)
+
+      return render_bad_request if poi.nil?
+
+      render json: poi.favourites.exists?(user: @user)
+    end
+
     def add
       poi_id = params[:poi_id]
 
