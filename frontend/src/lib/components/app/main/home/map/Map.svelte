@@ -9,7 +9,7 @@
 		description: t.string,
 		features: t.array(t.string),
 		likes: t.number,
-		comments: t.array(t.string)
+		comments: t.array(t.type({ text: t.string, nickname: t.string }))
 	});
 
 	export type POI = t.TypeOf<typeof POIType>;
@@ -163,53 +163,73 @@
 
 	const getPOIById = (id: number) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
 
+	let userNickname: string;
+
 	onMount(async () => {
-		try {
-			const response = await fetch('/api/utils/geolocation');
+		const ipGeolocationRequest = async () => {
+			try {
+				const response = await fetch('/api/utils/geolocation');
 
-			if (response.ok) {
-				const data = await response.json();
-				if (!isNaN(parseFloat(data.lon)) && !isNaN(parseFloat(data.lat))) {
-					[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
-					foundLocationByIP = true;
-				}
-			} else {
-				const response = await fetch('https://api.ipify.org?format=json');
-				const data = await response.json();
-				const ip = data.ip;
-
-				if (!response.ok) return;
-
-				const secondResponse = await fetch('/api/utils/geolocation-with-ip-param', {
-					method: 'POST',
-					body: JSON.stringify({ ip }),
-					headers: {
-						'Content-Type': 'application/json'
+				if (response.ok) {
+					const data = await response.json();
+					if (!isNaN(parseFloat(data.lon)) && !isNaN(parseFloat(data.lat))) {
+						[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
+						foundLocationByIP = true;
 					}
-				});
+				} else {
+					const response = await fetch('https://api.ipify.org?format=json');
+					const data = await response.json();
+					const ip = data.ip;
 
-				if (!secondResponse.ok) return;
-				const secondData = await secondResponse.json();
+					if (!response.ok) return;
 
-				if (!isNaN(parseFloat(secondData.lon)) && !isNaN(parseFloat(secondData.lat))) {
-					[defaultCoords.lon, defaultCoords.lat] = [
-						parseFloat(secondData.lon),
-						parseFloat(secondData.lat)
-					];
-					foundLocationByIP = true;
+					const secondResponse = await fetch('/api/utils/geolocation-with-ip-param', {
+						method: 'POST',
+						body: JSON.stringify({ ip }),
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+
+					if (!secondResponse.ok) return;
+					const secondData = await secondResponse.json();
+
+					if (!isNaN(parseFloat(secondData.lon)) && !isNaN(parseFloat(secondData.lat))) {
+						[defaultCoords.lon, defaultCoords.lat] = [
+							parseFloat(secondData.lon),
+							parseFloat(secondData.lat)
+						];
+						foundLocationByIP = true;
+					}
 				}
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
-		}
+		};
 
-		try {
-			const response = await fetch('/api/poi/features');
-			const data = await response.json();
-			poiFeatureOptions = data.allPOIFeatures;
-		} catch (error) {
-			console.error(error);
-		}
+		const poiFeatureOptionsRequest = async () => {
+			try {
+				const response = await fetch('/api/poi/features');
+				const data = await response.json();
+				poiFeatureOptions = data.allPOIFeatures;
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		const getUserNicknameRequest = async () => {
+			const response = await fetch('/api/settings/profile');
+			const { nickname } = await response.json();
+			if (nickname === undefined && typeof nickname !== 'string') return;
+			userNickname = nickname;
+		};
+
+		// Make 3 fetch requests in parallel for efficiency
+		await Promise.allSettled([
+			ipGeolocationRequest(),
+			poiFeatureOptionsRequest(),
+			getUserNicknameRequest()
+		]);
 
 		loading = false;
 		await tick();
@@ -253,12 +273,6 @@
 			searchBarHeight = searchBar.offsetHeight;
 		}
 	});
-
-	function closePOICard() {
-		console.log('Close POI Card');
-		idOfSelectedPOI = null;
-		// Update the state or perform any necessary action
-	}
 </script>
 
 <svelte:window
@@ -318,7 +332,7 @@
 			class="absolute w-full max-w-xs sm:max-w-md md:max-w-xl top-2 right-2"
 			style={`margin-top: ${searchBarHeight}px;`}
 		>
-			<POIcard {closePOICard} {poi} />
+			<POIcard closePOICard={() => (idOfSelectedPOI = null)} {poi} {userNickname} />
 		</div>
 	{/if}
 {/if}
