@@ -24,6 +24,9 @@
 	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
 	import { isRight } from 'fp-ts/Either';
 	import { Heart, TreePine } from 'lucide-svelte';
+	import { page } from '$app/stores';
+
+	const focusPOIId = $page.url.searchParams.get('focus-poi');
 
 	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
 
@@ -263,9 +266,18 @@
 		map.addControl(scale, 'bottom-left');
 		scale._container.parentElement!.style.zIndex = '10';
 
-		map.on('load', () => {
+		map.on('load', async () => {
 			map.resize();
-			geolocate.trigger();
+			if (focusPOIId) {
+				await fetchPOIById(parseInt(focusPOIId));
+				const poiToBeFocused = pointsOfInterest.find(({ id }) => id === parseInt(focusPOIId));
+
+				if (poiToBeFocused) {
+					map.flyTo({ center: poiToBeFocused.lngLat });
+				}
+			} else {
+				geolocate.trigger();
+			}
 		});
 
 		map.on('pitchend', updatePOIData);

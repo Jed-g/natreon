@@ -23,8 +23,8 @@
 	<div class="my-1" />
 	<li>
 		<Button
-			variant={slug?.split('/')[0] === AppUrls.FAVOURITE_POIS ? 'secondary' : 'outline'}
-			href={`/app${AppUrls.FAVOURITE_POIS ? '/' + AppUrls.FAVOURITE_POIS : ''}`}
+			variant={slug?.split('/')[0] === AppUrls.FAVOURITES ? 'secondary' : 'outline'}
+			href={`/app${AppUrls.FAVOURITES ? '/' + AppUrls.FAVOURITES : ''}`}
 			data-testid="favourite-pois-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			class="flex items-center text-sm justify-start"

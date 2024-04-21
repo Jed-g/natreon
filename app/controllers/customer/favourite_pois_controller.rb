@@ -5,7 +5,20 @@ module Customer
     before_action :authorize_customer_controllers, :get_user
 
     def all
-      render json: @user.favourite_pois
+      pois_formatted = @user.favourite_pois.map do |poi|
+        {
+          lngLat:      {lng: poi.longitude, lat: poi.latitude},
+          name:        poi.name,
+          id:          poi.id,
+          isFavourite: true,
+          description: poi.description,
+          features:    poi.features,
+          likes:       poi.likes,
+          comments:    [] # Add later...
+        }
+      end
+
+      render json: pois_formatted
     end
 
     def single_poi_favourite_status
