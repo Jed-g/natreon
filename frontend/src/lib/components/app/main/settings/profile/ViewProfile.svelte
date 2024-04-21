@@ -25,7 +25,7 @@
 	};
 
 	async function getUserProfile() {
-		const response = await fetch('/api/users/profile');
+		const response = await fetch('/api/settings/profile');
 		const data = await response.json();
 		user = data;
 
@@ -57,7 +57,7 @@
 			return;
 		}
 		loading = true;
-		const response = await fetch('/api/users/profile', {
+		const response = await fetch('/api/settings/profile', {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
@@ -86,7 +86,7 @@
 			const formData = new FormData();
 			formData.append('profile_picture', selectedFile);
 			loading = true;
-			const response = await fetch('/api/users/profile/update-picture', {
+			const response = await fetch('/api/settings/profile/update-picture', {
 				method: 'POST',
 				body: formData
 			});

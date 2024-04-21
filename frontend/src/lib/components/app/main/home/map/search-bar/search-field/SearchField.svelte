@@ -6,7 +6,7 @@
 	import type { Map } from 'maplibre-gl';
 	import { type POI, POIType } from '$lib/components/app/main/home/map/Map.svelte';
 	import { isRight } from 'fp-ts/Either';
-	import { ThumbsUp, MessageCircleMore, Search } from 'lucide-svelte';
+	import { ThumbsUp, MessageCircleMore, Search, Heart } from 'lucide-svelte';
 	import { createEventDispatcher } from 'svelte';
 
 	const AUTOSUGGEST_RESPONSE_LIMIT = 30;
@@ -43,9 +43,6 @@
 
 		if (request?.data) {
 			let data = request.data;
-
-			// To be changed...
-			data = data.map((poi: any) => ({ ...poi, isFavourite: false }));
 
 			data = data.map((poi: any): POI | { error: boolean; message: string } => {
 				const validationResult = POIType.decode(poi);
@@ -244,6 +241,11 @@
 									</p>
 								</div>
 								<div class="flex gap-4">
+									{#if poi.isFavourite}
+										<div class="flex gap-2">
+											<Heart class="h-3 w-3 text-primary" />
+										</div>
+									{/if}
 									<div class="flex gap-2">
 										<ThumbsUp class="h-3 w-3" />
 										<p class="text-muted-foreground">{poi.likes}</p>
@@ -286,6 +288,11 @@
 									</p>
 								</div>
 								<div class="flex gap-4">
+									{#if poi.isFavourite}
+										<div class="flex gap-2">
+											<Heart class="h-3 w-3 text-primary" />
+										</div>
+									{/if}
 									<div class="flex gap-2">
 										<ThumbsUp class="h-3 w-3" />
 										<p class="text-muted-foreground">{poi.likes}</p>

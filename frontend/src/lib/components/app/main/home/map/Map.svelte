@@ -9,7 +9,7 @@
 		description: t.string,
 		features: t.array(t.string),
 		likes: t.number,
-		comments: t.array(t.string)
+		comments: t.array(t.type({ text: t.string, nickname: t.string }))
 	});
 
 	export type POI = t.TypeOf<typeof POIType>;
@@ -23,6 +23,10 @@
 	import layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
 	import { isRight } from 'fp-ts/Either';
+	import { Heart, TreePine } from 'lucide-svelte';
+	import { page } from '$app/stores';
+
+	const focusPOIId = $page.url.searchParams.get('focus-poi');
 
 	let selectedMapLayer = layers.find(({ value }) => value === 'outdoor')!;
 
@@ -119,11 +123,7 @@
 		if (response.ok) {
 			const data = await response.json();
 
-			// To be changed...
-			const newPOIs = data.pois.map((poi: any) => ({ ...poi, isFavourite: false }));
-			// const newPOIs = data.pois;
-
-			newPOIs.forEach((newPOI: any) => {
+			data.forEach((newPOI: any) => {
 				const validationResult = POIType.decode(newPOI);
 
 				if (isRight(validationResult)) {
@@ -152,10 +152,7 @@
 		if (response.ok) {
 			const data = await response.json();
 
-			// To be changed...
-			const fetchedPOI = { ...data, isFavourite: false };
-
-			const validationResult = POIType.decode(fetchedPOI);
+			const validationResult = POIType.decode(data);
 			if (isRight(validationResult)) {
 				const newPOI: POI = validationResult.right;
 				if (!pointsOfInterest.some((poi) => poi.id === newPOI.id)) {
@@ -170,53 +167,73 @@
 
 	const getPOIById = (id: number) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
 
+	let userNickname: string;
+
 	onMount(async () => {
-		try {
-			const response = await fetch('/api/utils/geolocation');
+		const ipGeolocationRequest = async () => {
+			try {
+				const response = await fetch('/api/utils/geolocation');
 
-			if (response.ok) {
-				const data = await response.json();
-				if (!isNaN(parseFloat(data.lon)) && !isNaN(parseFloat(data.lat))) {
-					[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
-					foundLocationByIP = true;
-				}
-			} else {
-				const response = await fetch('https://api.ipify.org?format=json');
-				const data = await response.json();
-				const ip = data.ip;
-
-				if (!response.ok) return;
-
-				const secondResponse = await fetch('/api/utils/geolocation-with-ip-param', {
-					method: 'POST',
-					body: JSON.stringify({ ip }),
-					headers: {
-						'Content-Type': 'application/json'
+				if (response.ok) {
+					const data = await response.json();
+					if (!isNaN(parseFloat(data.lon)) && !isNaN(parseFloat(data.lat))) {
+						[defaultCoords.lon, defaultCoords.lat] = [parseFloat(data.lon), parseFloat(data.lat)];
+						foundLocationByIP = true;
 					}
-				});
+				} else {
+					const response = await fetch('https://api.ipify.org?format=json');
+					const data = await response.json();
+					const ip = data.ip;
 
-				if (!secondResponse.ok) return;
-				const secondData = await secondResponse.json();
+					if (!response.ok) return;
 
-				if (!isNaN(parseFloat(secondData.lon)) && !isNaN(parseFloat(secondData.lat))) {
-					[defaultCoords.lon, defaultCoords.lat] = [
-						parseFloat(secondData.lon),
-						parseFloat(secondData.lat)
-					];
-					foundLocationByIP = true;
+					const secondResponse = await fetch('/api/utils/geolocation-with-ip-param', {
+						method: 'POST',
+						body: JSON.stringify({ ip }),
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+
+					if (!secondResponse.ok) return;
+					const secondData = await secondResponse.json();
+
+					if (!isNaN(parseFloat(secondData.lon)) && !isNaN(parseFloat(secondData.lat))) {
+						[defaultCoords.lon, defaultCoords.lat] = [
+							parseFloat(secondData.lon),
+							parseFloat(secondData.lat)
+						];
+						foundLocationByIP = true;
+					}
 				}
+			} catch (error) {
+				console.error(error);
 			}
-		} catch (error) {
-			console.error(error);
-		}
+		};
 
-		try {
-			const response = await fetch('/api/poi/features');
-			const data = await response.json();
-			poiFeatureOptions = data.allPOIFeatures;
-		} catch (error) {
-			console.error(error);
-		}
+		const poiFeatureOptionsRequest = async () => {
+			try {
+				const response = await fetch('/api/poi/features');
+				const data = await response.json();
+				poiFeatureOptions = data.allPOIFeatures;
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		const getUserNicknameRequest = async () => {
+			const response = await fetch('/api/settings/profile');
+			const { nickname } = await response.json();
+			if (nickname === undefined && typeof nickname !== 'string') return;
+			userNickname = nickname;
+		};
+
+		// Make 3 fetch requests in parallel for efficiency
+		await Promise.allSettled([
+			ipGeolocationRequest(),
+			poiFeatureOptionsRequest(),
+			getUserNicknameRequest()
+		]);
 
 		loading = false;
 		await tick();
@@ -249,9 +266,18 @@
 		map.addControl(scale, 'bottom-left');
 		scale._container.parentElement!.style.zIndex = '10';
 
-		map.on('load', () => {
+		map.on('load', async () => {
 			map.resize();
-			geolocate.trigger();
+			if (focusPOIId) {
+				await fetchPOIById(parseInt(focusPOIId));
+				const poiToBeFocused = pointsOfInterest.find(({ id }) => id === parseInt(focusPOIId));
+
+				if (poiToBeFocused) {
+					map.flyTo({ center: poiToBeFocused.lngLat });
+				}
+			} else {
+				geolocate.trigger();
+			}
 		});
 
 		map.on('pitchend', updatePOIData);
@@ -260,12 +286,6 @@
 			searchBarHeight = searchBar.offsetHeight;
 		}
 	});
-
-	function closePOICard() {
-		console.log('Close POI Card');
-		idOfSelectedPOI = null;
-		// Update the state or perform any necessary action
-	}
 </script>
 
 <svelte:window
@@ -293,17 +313,22 @@
 		on:moveend={updatePOIData}
 		on:zoomend={updatePOIData}
 	>
-		{#each filteredPointsOfInterest as { lngLat, name, id } (id)}
+		{#each filteredPointsOfInterest as { lngLat, name, id, isFavourite } (id)}
 			<Marker
 				{lngLat}
 				on:click={() => {
 					idOfSelectedPOI = id;
 					map.flyTo({ center: lngLat });
 				}}
-				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 bg-red-300 text-black shadow-2xl focus:outline-2 focus:outline-black' +
-					(idOfSelectedPOI === id ? ' border-4 box-content' : '')}
+				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 text-black shadow-2xl focus:outline-2 focus:outline-black' +
+					(idOfSelectedPOI === id ? ' border-4 box-content' : '') +
+					(isFavourite ? ' bg-green-300' : ' bg-red-300')}
 			>
-				<span class="text-xl">🌲</span>
+				{#if isFavourite}
+					<span class="text-xl"><Heart class="h-5 w-5" /></span>
+				{:else}
+					<span class="text-xl"><TreePine class="h-5 w-5" /></span>
+				{/if}
 				<Popup openOn="hover" offset={[0, -10]}>
 					<div class="text-lg font-bold text-black">{name}</div>
 				</Popup>
@@ -325,7 +350,12 @@
 			class="absolute w-full max-w-xs sm:max-w-md md:max-w-xl top-2 right-2"
 			style={`margin-top: ${searchBarHeight}px;`}
 		>
-			<POIcard {closePOICard} {poi} />
+			<POIcard
+				closePOICard={() => (idOfSelectedPOI = null)}
+				{poi}
+				{userNickname}
+				refreshPOIs={() => (pointsOfInterest = [...pointsOfInterest])}
+			/>
 		</div>
 	{/if}
 {/if}

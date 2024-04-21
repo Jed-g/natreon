@@ -23,7 +23,7 @@
 	const refreshAvatarData: Writable<null | (() => Promise<void>)> = getContext('refreshAvatarData');
 
 	const getUserProfile = async () => {
-		const response = await fetch('/api/users/profile');
+		const response = await fetch('/api/settings/profile');
 		const data = await response.json();
 		user = data;
 

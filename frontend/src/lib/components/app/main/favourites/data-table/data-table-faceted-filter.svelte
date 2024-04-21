@@ -1,31 +1,29 @@
 <script lang="ts">
-	import { Check } from 'svelte-radix';
 	import * as Command from '$lib/components/new-york/ui/command';
 	import * as Popover from '$lib/components/new-york/ui/popover';
 	import { Button } from '$lib/components/new-york/ui/button';
 	import { cn } from '$lib/utils/ui';
-	import { Separator } from '$lib/components/ui/separator';
-	import { Badge } from '$lib/components/new-york/ui/badge';
-	import { Glasses, Filter } from 'lucide-svelte';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import Badge from '$lib/components/new-york/ui/badge/badge.svelte';
+	import { Filter, Glasses } from 'lucide-svelte';
 
 	export let filterValues: string[] = [];
 	export let title: string;
-	export let poiFeatureOptions: string[];
+	export let options: string[];
 	export let counts: { [index: string]: number } = {};
 
 	let open = false;
-	export const forceClosePopover: () => void = () => (open = false);
 
-	function handleSelect(currentValue: string) {
+	const handleSelect = (currentValue: string) => {
 		if (Array.isArray(filterValues) && filterValues.includes(currentValue)) {
 			filterValues = filterValues.filter((v) => v !== currentValue);
 		} else {
 			filterValues = [...(Array.isArray(filterValues) ? filterValues : []), currentValue];
 		}
-	}
+	};
 </script>
 
-<Popover.Root bind:open disableFocusTrap={true} onOutsideClick={forceClosePopover}>
+<Popover.Root bind:open>
 	<Popover.Trigger asChild let:builder>
 		<Button
 			builders={[builder]}
@@ -61,7 +59,7 @@
 			<Command.List>
 				<Command.Empty>No results found.</Command.Empty>
 				<Command.Group>
-					{#each poiFeatureOptions as option}
+					{#each options as option}
 						<Command.Item
 							class="cursor-pointer"
 							value={option}

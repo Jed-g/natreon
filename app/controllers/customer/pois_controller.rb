@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-module Users
+module Customer
   class PoisController < ApplicationController
+    before_action :authorize_customer_controllers, :get_user
     before_action :validate_params, only: [:all]
 
     def all
@@ -11,6 +12,7 @@ module Users
           lngLat:      {lng: poi.longitude, lat: poi.latitude},
           name:        poi.name,
           id:          poi.id,
+          isFavourite: poi.favourites.exists?(user: @user),
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
@@ -18,7 +20,7 @@ module Users
         }
       end
 
-      render json: {pois: pois_formatted}
+      render json: pois_formatted
     end
 
     def single_poi_by_id
@@ -34,6 +36,7 @@ module Users
         lngLat:      {lng: poi.longitude, lat: poi.latitude},
         name:        poi.name,
         id:          poi.id,
+        isFavourite: poi.favourites.exists?(user: @user),
         description: poi.description,
         features:    poi.features,
         likes:       poi.likes,
@@ -63,6 +66,7 @@ module Users
           lngLat:      {lng: poi.longitude, lat: poi.latitude},
           name:        poi.name,
           id:          poi.id,
+          isFavourite: poi.favourites.exists?(user: @user),
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
@@ -74,6 +78,12 @@ module Users
     end
 
     private
+
+    def get_user
+      @user = current_user
+
+      return render_internal_server_error if @user.nil?
+    end
 
     def validate_params
       params.require(:north)

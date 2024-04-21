@@ -20,6 +20,14 @@ module ApplicationHelper
     current_user
   end
 
+  def customer?
+    user = current_user
+
+    return false if !user || user.user_type != "customer"
+
+    true
+  end
+
   def admin?
     user = current_user
 
@@ -34,6 +42,10 @@ module ApplicationHelper
     return false if !user || user.user_type != "reporter"
 
     true
+  end
+
+  def authorize_customer_controllers
+    render json: {message: "Not Authorized"}, status: :unauthorized unless customer?
   end
 
   def authorize_admin_controllers

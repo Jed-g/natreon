@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Users::ProfileController do
+RSpec.describe Customer::ProfileController do
   let(:user) { create(:user, user_type: "customer") }
 
   before do
@@ -24,13 +24,13 @@ RSpec.describe Users::ProfileController do
   describe "PUT #update_user_profile" do
     context "with valid params" do
       let(:valid_attributes) {
-        { nickname: "user2", description: "user description2" }
+        {nickname: "user2", description: "user description2"}
       }
 
       let(:current_user) { user }
 
       it "updates the requested user's profile" do
-        put :update_user_profile, params: { user: valid_attributes }
+        put :update_user_profile, params: {user: valid_attributes}
         expect(response).to be_successful
       end
     end
@@ -43,7 +43,7 @@ RSpec.describe Users::ProfileController do
       let(:current_user) { user }
 
       it "does not update the user's profile" do
-        put :update_user_profile, params: { user: invalid_attributes }
+        put :update_user_profile, params: {user: invalid_attributes}
         expect(response).to have_http_status(:internal_server_error)
       end
     end
@@ -58,7 +58,7 @@ RSpec.describe Users::ProfileController do
       let (:current_user) { user }
 
       it "updates the requested user's profile picture" do
-        put :update_profile_picture, params: { profile_picture: valid_picture }
+        put :update_profile_picture, params: {profile_picture: valid_picture}
         expect(response).to be_successful
       end
     end
@@ -71,7 +71,7 @@ RSpec.describe Users::ProfileController do
       let (:current_user) { user }
 
       it "does not update the user's profile picture" do
-        put :update_profile_picture, params: { profile_picture: invalid_picture }
+        put :update_profile_picture, params: {profile_picture: invalid_picture}
         expect(response).to have_http_status(:internal_server_error)
       end
     end

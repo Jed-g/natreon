@@ -1,5 +1,6 @@
 enum AppUrls {
 	HOME = '',
+	FAVOURITES = 'favourites',
 	SETTINGS = 'settings',
 	SETTINGS_PROFILE = 'settings/profile',
 	SETTINGS_PAGE_2 = 'settings/page-2',
