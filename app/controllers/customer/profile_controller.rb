@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-module Users
+module Customer
   class ProfileController < ApplicationController
+    before_action :authorize_customer_controllers
+
     def show
       @user = current_user
 

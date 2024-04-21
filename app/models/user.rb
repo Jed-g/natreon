@@ -43,6 +43,9 @@ class User < ApplicationRecord
 
   validates :profile_picture, content_type: ['image/png', 'image/jpg', 'image/jpeg']
 
+  has_many :favourites, foreign_key: :user_id
+  has_many :favourite_pois, through: :favourites, source: :poi
+
   def active_for_authentication?
     super && !deactivated
   end

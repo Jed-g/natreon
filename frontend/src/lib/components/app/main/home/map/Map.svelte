@@ -119,11 +119,7 @@
 		if (response.ok) {
 			const data = await response.json();
 
-			// To be changed...
-			const newPOIs = data.pois.map((poi: any) => ({ ...poi, isFavourite: false }));
-			// const newPOIs = data.pois;
-
-			newPOIs.forEach((newPOI: any) => {
+			data.forEach((newPOI: any) => {
 				const validationResult = POIType.decode(newPOI);
 
 				if (isRight(validationResult)) {
@@ -152,10 +148,7 @@
 		if (response.ok) {
 			const data = await response.json();
 
-			// To be changed...
-			const fetchedPOI = { ...data, isFavourite: false };
-
-			const validationResult = POIType.decode(fetchedPOI);
+			const validationResult = POIType.decode(data);
 			if (isRight(validationResult)) {
 				const newPOI: POI = validationResult.right;
 				if (!pointsOfInterest.some((poi) => poi.id === newPOI.id)) {

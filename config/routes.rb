@@ -87,17 +87,27 @@ Rails.application.routes.draw do
     delete "/reviews/upvote", to: "reviews#cancel_upvote_review"
     delete "/reviews/downvote", to: "reviews#cancel_downvote_review"
 
-    get "/users/profile", to: "users/profile#show"
-    put "/users/profile", to: "users/profile#update_user_profile"
-    post "/users/profile/update-picture", to: "users/profile#update_profile_picture"
-
     post "/mailinglist", to: "mailing_list#submit_email"
 
+    # /app url (customer) api routes
+
+    scope "settings" do
+      get "/profile", to: "customer/profile#show"
+      put "/profile", to: "customer/profile#update_user_profile"
+      post "/profile/update-picture", to: "customer/profile#update_profile_picture"
+    end
+
     scope "poi" do
-      get "/", to: "users/pois#all"
-      get "/get-by-id", to: "users/pois#single_poi_by_id"
-      get "/features", to: "users/pois#all_poi_features"
-      get "/search", to: "users/pois#search_by_name"
+      get "/", to: "customer/pois#all"
+      get "/get-by-id", to: "customer/pois#single_poi_by_id"
+      get "/features", to: "customer/pois#all_poi_features"
+      get "/search", to: "customer/pois#search_by_name"
+    end
+
+    scope "favourites" do
+      get "/", to: "customer/favourite_pois#all"
+      post "/", to: "customer/favourite_pois#add"
+      delete "/", to: "customer/favourite_pois#remove"
     end
   end
 end
