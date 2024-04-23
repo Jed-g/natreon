@@ -5,7 +5,7 @@ class CreatePois < ActiveRecord::Migration[7.0]
       t.text :description
       t.string :location
       t.text :features
-      t.integer :likes
+      t.integer :likes, default: 0
       t.float :latitude
       t.float :longitude
 

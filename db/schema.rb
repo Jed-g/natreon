@@ -106,7 +106,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_20_230929) do
     t.text "description"
     t.string "location"
     t.string "features", default: [], array: true
-    t.integer "likes"
+    t.integer "likes", default: 0
     t.float "latitude"
     t.float "longitude"
     t.datetime "created_at", null: false

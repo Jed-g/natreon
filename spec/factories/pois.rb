@@ -6,7 +6,7 @@
 #  description :text
 #  features    :string           default([]), is an Array
 #  latitude    :float
-#  likes       :integer
+#  likes       :integer          default(0)
 #  location    :string
 #  longitude   :float
 #  name        :string
