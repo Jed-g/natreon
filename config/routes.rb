@@ -110,5 +110,9 @@ Rails.application.routes.draw do
       post "/", to: "customer/favourite_pois#add"
       delete "/", to: "customer/favourite_pois#remove"
     end
+
+    scope "check-in" do
+      get "/candidates", to: "customer/check_in#check_in_candidates"
+    end
   end
 end

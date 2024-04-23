@@ -37,7 +37,7 @@ class User < ApplicationRecord
   EMAIL_REGEX = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
   validates :email, presence: true, format: {with: EMAIL_REGEX}
 
-  validates :nickname, length: { minimum: 3 }
+  validates :nickname, length: {minimum: 3}
 
   has_one_attached :profile_picture
 
@@ -45,6 +45,9 @@ class User < ApplicationRecord
 
   has_many :favourites, foreign_key: :user_id
   has_many :favourite_pois, through: :favourites, source: :poi
+
+  has_many :check_ins, foreign_key: :user_id
+  has_many :checked_in_pois, through: :check_ins, source: :poi
 
   def active_for_authentication?
     super && !deactivated

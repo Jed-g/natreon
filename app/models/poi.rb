@@ -37,6 +37,9 @@ class Poi < ApplicationRecord
   has_many :favourites, foreign_key: :poi_id
   has_many :favourite_users, through: :favourites, source: :user
 
+  has_many :check_ins, foreign_key: :poi_id
+  has_many :checked_in_users, through: :check_ins, source: :user
+
   validates_each :features do |record, attr, value|
     value.each do |feature|
       record.errors.add(attr, 'contains invalid feature') unless FEATURES.include?(feature)

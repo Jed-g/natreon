@@ -9,7 +9,8 @@
 		description: t.string,
 		features: t.array(t.string),
 		likes: t.number,
-		comments: t.array(t.type({ text: t.string, nickname: t.string }))
+		comments: t.array(t.type({ text: t.string, nickname: t.string })),
+		checkedIn: t.boolean
 	});
 
 	export type POI = t.TypeOf<typeof POIType>;
@@ -25,6 +26,9 @@
 	import { isRight } from 'fp-ts/Either';
 	import { Heart, TreePine } from 'lucide-svelte';
 	import { page } from '$app/stores';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import { Button } from '$lib/components/ui/button';
+	import axios, { type CancelTokenSource } from 'axios';
 
 	const focusPOIId = $page.url.searchParams.get('focus-poi');
 
@@ -72,16 +76,70 @@
 
 	let idOfSelectedPOI: number | null = null;
 
-	// $: if (
-	// 	idOfSelectedPOI !== null &&
-	// 	filteredPointsOfInterest.find(({ id }) => id === idOfSelectedPOI) === undefined
-	// ) {
-	// 	idOfSelectedPOI = null;
-	// }
-
 	let defaultCoords = { lon: 0, lat: 0 };
 	let foundLocationByIP = false;
 	let loading = true;
+	let userLocation: { lng: number; lat: number; accuracyMeters: number };
+
+	let checkInCandidates: POI[] = [];
+	let checkInCandidatesCancelTokenSource: CancelTokenSource = axios.CancelToken.source();
+
+	const updateSearchBarOffset = () => {
+		if (searchBar) {
+			searchBarHeight = searchBar.offsetHeight;
+		}
+	};
+
+	const fetchCheckInCandidates = async () => {
+		if (checkInCandidatesCancelTokenSource) {
+			checkInCandidatesCancelTokenSource.cancel();
+		}
+		checkInCandidatesCancelTokenSource = axios.CancelToken.source();
+		const cancelToken = checkInCandidatesCancelTokenSource.token;
+
+		const params = new URLSearchParams({
+			latitude: userLocation.lat.toString(),
+			longitude: userLocation.lng.toString(),
+			accuracy_meters: userLocation.accuracyMeters.toString()
+		});
+
+		const request = await axios
+			.get(`/api/check-in/candidates?${params.toString()}`, {
+				cancelToken
+			})
+			.catch((error) => error);
+
+		if (request?.data) {
+			let data = request.data;
+
+			data = data.map((poi: any): POI | { error: boolean; message: string } => {
+				const validationResult = POIType.decode(poi);
+
+				if (isRight(validationResult)) {
+					const typeSafePOI: POI = validationResult.right;
+					return typeSafePOI;
+				} else {
+					return {
+						error: true,
+						message: 'Invalid POI object received from API: ' + validationResult.left
+					};
+				}
+			});
+
+			data = data.filter((poi: POI | { error: boolean; message: string }) => {
+				if ('error' in poi && poi.error) {
+					console.error(poi.message);
+					return false;
+				}
+
+				return true;
+			});
+
+			checkInCandidates = data;
+		}
+	};
+
+	$: userLocation !== undefined && fetchCheckInCandidates();
 
 	let previousPOIRequestParams: {
 		north: string;
@@ -168,6 +226,8 @@
 	const getPOIById = (id: number) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
 
 	let userNickname: string;
+
+	let geolocationDisabled = false;
 
 	onMount(async () => {
 		const ipGeolocationRequest = async () => {
@@ -282,21 +342,25 @@
 
 		map.on('pitchend', updatePOIData);
 
-		if (searchBar) {
-			searchBarHeight = searchBar.offsetHeight;
-		}
+		updateSearchBarOffset();
+
+		geolocate.on('error', () => (geolocationDisabled = true));
+
+		geolocate.on(
+			'trackuserlocationend',
+			(e) => e.target._watchState === 'OFF' && geolocate.trigger()
+		);
+
+		geolocate.on('geolocate', (e) => {
+			const coords: GeolocationCoordinates = e.coords;
+			userLocation = {
+				lat: coords.latitude,
+				lng: coords.longitude,
+				accuracyMeters: coords.accuracy
+			};
+		});
 	});
 </script>
-
-<svelte:window
-	on:resize={() => {
-		map?.resize();
-
-		if (searchBar) {
-			searchBarHeight = searchBar.offsetHeight;
-		}
-	}}
-/>
 
 {#if loading}
 	<div class="grow flex items-center justify-center">
@@ -343,6 +407,9 @@
 		bind:onlyShowFavourites
 		{map}
 		on:poiSelected={({ detail: poiId }) => fetchPOIById(poiId)}
+		{checkInCandidates}
+		{updateSearchBarOffset}
+		bind:idOfSelectedPOI
 	/>
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
@@ -358,4 +425,19 @@
 			/>
 		</div>
 	{/if}
+	<Dialog.Root
+		bind:open={geolocationDisabled}
+		onOpenChange={(isOpen) => isOpen || location.reload()}
+	>
+		<Dialog.Content>
+			<Dialog.Header>
+				<Dialog.Description>
+					Please allow geolocation permissions and turn on location services.
+				</Dialog.Description>
+			</Dialog.Header>
+			<Dialog.Footer>
+				<Button on:click={() => location.reload()}>Confirm & Refresh Page</Button>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
 {/if}
