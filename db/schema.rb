@@ -110,13 +110,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_23_175632) do
   end
 
   create_table "pois", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.string "location"
-    t.string "features", default: [], array: true
-    t.integer "likes", default: 0
-    t.float "latitude"
-    t.float "longitude"
+    t.string "name", null: false
+    t.text "description", default: "", null: false
+    t.string "location", null: false
+    t.string "features", default: [], null: false, array: true
+    t.integer "likes", default: 0, null: false
+    t.float "latitude", null: false
+    t.float "longitude", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -3,6 +3,7 @@
 	import SideMenu from '$lib/components/app/sidemenu/SideMenu.svelte';
 	import AppUrls from '$lib/enums/AppUrls';
 	import Home from '$lib/components/app/main/home/Home.svelte';
+	import CheckIns from '$lib/components/app/main/check-ins/CheckIns.svelte';
 	import Favourites from '$lib/components/app/main/favourites/Favourites.svelte';
 	import Settings from '$lib/components/app/main/settings/Settings.svelte';
 	import { onMount } from 'svelte';
@@ -16,6 +17,10 @@
 
 	$: {
 		switch (data.slug.split('/')[0]) {
+			case AppUrls.CHECK_INS:
+				mainComponent = CheckIns;
+				pageTitle = 'Check-ins';
+				break;
 			case AppUrls.FAVOURITES:
 				mainComponent = Favourites;
 				pageTitle = 'Favourites';

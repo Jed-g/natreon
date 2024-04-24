@@ -333,7 +333,18 @@
 				const poiToBeFocused = pointsOfInterest.find(({ id }) => id === parseInt(focusPOIId));
 
 				if (poiToBeFocused) {
-					map.flyTo({ center: poiToBeFocused.lngLat });
+					await new Promise((resolve) => {
+						geolocate.on('trackuserlocationstart', () => map.once('movestart', resolve));
+						geolocate.trigger();
+					});
+
+					map.stop();
+
+					const zoomLevel = 14;
+					map.flyTo({ center: poiToBeFocused.lngLat, zoom: zoomLevel, padding: { top: 300 } });
+					idOfSelectedPOI = parseInt(focusPOIId);
+				} else {
+					geolocate.trigger();
 				}
 			} else {
 				geolocate.trigger();
@@ -382,7 +393,7 @@
 				{lngLat}
 				on:click={() => {
 					idOfSelectedPOI = id;
-					map.flyTo({ center: lngLat });
+					map.flyTo({ center: lngLat, padding: { top: 300 } });
 				}}
 				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 text-black shadow-2xl focus:outline-2 focus:outline-black' +
 					(idOfSelectedPOI === id ? ' border-4 box-content' : '') +

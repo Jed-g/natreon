@@ -30,6 +30,18 @@
 
 	const closeAccordionAndDispatch = (poiId: number) => {
 		accordionValue = '';
+		const poi = pointsOfInterest.find(({ id }) => id === poiId);
+
+		if (poi) {
+			const minZoomLevel = 14;
+			const maxZoomLevel = 16;
+			map.flyTo({
+				center: poi.lngLat,
+				zoom: Math.min(maxZoomLevel, Math.max(minZoomLevel, map.getZoom())),
+				padding: { top: 300 }
+			});
+		}
+
 		dispatch('poiSelected', poiId);
 	};
 
@@ -50,7 +62,10 @@
 
 	let oldCheckInCandidatesLength = 0;
 	$: (async () => {
-		if (checkInCandidates.length !== oldCheckInCandidatesLength) {
+		if (
+			(checkInCandidates.length > 0 && oldCheckInCandidatesLength === 0) ||
+			(checkInCandidates.length === 0 && oldCheckInCandidatesLength > 0)
+		) {
 			oldCheckInCandidatesLength = checkInCandidates.length;
 			await tick();
 			updateSearchBarOffset();
@@ -141,7 +156,7 @@
 					class="hover:no-underline hover:backdrop-opacity-75 active:backdrop-opacity-95 rounded-md h-10 px-4 py-2"
 					>Check-in to nearby POI{checkInCandidates.length > 1 ? 's' : ''}:</Accordion.Trigger
 				>
-				<Accordion.Content class="*:p-0 max-h-36 overflow-y-auto">
+				<Accordion.Content class="*:p-0 max-h-32 overflow-y-auto">
 					{#each checkInCandidates as candidate (candidate.id)}
 						<div class="flex justify-between items-center gap-4 px-4 py-2">
 							<p class="max-sm:text-ellipsis max-sm:max-w-48 max-sm:overflow-hidden">
