@@ -3,6 +3,7 @@
 	import SideMenu from '$lib/components/app/sidemenu/SideMenu.svelte';
 	import AppUrls from '$lib/enums/AppUrls';
 	import Home from '$lib/components/app/main/home/Home.svelte';
+	import PointsBadges from '$lib/components/app/main/points-badges/PointsBadges.svelte';
 	import CheckIns from '$lib/components/app/main/check-ins/CheckIns.svelte';
 	import Favourites from '$lib/components/app/main/favourites/Favourites.svelte';
 	import Settings from '$lib/components/app/main/settings/Settings.svelte';
@@ -17,6 +18,10 @@
 
 	$: {
 		switch (data.slug.split('/')[0]) {
+			case AppUrls.POINTS_AND_BADGES:
+				mainComponent = PointsBadges;
+				pageTitle = 'Points & Badges';
+				break;
 			case AppUrls.CHECK_INS:
 				mainComponent = CheckIns;
 				pageTitle = 'Check-ins';

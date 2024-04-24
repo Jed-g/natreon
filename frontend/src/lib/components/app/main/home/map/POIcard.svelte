@@ -30,7 +30,9 @@
 	function navigate() {
 		console.log('Navigate to the POI');
 		const { lng, lat } = poi.lngLat;
-		const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+		const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+			lat
+		)},${encodeURIComponent(lng)}`;
 		window.open(url, '_blank');
 	}
 

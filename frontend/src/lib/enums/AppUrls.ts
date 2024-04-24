@@ -1,5 +1,6 @@
 enum AppUrls {
 	HOME = '',
+	POINTS_AND_BADGES = 'points-badges',
 	CHECK_INS = 'check-ins',
 	FAVOURITES = 'favourites',
 	SETTINGS = 'settings',

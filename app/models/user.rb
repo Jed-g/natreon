@@ -52,4 +52,102 @@ class User < ApplicationRecord
   def active_for_authentication?
     super && !deactivated
   end
+
+  def total_points
+    points_for_check_ins = total_check_in_counts * Constants::POINTS_PER_POI_CHECK_IN
+    points_for_photos = total_poi_photo_counts * Constants::POINTS_PER_NEW_POI_PHOTO
+    points_for_reviews = total_poi_review_counts * Constants::POINTS_PER_NEW_POI_REVIEW
+
+    points_for_check_ins + points_for_photos + points_for_reviews
+  end
+
+  def total_check_in_counts
+    check_ins.count
+  end
+
+  def total_poi_photo_counts
+    0
+
+    # TODO
+    # poi_photos.count
+  end
+
+  def total_poi_review_counts
+    0
+
+    # TODO
+    # poi_reviews.count
+  end
+
+  def badge_statuses_for_total_points
+    total = total_points
+    previous_threshold = 0
+    Constants::BADGE_THRESHOLDS_FOR_TOTAL_NO_POINTS.map do |badge, threshold|
+      status = if total >= threshold
+                 "ACHIEVED"
+               elsif total >= previous_threshold
+                 "IN PROGRESS"
+               else
+                 "LOCKED"
+               end
+      return_value = {badge: badge, status: status, threshold: threshold,
+      previous_threshold: previous_threshold}
+      previous_threshold = threshold
+      return_value
+    end
+  end
+
+  def badge_statuses_for_total_check_in_counts
+    total = total_check_in_counts
+    previous_threshold = 0
+    Constants::BADGE_THRESHOLDS_FOR_TOTAL_COUNTS_IN_CATEGORY.map do |badge, threshold|
+      status = if total >= threshold
+                 "ACHIEVED"
+               elsif total >= previous_threshold
+                 "IN PROGRESS"
+               else
+                 "LOCKED"
+               end
+      return_value = {badge: badge, status: status, threshold: threshold,
+      previous_threshold: previous_threshold}
+      previous_threshold = threshold
+      return_value
+    end
+  end
+
+  def badge_statuses_for_total_poi_photo_counts
+    total = total_poi_photo_counts
+    previous_threshold = 0
+    Constants::BADGE_THRESHOLDS_FOR_TOTAL_COUNTS_IN_CATEGORY.map do |badge, threshold|
+      status = if total >= threshold
+                 "ACHIEVED"
+               elsif total >= previous_threshold
+                 "IN PROGRESS"
+               else
+                 "LOCKED"
+               end
+      return_value = {badge: badge, status: status, threshold: threshold,
+previous_threshold: previous_threshold}
+      previous_threshold = threshold
+      return_value
+    end
+  end
+
+  def badge_statuses_for_total_poi_review_counts
+    total = total_poi_review_counts
+    previous_threshold = 0
+    Constants::BADGE_THRESHOLDS_FOR_TOTAL_COUNTS_IN_CATEGORY.map do |badge, threshold|
+      status = if total >= threshold
+                 "ACHIEVED"
+               elsif total >= previous_threshold
+                 "IN PROGRESS"
+               else
+                 "LOCKED"
+               end
+      return_value = {badge: badge, status: status, threshold: threshold,
+      previous_threshold: previous_threshold}
+      previous_threshold = threshold
+      return_value
+    end
+  end
 end
