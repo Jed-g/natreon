@@ -16,6 +16,7 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
+          checkedIn:   poi.check_ins.exists?(user: @user),
           comments:    [] # Add later...
         }
       end
@@ -40,6 +41,7 @@ module Customer
         description: poi.description,
         features:    poi.features,
         likes:       poi.likes,
+        checkedIn:   poi.check_ins.exists?(user: @user),
         comments:    [] # Add later...
       }
 
@@ -70,6 +72,7 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
+          checkedIn:   poi.check_ins.exists?(user: @user),
           comments:    [] # Add later...
         }
       end

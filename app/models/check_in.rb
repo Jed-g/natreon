@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: favourites
+# Table name: check_ins
 #
 #  id         :bigint           not null, primary key
 #  created_at :datetime         not null
@@ -10,9 +10,9 @@
 #
 # Indexes
 #
-#  index_favourites_on_user_id_and_poi_id  (user_id,poi_id) UNIQUE
+#  index_check_ins_on_user_id_and_poi_id  (user_id,poi_id) UNIQUE
 #
-class Favourite < ApplicationRecord
+class CheckIn < ApplicationRecord
   belongs_to :user
   belongs_to :poi
 

@@ -3,13 +3,13 @@
 # Table name: pois
 #
 #  id          :bigint           not null, primary key
-#  description :text
-#  features    :string           default([]), is an Array
-#  latitude    :float
-#  likes       :integer          default(0)
-#  location    :string
-#  longitude   :float
-#  name        :string
+#  description :text             default(""), not null
+#  features    :string           default([]), not null, is an Array
+#  latitude    :float            not null
+#  likes       :integer          default(0), not null
+#  location    :string           not null
+#  longitude   :float            not null
+#  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #

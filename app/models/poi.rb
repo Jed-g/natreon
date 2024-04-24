@@ -3,13 +3,13 @@
 # Table name: pois
 #
 #  id          :bigint           not null, primary key
-#  description :text
-#  features    :string           default([]), is an Array
-#  latitude    :float
-#  likes       :integer          default(0)
-#  location    :string
-#  longitude   :float
-#  name        :string
+#  description :text             default(""), not null
+#  features    :string           default([]), not null, is an Array
+#  latitude    :float            not null
+#  likes       :integer          default(0), not null
+#  location    :string           not null
+#  longitude   :float            not null
+#  name        :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
@@ -36,6 +36,9 @@ class Poi < ApplicationRecord
 
   has_many :favourites, foreign_key: :poi_id
   has_many :favourite_users, through: :favourites, source: :user
+
+  has_many :check_ins, foreign_key: :poi_id
+  has_many :checked_in_users, through: :check_ins, source: :user
 
   validates_each :features do |record, attr, value|
     value.each do |feature|

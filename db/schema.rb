@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_20_230929) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_23_175632) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -59,6 +59,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_20_230929) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "check_ins", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "poi_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "poi_id"], name: "index_check_ins_on_user_id_and_poi_id", unique: true
+  end
+
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -102,13 +110,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_20_230929) do
   end
 
   create_table "pois", force: :cascade do |t|
-    t.string "name"
-    t.text "description"
-    t.string "location"
-    t.string "features", default: [], array: true
-    t.integer "likes", default: 0
-    t.float "latitude"
-    t.float "longitude"
+    t.string "name", null: false
+    t.text "description", default: "", null: false
+    t.string "location", null: false
+    t.string "features", default: [], null: false, array: true
+    t.integer "likes", default: 0, null: false
+    t.float "latitude", null: false
+    t.float "longitude", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
