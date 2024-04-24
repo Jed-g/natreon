@@ -113,6 +113,9 @@ Rails.application.routes.draw do
 
     scope "check-in" do
       get "/candidates", to: "customer/check_in#check_in_candidates"
+      get "/", to: "customer/check_in#all"
+      get "/single", to: "customer/check_in#single_poi_check_in_status"
+      post "/", to: "customer/check_in#register_check_in"
     end
   end
 end

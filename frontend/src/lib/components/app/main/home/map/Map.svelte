@@ -24,7 +24,7 @@
 	import layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
 	import { isRight } from 'fp-ts/Either';
-	import { Heart, TreePine } from 'lucide-svelte';
+	import { Check, Heart, TreePine } from 'lucide-svelte';
 	import { page } from '$app/stores';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Button } from '$lib/components/ui/button';
@@ -377,7 +377,7 @@
 		on:moveend={updatePOIData}
 		on:zoomend={updatePOIData}
 	>
-		{#each filteredPointsOfInterest as { lngLat, name, id, isFavourite } (id)}
+		{#each filteredPointsOfInterest as { lngLat, name, id, isFavourite, checkedIn } (id)}
 			<Marker
 				{lngLat}
 				on:click={() => {
@@ -386,9 +386,11 @@
 				}}
 				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 text-black shadow-2xl focus:outline-2 focus:outline-black' +
 					(idOfSelectedPOI === id ? ' border-4 box-content' : '') +
-					(isFavourite ? ' bg-green-300' : ' bg-red-300')}
+					(checkedIn ? ' bg-cyan-300' : isFavourite ? ' bg-green-300' : ' bg-red-300')}
 			>
-				{#if isFavourite}
+				{#if checkedIn}
+					<span class="text-xl"><Check class="h-5 w-5" /></span>
+				{:else if isFavourite}
 					<span class="text-xl"><Heart class="h-5 w-5" /></span>
 				{:else}
 					<span class="text-xl"><TreePine class="h-5 w-5" /></span>
@@ -410,6 +412,9 @@
 		{checkInCandidates}
 		{updateSearchBarOffset}
 		bind:idOfSelectedPOI
+		{userLocation}
+		{fetchCheckInCandidates}
+		bind:pointsOfInterest
 	/>
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}

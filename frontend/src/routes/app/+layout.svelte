@@ -7,6 +7,7 @@
 	import { POLLING_INTERVAL_FOR_TIME_SPENT_ON_PAGE } from '$lib/config';
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { Toaster } from '$lib/components/ui/sonner';
 
 	const refreshAvatarData = writable<null | (() => Promise<void>)>(null);
 	setContext('refreshAvatarData', refreshAvatarData);
@@ -81,6 +82,7 @@
 </svelte:head>
 
 <main class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex">
+	<Toaster theme="dark" />
 	{#if loading}
 		<div class="grow flex items-center justify-center">
 			<span class="loading loading-ring loading-lg" />

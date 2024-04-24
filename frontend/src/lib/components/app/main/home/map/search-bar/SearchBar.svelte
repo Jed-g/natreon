@@ -8,6 +8,7 @@
 	import { tick } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { sleep } from '$lib/utils';
+	import { toast } from 'svelte-sonner';
 
 	export let selectedMapLayer: (typeof layers)[0];
 	export let searchBar: HTMLDivElement;
@@ -18,6 +19,9 @@
 	export let checkInCandidates: POI[];
 	export let updateSearchBarOffset: () => void;
 	export let idOfSelectedPOI: number | null;
+	export let userLocation: { lng: number; lat: number; accuracyMeters: number };
+	export let fetchCheckInCandidates: () => Promise<void>;
+	export let pointsOfInterest: POI[];
 
 	let accordionValue = '';
 	let lastIdOfSelectedPOI: number | null = null;
@@ -52,6 +56,42 @@
 			updateSearchBarOffset();
 		}
 	})();
+
+	const registerPOICheckIn = async (poiId: number) => {
+		if (userLocation === undefined) return;
+		const response = await fetch('/api/check-in', {
+			method: 'POST',
+			body: JSON.stringify({
+				poi_id: poiId,
+				latitude: userLocation.lat,
+				longitude: userLocation.lat,
+				accuracy_meters: userLocation.accuracyMeters
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			toast.error('Failed to check-in at POI, contact admin for details.');
+		}
+
+		fetchCheckInCandidates();
+		const checkInVerificationResponse = await fetch(
+			'/api/check-in/single?poi_id=' + encodeURIComponent(poiId)
+		);
+
+		const checkInVerificationData = await checkInVerificationResponse.json();
+		if (checkInVerificationData) {
+			toast.success('Successfully checked in at POI!');
+			const checkedInPOI = pointsOfInterest.find(({ id: _id }) => poiId === _id);
+
+			if (checkedInPOI !== undefined) {
+				checkedInPOI.checkedIn = true;
+				pointsOfInterest = pointsOfInterest;
+			}
+		}
+	};
 </script>
 
 <svelte:window
@@ -119,7 +159,8 @@
 									variant="secondary"
 									on:click={() => closeAccordionAndDispatch(candidate.id)}>View</Button
 								>
-								<Button size="sm" on:click={() => console.log('TODO: Check-in')}>Check-in</Button>
+								<Button size="sm" on:click={() => registerPOICheckIn(candidate.id)}>Check-in</Button
+								>
 							</div>
 						</div>
 					{/each}
