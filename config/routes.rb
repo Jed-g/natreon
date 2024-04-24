@@ -121,6 +121,7 @@ Rails.application.routes.draw do
     scope "points-badges" do
       get "/", to: "customer/points_badges#all"
       get "/avatar", to: "customer/points_badges#avatar_dropdown_current_total_points"
+      get "/in-progress", to: "customer/points_badges#all_in_progress"
     end
   end
 end

@@ -9,6 +9,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { sleep } from '$lib/utils';
 	import { toast } from 'svelte-sonner';
+	import { inProgressBadges } from '$lib/stores';
 
 	export let selectedMapLayer: (typeof layers)[0];
 	export let searchBar: HTMLDivElement;
@@ -99,6 +100,7 @@
 		const checkInVerificationData = await checkInVerificationResponse.json();
 		if (checkInVerificationData) {
 			toast.success('Successfully checked in at POI!');
+			inProgressBadges.checkForUpdates();
 			const checkedInPOI = pointsOfInterest.find(({ id: _id }) => poiId === _id);
 
 			if (checkedInPOI !== undefined) {
