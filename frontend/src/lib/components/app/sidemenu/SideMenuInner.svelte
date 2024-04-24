@@ -1,7 +1,7 @@
 <script lang="ts">
 	import AppUrls from '$lib/enums/AppUrls';
 	import { createEventDispatcher } from 'svelte';
-	import { Map, Settings2, Heart, Check, Shield } from 'lucide-svelte';
+	import { Map, Settings2, Heart, Check, Shield, UsersRound } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
 	import LogoutButton from '$lib/components/LogoutButton.svelte';
 
@@ -18,6 +18,17 @@
 			data-testid="home-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			class="flex items-center text-sm justify-start"><Map class="h-5 w-5 mr-2" />Home</Button
+		>
+	</li>
+	<div class="my-1" />
+	<li>
+		<Button
+			variant={slug?.split('/')[0] === AppUrls.SOCIAL_NETWORK ? 'secondary' : 'outline'}
+			href={`/app${AppUrls.SOCIAL_NETWORK ? '/' + AppUrls.SOCIAL_NETWORK : ''}`}
+			data-testid="social-network-button"
+			on:click={() => dispatch('sideMenuItemClicked')}
+			class="flex items-center text-sm justify-start"
+			><UsersRound class="h-5 w-5 mr-2" />Social Network</Button
 		>
 	</li>
 	<div class="my-1" />
