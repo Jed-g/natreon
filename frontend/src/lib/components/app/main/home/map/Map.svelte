@@ -10,7 +10,8 @@
 		features: t.array(t.string),
 		likes: t.number,
 		comments: t.array(t.type({ text: t.string, nickname: t.string })),
-		pictures: t.array(t.string)
+		pictures: t.array(t.string),
+		checkedIn: t.boolean
 	});
 
 	export type POI = t.TypeOf<typeof POIType>;
@@ -24,8 +25,11 @@
 	import layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
 	import { isRight } from 'fp-ts/Either';
-	import { Heart, TreePine } from 'lucide-svelte';
+	import { Check, Heart, TreePine } from 'lucide-svelte';
 	import { page } from '$app/stores';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import { Button } from '$lib/components/ui/button';
+	import axios, { type CancelTokenSource } from 'axios';
 
 	const focusPOIId = $page.url.searchParams.get('focus-poi');
 
@@ -73,16 +77,70 @@
 
 	let idOfSelectedPOI: number | null = null;
 
-	// $: if (
-	// 	idOfSelectedPOI !== null &&
-	// 	filteredPointsOfInterest.find(({ id }) => id === idOfSelectedPOI) === undefined
-	// ) {
-	// 	idOfSelectedPOI = null;
-	// }
-
 	let defaultCoords = { lon: 0, lat: 0 };
 	let foundLocationByIP = false;
 	let loading = true;
+	let userLocation: { lng: number; lat: number; accuracyMeters: number };
+
+	let checkInCandidates: POI[] = [];
+	let checkInCandidatesCancelTokenSource: CancelTokenSource = axios.CancelToken.source();
+
+	const updateSearchBarOffset = () => {
+		if (searchBar) {
+			searchBarHeight = searchBar.offsetHeight;
+		}
+	};
+
+	const fetchCheckInCandidates = async () => {
+		if (checkInCandidatesCancelTokenSource) {
+			checkInCandidatesCancelTokenSource.cancel();
+		}
+		checkInCandidatesCancelTokenSource = axios.CancelToken.source();
+		const cancelToken = checkInCandidatesCancelTokenSource.token;
+
+		const params = new URLSearchParams({
+			latitude: userLocation.lat.toString(),
+			longitude: userLocation.lng.toString(),
+			accuracy_meters: userLocation.accuracyMeters.toString()
+		});
+
+		const request = await axios
+			.get(`/api/check-in/candidates?${params.toString()}`, {
+				cancelToken
+			})
+			.catch((error) => error);
+
+		if (request?.data) {
+			let data = request.data;
+
+			data = data.map((poi: any): POI | { error: boolean; message: string } => {
+				const validationResult = POIType.decode(poi);
+
+				if (isRight(validationResult)) {
+					const typeSafePOI: POI = validationResult.right;
+					return typeSafePOI;
+				} else {
+					return {
+						error: true,
+						message: 'Invalid POI object received from API: ' + validationResult.left
+					};
+				}
+			});
+
+			data = data.filter((poi: POI | { error: boolean; message: string }) => {
+				if ('error' in poi && poi.error) {
+					console.error(poi.message);
+					return false;
+				}
+
+				return true;
+			});
+
+			checkInCandidates = data;
+		}
+	};
+
+	$: userLocation !== undefined && fetchCheckInCandidates();
 
 	let previousPOIRequestParams: {
 		north: string;
@@ -169,6 +227,8 @@
 	const getPOIById = (id: number) => pointsOfInterest.find(({ id: _id }) => id === _id)!;
 
 	let userNickname: string;
+
+	let geolocationDisabled = false;
 
 	onMount(async () => {
 		const ipGeolocationRequest = async () => {
@@ -274,7 +334,18 @@
 				const poiToBeFocused = pointsOfInterest.find(({ id }) => id === parseInt(focusPOIId));
 
 				if (poiToBeFocused) {
-					map.flyTo({ center: poiToBeFocused.lngLat });
+					await new Promise((resolve) => {
+						geolocate.on('trackuserlocationstart', () => map.once('movestart', resolve));
+						geolocate.trigger();
+					});
+
+					map.stop();
+
+					const zoomLevel = 14;
+					map.flyTo({ center: poiToBeFocused.lngLat, zoom: zoomLevel, padding: { top: 300 } });
+					idOfSelectedPOI = parseInt(focusPOIId);
+				} else {
+					geolocate.trigger();
 				}
 			} else {
 				geolocate.trigger();
@@ -283,21 +354,25 @@
 
 		map.on('pitchend', updatePOIData);
 
-		if (searchBar) {
-			searchBarHeight = searchBar.offsetHeight;
-		}
+		updateSearchBarOffset();
+
+		geolocate.on('error', () => (geolocationDisabled = true));
+
+		geolocate.on(
+			'trackuserlocationend',
+			(e) => e.target._watchState === 'OFF' && geolocate.trigger()
+		);
+
+		geolocate.on('geolocate', (e) => {
+			const coords: GeolocationCoordinates = e.coords;
+			userLocation = {
+				lat: coords.latitude,
+				lng: coords.longitude,
+				accuracyMeters: coords.accuracy
+			};
+		});
 	});
 </script>
-
-<svelte:window
-	on:resize={() => {
-		map?.resize();
-
-		if (searchBar) {
-			searchBarHeight = searchBar.offsetHeight;
-		}
-	}}
-/>
 
 {#if loading}
 	<div class="grow flex items-center justify-center">
@@ -314,18 +389,20 @@
 		on:moveend={updatePOIData}
 		on:zoomend={updatePOIData}
 	>
-		{#each filteredPointsOfInterest as { lngLat, name, id, isFavourite } (id)}
+		{#each filteredPointsOfInterest as { lngLat, name, id, isFavourite, checkedIn } (id)}
 			<Marker
 				{lngLat}
 				on:click={() => {
 					idOfSelectedPOI = id;
-					map.flyTo({ center: lngLat });
+					map.flyTo({ center: lngLat, padding: { top: 300 } });
 				}}
 				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 text-black shadow-2xl focus:outline-2 focus:outline-black' +
 					(idOfSelectedPOI === id ? ' border-4 box-content' : '') +
-					(isFavourite ? ' bg-green-300' : ' bg-red-300')}
+					(checkedIn ? ' bg-cyan-300' : isFavourite ? ' bg-green-300' : ' bg-red-300')}
 			>
-				{#if isFavourite}
+				{#if checkedIn}
+					<span class="text-xl"><Check class="h-5 w-5" /></span>
+				{:else if isFavourite}
 					<span class="text-xl"><Heart class="h-5 w-5" /></span>
 				{:else}
 					<span class="text-xl"><TreePine class="h-5 w-5" /></span>
@@ -344,6 +421,12 @@
 		bind:onlyShowFavourites
 		{map}
 		on:poiSelected={({ detail: poiId }) => fetchPOIById(poiId)}
+		{checkInCandidates}
+		{updateSearchBarOffset}
+		bind:idOfSelectedPOI
+		{userLocation}
+		{fetchCheckInCandidates}
+		bind:pointsOfInterest
 	/>
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
@@ -359,4 +442,19 @@
 			/>
 		</div>
 	{/if}
+	<Dialog.Root
+		bind:open={geolocationDisabled}
+		onOpenChange={(isOpen) => isOpen || location.reload()}
+	>
+		<Dialog.Content>
+			<Dialog.Header>
+				<Dialog.Description>
+					Please allow geolocation permissions and turn on location services.
+				</Dialog.Description>
+			</Dialog.Header>
+			<Dialog.Footer>
+				<Button on:click={() => location.reload()}>Confirm & Refresh Page</Button>
+			</Dialog.Footer>
+		</Dialog.Content>
+	</Dialog.Root>
 {/if}

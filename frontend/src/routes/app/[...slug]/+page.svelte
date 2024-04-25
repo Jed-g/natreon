@@ -3,10 +3,14 @@
 	import SideMenu from '$lib/components/app/sidemenu/SideMenu.svelte';
 	import AppUrls from '$lib/enums/AppUrls';
 	import Home from '$lib/components/app/main/home/Home.svelte';
+	import SocialNetwork from '$lib/components/app/main/social-network/SocialNetwork.svelte';
+	import PointsBadges from '$lib/components/app/main/points-badges/PointsBadges.svelte';
+	import CheckIns from '$lib/components/app/main/check-ins/CheckIns.svelte';
 	import Favourites from '$lib/components/app/main/favourites/Favourites.svelte';
 	import Settings from '$lib/components/app/main/settings/Settings.svelte';
 	import { onMount } from 'svelte';
 	import type { SvelteComponent } from 'svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: { slug: string };
 	let menuClosed = true;
@@ -16,6 +20,22 @@
 
 	$: {
 		switch (data.slug.split('/')[0]) {
+			case AppUrls.HOME:
+				mainComponent = Home;
+				pageTitle = 'Home';
+				break;
+			case AppUrls.SOCIAL_NETWORK:
+				mainComponent = SocialNetwork;
+				pageTitle = 'Social Network';
+				break;
+			case AppUrls.POINTS_AND_BADGES:
+				mainComponent = PointsBadges;
+				pageTitle = 'Points & Badges';
+				break;
+			case AppUrls.CHECK_INS:
+				mainComponent = CheckIns;
+				pageTitle = 'Check-ins';
+				break;
 			case AppUrls.FAVOURITES:
 				mainComponent = Favourites;
 				pageTitle = 'Favourites';
@@ -25,8 +45,7 @@
 				pageTitle = 'Settings';
 				break;
 			default:
-				mainComponent = Home;
-				pageTitle = 'Home';
+				goto('/app');
 				break;
 		}
 	}

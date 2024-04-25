@@ -127,7 +127,13 @@
 		const item = autoSuggestData.find(({ id }) => id === itemId);
 
 		if (item) {
-			map.flyTo({ center: { lat: item.position.lat, lng: item.position.lng } });
+			const minZoomLevel = 14;
+			const maxZoomLevel = 16;
+			map.flyTo({
+				center: { lat: item.position.lat, lng: item.position.lng },
+				zoom: Math.min(maxZoomLevel, Math.max(minZoomLevel, map.getZoom())),
+				padding: { top: 300 }
+			});
 		}
 
 		open = false;
@@ -137,7 +143,13 @@
 		const poi = matchingPointsOfInterest.find(({ id }) => id === parseInt(poiId));
 
 		if (poi) {
-			map.flyTo({ center: poi.lngLat });
+			const minZoomLevel = 14;
+			const maxZoomLevel = 16;
+			map.flyTo({
+				center: poi.lngLat,
+				zoom: Math.min(maxZoomLevel, Math.max(minZoomLevel, map.getZoom())),
+				padding: { top: 300 }
+			});
 			dispatch('poiSelected', parseInt(poiId));
 		}
 

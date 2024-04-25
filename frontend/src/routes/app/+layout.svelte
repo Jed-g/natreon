@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { authenticated } from '$lib/stores';
+	import { authenticated, inProgressBadges } from '$lib/stores';
 	import { onDestroy, onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import UserType from '$lib/enums/userType';
@@ -7,6 +7,7 @@
 	import { POLLING_INTERVAL_FOR_TIME_SPENT_ON_PAGE } from '$lib/config';
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { Toaster } from '$lib/components/ui/sonner';
 
 	const refreshAvatarData = writable<null | (() => Promise<void>)>(null);
 	setContext('refreshAvatarData', refreshAvatarData);
@@ -15,8 +16,11 @@
 	let timeSpentInMs = 0;
 	let interval: ReturnType<typeof setTimeout>;
 
+	$: $inProgressBadges;
+
 	onMount(async () => {
 		await authenticated.verify();
+		inProgressBadges.checkForUpdates();
 
 		// Register new visit if time spent is above 5 seconds
 		await sleep(5000);
@@ -81,6 +85,7 @@
 </svelte:head>
 
 <main class="h-screen w-screen full-dynamic-viewport-height full-dynamic-viewport-width flex">
+	<Toaster theme="dark" closeButton richColors visibleToasts={5} duration={3500} />
 	{#if loading}
 		<div class="grow flex items-center justify-center">
 			<span class="loading loading-ring loading-lg" />

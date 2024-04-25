@@ -15,6 +15,7 @@ module Customer
           features:    poi.features,
           likes:       poi.likes,
           pictures:    poi.poi_pictures.map { |picture| url_for(picture) }, # Include picture URLs,
+          checkedIn:   poi.check_ins.exists?(user: @user),
           comments:    [] # Add later...
         }
       end

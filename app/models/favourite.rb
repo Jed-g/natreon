@@ -17,4 +17,5 @@ class Favourite < ApplicationRecord
   belongs_to :poi
 
   validates :user_id, uniqueness: {scope: :poi_id}
+  validates :poi_id, uniqueness: {scope: :user_id}
 end

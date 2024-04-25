@@ -111,5 +111,18 @@ Rails.application.routes.draw do
       post "/", to: "customer/favourite_pois#add"
       delete "/", to: "customer/favourite_pois#remove"
     end
+
+    scope "check-in" do
+      get "/candidates", to: "customer/check_in#check_in_candidates"
+      get "/", to: "customer/check_in#all"
+      get "/single", to: "customer/check_in#single_poi_check_in_status"
+      post "/", to: "customer/check_in#register_check_in"
+    end
+
+    scope "points-badges" do
+      get "/", to: "customer/points_badges#all"
+      get "/avatar", to: "customer/points_badges#avatar_dropdown_current_total_points"
+      get "/in-progress", to: "customer/points_badges#all_in_progress"
+    end
   end
 end

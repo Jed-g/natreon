@@ -16,6 +16,7 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
+          checkedIn:   poi.check_ins.exists?(user: @user),
           comments:    [], # Add later...
           pictures:    poi.poi_pictures.map { |picture| url_for(picture) } # Include picture URLs
         }
@@ -41,6 +42,7 @@ module Customer
         description: poi.description,
         features:    poi.features,
         likes:       poi.likes,
+        checkedIn:   poi.check_ins.exists?(user: @user),
         comments:    [], # Add later...
         pictures:    poi.poi_pictures.map { |picture| url_for(picture) } # Include picture URLs
       }
@@ -72,6 +74,7 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
+          checkedIn:   poi.check_ins.exists?(user: @user),
           comments:    [], # Add later...
           pictures:    poi.poi_pictures.map { |picture| url_for(picture) } # Include picture URLs
         }

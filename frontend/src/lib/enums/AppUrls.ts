@@ -1,10 +1,12 @@
 enum AppUrls {
 	HOME = '',
+	SOCIAL_NETWORK = 'social',
+	SOCIAL_NETWORK_FEED = 'social/feed',
+	SOCIAL_NETWORK_CONNECTIONS = 'social/connections',
+	POINTS_AND_BADGES = 'points-badges',
+	CHECK_INS = 'check-ins',
 	FAVOURITES = 'favourites',
-	SETTINGS = 'settings',
-	SETTINGS_PROFILE = 'settings/profile',
-	SETTINGS_PAGE_2 = 'settings/page-2',
-	SETTINGS_PAGE_3 = 'settings/page-3'
+	SETTINGS = 'settings'
 }
 
 export default AppUrls;

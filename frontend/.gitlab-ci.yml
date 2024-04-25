@@ -38,7 +38,7 @@ frontend:
   script:
     - cd frontend
     - yarn playwright install --force chromium
-    - yarn deploy
+    - NODE_OPTIONS="--max-old-space-size=4096" yarn deploy
     - (RAILS_ENV=test bundle exec rails s &) | grep -q "3000" && yarn test:gitlab-ci
 
 yarn-audit:
