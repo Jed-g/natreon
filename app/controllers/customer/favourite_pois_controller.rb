@@ -14,6 +14,7 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
+          pictures:    poi.poi_pictures.map { |picture| url_for(picture) }, # Include picture URLs,
           comments:    [] # Add later...
         }
       end

@@ -42,4 +42,9 @@ class Poi < ApplicationRecord
       record.errors.add(attr, 'contains invalid feature') unless FEATURES.include?(feature)
     end
   end
+
+  has_many_attached :poi_pictures
+
+  validates :poi_pictures, content_type: ['image/png', 'image/jpg', 'image/jpeg']
+
 end

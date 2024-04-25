@@ -9,7 +9,8 @@
 		description: t.string,
 		features: t.array(t.string),
 		likes: t.number,
-		comments: t.array(t.type({ text: t.string, nickname: t.string }))
+		comments: t.array(t.type({ text: t.string, nickname: t.string })),
+		pictures: t.array(t.string)
 	});
 
 	export type POI = t.TypeOf<typeof POIType>;

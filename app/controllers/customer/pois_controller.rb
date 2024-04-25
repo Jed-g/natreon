@@ -16,7 +16,8 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
-          comments:    [] # Add later...
+          comments:    [], # Add later...
+          pictures:    poi.poi_pictures.map { |picture| url_for(picture) } # Include picture URLs
         }
       end
 
@@ -40,7 +41,8 @@ module Customer
         description: poi.description,
         features:    poi.features,
         likes:       poi.likes,
-        comments:    [] # Add later...
+        comments:    [], # Add later...
+        pictures:    poi.poi_pictures.map { |picture| url_for(picture) } # Include picture URLs
       }
 
       render json: poi_formatted
@@ -70,7 +72,8 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
-          comments:    [] # Add later...
+          comments:    [], # Add later...
+          pictures:    poi.poi_pictures.map { |picture| url_for(picture) } # Include picture URLs
         }
       end
 
@@ -103,6 +106,23 @@ module Customer
 
       unless @north >= @south && @east >= @west
         return render_bad_request
+      end
+    end
+
+    def upload_poi_picture
+      poi_id = params[:poi_id]
+      @poi = Poi.find_by(id: poi_id)
+  
+      return render_not_found unless @poi # Handle case where POI is not found
+        
+      pictures = params[:pictures] # Assuming you're sending the pictures as part of the request params
+        
+      @poi.poi_pictures.attach(picture)
+
+      if @poi.save
+        show
+      else
+        render json: @poi.errors, status: :internal_server_error
       end
     end
   end
