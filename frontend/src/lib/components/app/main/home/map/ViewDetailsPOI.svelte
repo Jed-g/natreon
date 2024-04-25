@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog';
 	import type { POI } from './Map.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	// Define props with type annotations
 	export let poi: POI;
@@ -10,6 +11,8 @@
 	export let onClose: () => void;
 
 	let newComment = '';
+	let selectedFile: File | null;
+	let loading = true;
 
 	// Function to add a new comment
 	function addComment() {
@@ -17,6 +20,41 @@
 		if (newComment.trim() !== '') {
 			comments = [...comments, { text: newComment.trim(), nickname: userNickname }];
 			newComment = ''; // Clear the input field after adding comment
+		}
+	}
+
+	async function handleUpload() {
+		if (selectedFile) {
+			const formData = new FormData();
+			formData.append('picture', selectedFile);
+			formData.append('poi_id', String(poi.id))
+			loading = true;
+			try {
+				const response = await fetch('/api/poi/poi-image/upload', {
+					method: 'POST',
+					body: formData
+				});
+				// Check response status and handle accordingly
+				if (response.ok) {
+					// Handle successful upload
+					window.location.reload();
+				} else {
+					// Handle HTTP error
+				}
+			} catch (error) {
+				console.error('Error uploading file:', error);
+            	// Handle fetch error
+        	} finally {
+            	loading = false; // Reset loading state whether upload is successful or not
+        	}
+
+		}
+	}
+
+	function selectFile(event: Event) {
+		const input = event.target as HTMLInputElement;
+		if (input && input.files && input.files.length > 0) {
+			selectedFile = input.files[0];
 		}
 	}
 
@@ -61,6 +99,21 @@
 				/>
 				<button on:click={addComment}>Add Comment</button>
 			</div>
+		</div>
+
+		<div class="mb-4 text-white rounded shadow-md mt-6 w-full md:w-3/4 lg:w-1/2">
+			<div class="mb-4">
+				<label for="profile-picture">Upload a picture of this location!</label>
+				<input
+					id="profile-picture"
+					type="file"
+					accept="image/*"
+					on:change={selectFile}
+					class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"
+				/>
+			</div>
+
+			<Button variant="outline" class="mt-4" on:click={handleUpload}>Upload Picture</Button>
 		</div>
 	</Dialog.Content>
 </Dialog.Root>

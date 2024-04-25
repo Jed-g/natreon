@@ -102,7 +102,7 @@ Rails.application.routes.draw do
       get "/get-by-id", to: "customer/pois#single_poi_by_id"
       get "/features", to: "customer/pois#all_poi_features"
       get "/search", to: "customer/pois#search_by_name"
-      post "poi_image/upload", to: "customer/pois#upload_poi_picture"
+      post "/poi-image/upload", to: "customer/pois#upload_poi_picture"
     end
 
     scope "favourites" do

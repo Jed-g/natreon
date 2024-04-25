@@ -83,6 +83,23 @@ module Customer
       render json: pois_formatted
     end
 
+    def upload_poi_picture
+      poi_id = params[:poi_id]
+      @poi = Poi.find_by(id: poi_id)
+  
+      return render_not_found unless @poi # Handle case where POI is not found
+        
+      picture = params[:picture] # Assuming you're sending the pictures as part of the request params
+        
+      @poi.poi_pictures.attach(picture)
+
+      if @poi.save
+        print(@poi.poi_pictures)
+      else
+        render json: @poi.errors, status: :internal_server_error
+      end
+    end
+
     private
 
     def get_user
@@ -109,23 +126,6 @@ module Customer
 
       unless @north >= @south && @east >= @west
         return render_bad_request
-      end
-    end
-
-    def upload_poi_picture
-      poi_id = params[:poi_id]
-      @poi = Poi.find_by(id: poi_id)
-  
-      return render_not_found unless @poi # Handle case where POI is not found
-        
-      pictures = params[:pictures] # Assuming you're sending the pictures as part of the request params
-        
-      @poi.poi_pictures.attach(picture)
-
-      if @poi.save
-        show
-      else
-        render json: @poi.errors, status: :internal_server_error
       end
     end
   end

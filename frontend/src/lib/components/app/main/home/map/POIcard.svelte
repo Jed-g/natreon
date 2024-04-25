@@ -108,21 +108,29 @@
 			</Card.Title>
 		</Card.Header>
 		<Card.Content class="grow p-3 flex flex-col overflow-y-auto">
-			<Carousel.Root class="w-full">
-				<Carousel.Content>
-					{#each Array(5) as _, i (i)}
-						<Carousel.Item>
-							<div class="p-1">
-								<Card.Root>
-									<Card.Content class="flex aspect-square items-center justify-center p-6">
-										<span class="text-4xl font-semibold">{i + 1}</span>
-									</Card.Content>
-								</Card.Root>
-							</div>
-						</Carousel.Item>
-					{/each}
-				</Carousel.Content>
-			</Carousel.Root>
+			{#if poi.pictures.length === 0}
+				<Card.Root class="mb-2">
+					<Card.Content class="p-2">
+						<p class="text-center">No Pictures available for this Point of Interest</p>
+					</Card.Content>
+				</Card.Root>
+			{:else}
+				<Carousel.Root class="w-full">
+					<Carousel.Content>
+						{#each poi.pictures as picture, index (index)}
+							<Carousel.Item>
+								<div class="p-1">
+									<Card.Root>
+										<Card.Content class="flex aspect-square items-center justify-center p-6">
+											<img src={picture} alt={"Picture " + (index + 1)} class="max-h-full max-w-full" />
+										</Card.Content>
+									</Card.Root>
+								</div>
+							</Carousel.Item>
+						{/each}
+					</Carousel.Content>
+				</Carousel.Root>
+			{/if}
 			<p>Description: {poi.description}</p>
 			<p>Features:</p>
 			<ul>
