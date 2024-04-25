@@ -12,7 +12,6 @@
 
 	let newComment = '';
 	let selectedFile: File | null;
-	let loading = true;
 
 	// Function to add a new comment
 	function addComment() {
@@ -28,7 +27,6 @@
 			const formData = new FormData();
 			formData.append('picture', selectedFile);
 			formData.append('poi_id', String(poi.id))
-			loading = true;
 			try {
 				const response = await fetch('/api/poi/poi-image/upload', {
 					method: 'POST',
@@ -44,8 +42,6 @@
 			} catch (error) {
 				console.error('Error uploading file:', error);
             	// Handle fetch error
-        	} finally {
-            	loading = false; // Reset loading state whether upload is successful or not
         	}
 
 		}
