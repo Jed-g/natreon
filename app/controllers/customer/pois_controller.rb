@@ -16,6 +16,7 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
+          pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
           checkedIn:   poi.check_ins.exists?(user: @user),
           comments:    [] # Add later...
         }
@@ -41,6 +42,7 @@ module Customer
         description: poi.description,
         features:    poi.features,
         likes:       poi.likes,
+        pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
         checkedIn:   poi.check_ins.exists?(user: @user),
         comments:    [] # Add later...
       }
@@ -72,12 +74,32 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
+          pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
           checkedIn:   poi.check_ins.exists?(user: @user),
           comments:    [] # Add later...
         }
       end
 
       render json: pois_formatted
+    end
+
+    def upload_poi_picture
+      poi_id = params[:poi_id]
+      @poi = Poi.find_by(id: poi_id)
+
+      return render_not_found unless @poi # Handle case where POI is not found
+
+      picture = params[:picture] # Assuming you're sending the pictures as part of the request params
+      poi_picture = @poi.poi_pictures.build(user: @user)
+      poi_picture.picture.attach(picture)
+
+      if poi_picture.save
+        return render_internal_server_error unless poi_picture.picture.attached?
+
+        render json: {message: "OK"}
+      else
+        render_internal_server_error
+      end
     end
 
     private
