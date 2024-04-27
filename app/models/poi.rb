@@ -40,14 +40,12 @@ class Poi < ApplicationRecord
   has_many :check_ins, foreign_key: :poi_id
   has_many :checked_in_users, through: :check_ins, source: :user
 
+  has_many :poi_pictures, foreign_key: :poi_id
+  has_many :submitted_picture_user, through: :poi_pictures, source: :user
+
   validates_each :features do |record, attr, value|
     value.each do |feature|
       record.errors.add(attr, 'contains invalid feature') unless FEATURES.include?(feature)
     end
   end
-
-  has_many_attached :poi_pictures
-
-  validates :poi_pictures, content_type: ['image/png', 'image/jpg', 'image/jpeg']
-
 end

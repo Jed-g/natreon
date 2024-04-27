@@ -401,10 +401,10 @@
 		<div
 			class="relative card h-full w-full md:w-3/4 max-w-3xl md:max-h-[32rem] max-h-none flex bg-base-200 shadow-xl p-6 flex-col"
 		>
-			<div class="flex justify-center">
+			<div class="flex justify-center items-center gap-4">
 				<h2>POI Details</h2>
 				{#if !editing}
-					<button class="btn btn-primary" on:click={startEditing}>Edit</button>
+					<button class="btn btn-primary btn-sm" on:click={startEditing}>Edit</button>
 				{/if}
 			</div>
 

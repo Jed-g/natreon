@@ -371,6 +371,13 @@
 				accuracyMeters: coords.accuracy
 			};
 		});
+
+		map.on('click', (e) => {
+			const target = e.originalEvent.target as HTMLElement;
+			if (target.dataset.testid === 'map-canvas') {
+				idOfSelectedPOI = null;
+			}
+		});
 	});
 </script>
 
@@ -431,7 +438,7 @@
 	{#if idOfSelectedPOI !== null}
 		{@const poi = getPOIById(idOfSelectedPOI)}
 		<div
-			class="absolute w-full max-w-xs sm:max-w-md md:max-w-xl top-2 right-2"
+			class="absolute w-full max-w-md md:max-w-xl top-2 right-2"
 			style={`margin-top: ${searchBarHeight}px;`}
 		>
 			<POIcard
