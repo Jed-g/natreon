@@ -62,7 +62,6 @@
 			formValidation.nicknameMin3 = false;
 		}
 
-
 		return isOk;
 	};
 
@@ -71,7 +70,12 @@
 			return;
 		}
 
-		const signupSuccessful = await signUp(formData.email, formData.nickname, formData.description, formData.password);
+		const signupSuccessful = await signUp(
+			formData.email,
+			formData.nickname,
+			formData.description,
+			formData.password
+		);
 
 		if (signupSuccessful) {
 			fetch('/api/stats/landing/registration-completed', {
@@ -95,7 +99,6 @@
 		if (formValidation.nicknameMin3 !== null) {
 			formValidation.nicknameMin3 = formData.nickname.length >= 3;
 		}
-
 
 		if (formValidation.passwordMin8 !== null) {
 			formValidation.passwordMin8 = formData.password.length >= 8;
@@ -122,6 +125,7 @@
 				placeholder="email"
 				class="input input-bordered"
 				id="email"
+				data-testid="email"
 				bind:value={formData.email}
 				on:input={() => {
 					if (formValidation.emailValid === null) {
@@ -133,7 +137,7 @@
 			/>
 		</div>
 		<div class="form-control">
-			<label class="label" for = "nickname">
+			<label class="label" for="nickname">
 				<span class="label-text">Nickname</span>
 			</label>
 			<input
@@ -143,11 +147,10 @@
 				id="nickname"
 				bind:value={formData.nickname}
 				on:input={() => {
-					if (formValidation.nicknameMin3=== null) {
-						formValidation.nicknameMin3= false;
+					if (formValidation.nicknameMin3 === null) {
+						formValidation.nicknameMin3 = false;
 					}
 				}}
-
 			/>
 		</div>
 		<div class="form-control">

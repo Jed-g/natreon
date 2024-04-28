@@ -37,9 +37,117 @@ class User < ApplicationRecord
   EMAIL_REGEX = /\A[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\z/
   validates :email, presence: true, format: {with: EMAIL_REGEX}
 
+  validates :nickname, length: {minimum: 3}
+
   has_one_attached :profile_picture
+
+  validates :profile_picture, content_type: ['image/png', 'image/jpg', 'image/jpeg']
+
+  has_many :favourites, foreign_key: :user_id
+  has_many :favourite_pois, through: :favourites, source: :poi
+
+  has_many :check_ins, foreign_key: :user_id
+  has_many :checked_in_pois, through: :check_ins, source: :poi
+
+  has_many :poi_pictures, foreign_key: :user_id
+  has_many :submitted_picture_poi, through: :poi_pictures, source: :poi
+
   def active_for_authentication?
     super && !deactivated
   end
 
+  def total_points
+    points_for_check_ins = total_check_in_counts * Constants::POINTS_PER_POI_CHECK_IN
+    points_for_photos = total_poi_photo_counts * Constants::POINTS_PER_NEW_POI_PHOTO
+    points_for_reviews = total_poi_review_counts * Constants::POINTS_PER_NEW_POI_REVIEW
+
+    points_for_check_ins + points_for_photos + points_for_reviews
+  end
+
+  def total_check_in_counts
+    check_ins.count
+  end
+
+  def total_poi_photo_counts
+    poi_pictures.count
+  end
+
+  def total_poi_review_counts
+    0
+
+    # TODO
+    # poi_reviews.count
+  end
+
+  def badge_statuses_for_total_points
+    total = total_points
+    previous_threshold = 0
+    Constants::BADGE_THRESHOLDS_FOR_TOTAL_NO_POINTS.map do |badge, threshold|
+      status = if total >= threshold
+                 "ACHIEVED"
+               elsif total >= previous_threshold
+                 "IN PROGRESS"
+               else
+                 "LOCKED"
+               end
+      return_value = {badge: badge, status: status, threshold: threshold,
+      previous_threshold: previous_threshold}
+      previous_threshold = threshold
+      return_value
+    end
+  end
+
+  def badge_statuses_for_total_check_in_counts
+    total = total_check_in_counts
+    previous_threshold = 0
+    Constants::BADGE_THRESHOLDS_FOR_TOTAL_COUNTS_IN_CATEGORY.map do |badge, threshold|
+      status = if total >= threshold
+                 "ACHIEVED"
+               elsif total >= previous_threshold
+                 "IN PROGRESS"
+               else
+                 "LOCKED"
+               end
+      return_value = {badge: badge, status: status, threshold: threshold,
+      previous_threshold: previous_threshold}
+      previous_threshold = threshold
+      return_value
+    end
+  end
+
+  def badge_statuses_for_total_poi_photo_counts
+    total = total_poi_photo_counts
+    previous_threshold = 0
+    Constants::BADGE_THRESHOLDS_FOR_TOTAL_COUNTS_IN_CATEGORY.map do |badge, threshold|
+      status = if total >= threshold
+                 "ACHIEVED"
+               elsif total >= previous_threshold
+                 "IN PROGRESS"
+               else
+                 "LOCKED"
+               end
+      return_value = {badge: badge, status: status, threshold: threshold,
+previous_threshold: previous_threshold}
+      previous_threshold = threshold
+      return_value
+    end
+  end
+
+  def badge_statuses_for_total_poi_review_counts
+    total = total_poi_review_counts
+    previous_threshold = 0
+    Constants::BADGE_THRESHOLDS_FOR_TOTAL_COUNTS_IN_CATEGORY.map do |badge, threshold|
+      status = if total >= threshold
+                 "ACHIEVED"
+               elsif total >= previous_threshold
+                 "IN PROGRESS"
+               else
+                 "LOCKED"
+               end
+      return_value = {badge: badge, status: status, threshold: threshold,
+      previous_threshold: previous_threshold}
+      previous_threshold = threshold
+      return_value
+    end
+  end
 end

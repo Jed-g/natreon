@@ -8,7 +8,7 @@ test('View Mailing List', async ({ page }) => {
 	await page.getByRole('button', { name: 'I Understand' }).click();
 	await page.getByRole('link', { name: 'Login' }).click();
 	await page.getByTestId('email').click();
-	await page.getByTestId('email').fill('test@admin.com');
+	await page.getByTestId('email').fill('admin@test.com');
 	await page.getByTestId('password').click();
 	await page.getByTestId('password').fill('password');
 	await page.getByTestId('login-button').click();

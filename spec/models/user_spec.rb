@@ -31,7 +31,7 @@ require "rails_helper"
 # end
 # rubocop:disable RSpec/NamedSubject
 RSpec.describe User do
-  subject { described_class.new(email: "test@example.com", password: "password", user_type: "customer") }
+  subject { described_class.new(email: "test@example.com", nickname: "user", description: "description",  password: "password", user_type: "customer") }
 
   describe "validations" do
     it "is valid with valid attributes" do
@@ -44,7 +44,7 @@ RSpec.describe User do
     end
 
     it "is not valid with a duplicate email" do
-      described_class.create!(email: "test@example.com", password: "password", user_type: "customer")
+      described_class.create!(email: "test@example.com", nickname: "user", description: "description", password: "password", user_type: "customer")
       expect(subject).not_to be_valid
     end
 

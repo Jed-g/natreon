@@ -120,14 +120,24 @@ bundle exec cap demo deploy:seed
 ```
 # Seeded User Details
 
+1st Customer Details
+```
+username:customer@demo.com
+password:password
+```
+2nd Customer Details
+```
+username:customer2@demo.com
+password:password
+```
 Admin Details
 ```
-username:test@admin.com
+username:admin@demo.com
 password:password
 ```
 Reporter Details
 ```
-username:test@reporter.com
+username:reporter@demo.com
 password:password
 ```
 

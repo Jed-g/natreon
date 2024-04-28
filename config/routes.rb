@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  namespace :admin do
+    get 'reported_reviews/index'
+    get 'reported_reviews/show'
+    get 'reported_reviews/destroy'
+  end
+  resources :pois
   devise_for :users, path: "api/auth", path_names: {
                                          sign_in:      "login",
                                          sign_out:     "logout",
@@ -49,6 +55,13 @@ Rails.application.routes.draw do
     post "/admin/questions", to: "admin/questions#answer_edit_create_question"
     delete "/admin/questions", to: "admin/questions#delete_question"
     get "/admin/mailinglist", to: "admin/mailing_list#all_emails"
+    get "/admin/report-response", to: "admin/mailing_list#all_emails"
+
+    get "/admin/pois", to: "admin/pois#all_pois"
+    post "/admin/pois", to: "admin/pois#create_poi"
+    delete "/admin/pois", to: "admin/pois#delete_poi"
+    post "/admin/pois/edit", to: "admin/pois#edit_poi"
+    get "/admin/pois/features", to: "admin/pois#all_poi_feature_options"
 
     get "/admin/stats/globe", to: "admin/stats#globe"
     get "/admin/stats/all-visits", to: "admin/stats#all_visits"
@@ -74,10 +87,42 @@ Rails.application.routes.draw do
     delete "/reviews/upvote", to: "reviews#cancel_upvote_review"
     delete "/reviews/downvote", to: "reviews#cancel_downvote_review"
 
-    get "/users/profile", to: "users/profile#show"
-    put "/users/profile", to: "users/profile#update_user_profile"
-    post "/users/profile/update-picture", to: "users/profile#update_profile_picture"
-
     post "/mailinglist", to: "mailing_list#submit_email"
+
+    # /app url (customer) api routes
+
+    scope "settings" do
+      get "/profile", to: "customer/profile#show"
+      put "/profile", to: "customer/profile#update_user_profile"
+      post "/profile/update-picture", to: "customer/profile#update_profile_picture"
+    end
+
+    scope "poi" do
+      get "/", to: "customer/pois#all"
+      get "/get-by-id", to: "customer/pois#single_poi_by_id"
+      get "/features", to: "customer/pois#all_poi_features"
+      get "/search", to: "customer/pois#search_by_name"
+      post "/poi-image/upload", to: "customer/pois#upload_poi_picture"
+    end
+
+    scope "favourites" do
+      get "/", to: "customer/favourite_pois#all"
+      get "/single", to: "customer/favourite_pois#single_poi_favourite_status"
+      post "/", to: "customer/favourite_pois#add"
+      delete "/", to: "customer/favourite_pois#remove"
+    end
+
+    scope "check-in" do
+      get "/candidates", to: "customer/check_in#check_in_candidates"
+      get "/", to: "customer/check_in#all"
+      get "/single", to: "customer/check_in#single_poi_check_in_status"
+      post "/", to: "customer/check_in#register_check_in"
+    end
+
+    scope "points-badges" do
+      get "/", to: "customer/points_badges#all"
+      get "/avatar", to: "customer/points_badges#avatar_dropdown_current_total_points"
+      get "/in-progress", to: "customer/points_badges#all_in_progress"
+    end
   end
 end
