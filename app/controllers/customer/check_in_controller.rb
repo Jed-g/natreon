@@ -42,6 +42,9 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
+          pictures:    poi.poi_pictures.map {|poi_picture|
+                         url_for(poi_picture.picture)
+                       }, # Include picture URLs,
           checkedIn:   true,
           comments:    [] # Add later...
         }
@@ -132,6 +135,7 @@ module Customer
           description: poi.description,
           features:    poi.features,
           likes:       poi.likes,
+          pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
           checkedIn:   false,
           comments:    [] # Add later...
         }

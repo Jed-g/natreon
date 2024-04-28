@@ -5,7 +5,7 @@ test('An admin can create a poi with one feature, and valid name, longitude, and
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@admin.com');
+  await page.getByTestId('email').fill('admin@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('password').press('Enter');
@@ -27,7 +27,7 @@ test('An admin cannot create a poi with an invalid name', async ({ page }) => {
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@admin.com');
+  await page.getByTestId('email').fill('admin@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('password').press('Enter');
@@ -46,7 +46,7 @@ test('An admin cannot create a poi with invalid latitude', async ({ page }) => {
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@admin.com');
+  await page.getByTestId('email').fill('admin@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('password').press('Enter');
@@ -66,7 +66,7 @@ test('An admin cannot create a poi with invalid longitude', async ({ page }) => 
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@admin.com');
+  await page.getByTestId('email').fill('admin@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('password').press('Enter');
@@ -88,7 +88,7 @@ test('An admin can add multiple features to a valid poi', async ({ page }) => {
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@admin.com');
+  await page.getByTestId('email').fill('admin@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('password').press('Enter');
@@ -109,7 +109,7 @@ test('An admin can change the default location when creating a poi', async ({ pa
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@admin.com');
+  await page.getByTestId('email').fill('admin@test.com');
   await page.getByTestId('password').click();
   await page.getByTestId('password').fill('password');
   await page.getByTestId('password').press('Tab');
@@ -130,7 +130,7 @@ test('An admin can create and delete a poi', async ({ page }) => {
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@admin.com');
+  await page.getByTestId('email').fill('admin@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('password').press('Enter');

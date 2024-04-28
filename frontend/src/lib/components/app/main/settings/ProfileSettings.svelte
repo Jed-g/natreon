@@ -12,7 +12,7 @@
 
 	let isEditing = false;
 	// let files: File[] = [];
-	let selectedFile: File | null;
+	let selectedFile: File | undefined;
 	let nicknameMin3 = '';
 	let error = false;
 	let loading = true;
@@ -114,10 +114,18 @@
 		}
 	}
 
+	const VALID_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
 	function selectFile(event: Event) {
 		const input = event.target as HTMLInputElement;
-		if (input && input.files && input.files.length > 0) {
+		if (
+			input &&
+			input.files &&
+			input.files.length > 0 &&
+			VALID_TYPES.includes(input.files[0].type)
+		) {
 			selectedFile = input.files[0];
+		} else {
+			selectedFile = undefined;
 		}
 	}
 
@@ -214,7 +222,7 @@
 				<input
 					id="profile-picture"
 					type="file"
-					accept="image/*"
+					accept="image/png, image/jpg, image/jpeg"
 					on:change={selectFile}
 					class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"
 				/>
