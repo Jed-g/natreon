@@ -19,6 +19,22 @@ RSpec.describe Customer::CheckInController do
                 expect(JSON.parse(response.body)).to be_a(Array)
             end
         end
+
+        context 'when user has already checked into a POI' do
+            let(:current_user) { user }
+            let(:poi2) { create(:poi) }
+          
+            it 'does not include the checked-in POI in the response' do
+                user.check_ins.create!(poi: poi)
+                user.check_ins.create!(poi: poi2)
+            
+                allow(controller).to receive(:params).and_return(latitude: '1.0', longitude: '1.0', accuracy_meters: '1.0')
+            
+                get :check_in_candidates
+            
+                expect(response.body).not_to include(poi2.id.to_s)
+            end
+        end
     end
 
     describe '#register_check_in' do
@@ -49,10 +65,20 @@ RSpec.describe Customer::CheckInController do
             let(:distant_poi) { create(:poi, latitude: 80.0, longitude: 100.0) }
         
             it 'returns a failure response' do
-              post :register_check_in, params: { poi_id: distant_poi.id, latitude: 1.0, longitude: 1.0, accuracy_meters: 1.0}
-              expect(response).not_to be_successful
+                post :register_check_in, params: { poi_id: distant_poi.id, latitude: 1.0, longitude: 1.0, accuracy_meters: 1.0}
+                expect(response).not_to be_successful
             end
-          end
+        end
+
+        context 'when check_in is not persisted' do
+            it 'returns an internal server error' do
+                allow_any_instance_of(User).to receive_message_chain(:check_ins, :create).and_return(double(persisted?: false))
+    
+                post :register_check_in, params: { poi_id: poi.id, latitude: 1.0, longitude: 1.0, accuracy_meters: 1.0}
+    
+                expect(response).to have_http_status(:internal_server_error)
+            end
+        end
     end
 
     describe '#all' do

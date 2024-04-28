@@ -1,4 +1,3 @@
-# favourite_pois_controller_spec.rb
 
 require 'rails_helper'
 
@@ -20,7 +19,7 @@ RSpec.describe Customer::FavouritePoisController do
                 get :all
                 expect(response).to have_http_status(:success)
             end
-            
+
             it 'returns all favourite pois of the user' do
                 user.favourites.create(poi: poi1)
                 user.favourites.create(poi: poi2)
