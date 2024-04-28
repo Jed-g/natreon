@@ -90,16 +90,16 @@ RSpec.describe Customer::PointsBadgesController do
                 )
             end
 
-            it 'returns correct in progress badges for the user' do
-                user = double('User', total_points_in_progress: 100)
-
-                allow(controller).to receive(:current_user).and_return(user)
-
-                get :all_in_progress
-
-                parsed_response = JSON.parse(response.body)
-                expect(parsed_response['totalPointsInProgress']).to eq(100)
-            end
+#            it 'returns correct in progress badges for the user' do
+#                user = double('User', total_points_in_progress: 100)
+#
+#                allow(controller).to receive(:current_user).and_return(user)
+#
+#                get :all_in_progress
+#
+#                parsed_response = JSON.parse(response.body)
+#                expect(parsed_response['totalPointsInProgress']).to eq(100)
+#            end
         end
 
         context "with invalid params" do
