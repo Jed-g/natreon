@@ -8,7 +8,7 @@ test.beforeEach('Login using admin', async ({ page }) => {
 	await page.getByRole('button', { name: 'I Understand' }).click();
 	await page.getByRole('link', { name: 'Login' }).click();
 	await page.getByTestId('email').click();
-	await page.getByTestId('email').fill('test@admin.com');
+	await page.getByTestId('email').fill('admin@test.com');
 	await page.getByTestId('password').click();
 	await page.getByTestId('password').fill('password');
 	await page.getByTestId('login-button').click();
@@ -43,5 +43,5 @@ test.beforeEach('Login using admin', async ({ page }) => {
 // test('Delete User', async ({ page }) => {
 // 	await page.goto('/admin/users');
 // 	await page.getByRole('button', { name: 'Delete' }).nth(1).click();
-// 	await expect(page.getByRole('cell', { name: 'test@user.com' })).toBeHidden;
+// 	await expect(page.getByRole('cell', { name: 'customer@test.com' })).toBeHidden;
 // });

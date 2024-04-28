@@ -3,24 +3,24 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-test('A user can log in to the map page', async ({ page }) => {
+test('A customer can log in to the map page', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@user.com');
+  await page.getByTestId('email').fill('customer@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
   await expect(page.locator('[data-testid="logout-button"]').first()).toBeAttached();
 });
 
-test('A user can log in and see their profile', async ({ page }) => {
+test('A customer can log in and see their profile', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@user.com');
+  await page.getByTestId('email').fill('customer@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
@@ -31,32 +31,32 @@ test('A user can log in and see their profile', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Profile Picture' })).toBeVisible();
 });
 
-test('A user can edit their nickname', async ({ page }) => {
+test('A customer can edit their nickname', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@user.com');
+  await page.getByTestId('email').fill('customer@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
   await page.locator('[data-testid="settings-button"]').first().click();
   await page.getByRole('button', { name: 'Edit Profile' }).click();
   await page.getByLabel('Nickname:').click();
-  await page.getByLabel('Nickname:').fill('user223');
+  await page.getByLabel('Nickname:').fill('customer223');
   await page.getByRole('button', { name: 'Save Changes' }).click();
   await page.getByRole('list').click();
   await page.getByRole('link', { name: 'Home' }).click();
   await page.getByRole('link', { name: 'Settings' }).click();
-  await expect(page.getByLabel('Nickname:')).toHaveValue('user223');
+  await expect(page.getByLabel('Nickname:')).toHaveValue('customer223');
 });
 
-test('A user can edit their description', async ({ page }) => {
+test('A customer can edit their description', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@user.com');
+  await page.getByTestId('email').fill('customer@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
@@ -70,12 +70,12 @@ test('A user can edit their description', async ({ page }) => {
   await expect(page.getByLabel('Description:')).toHaveValue('this is a description');
 });
 
-test('A user can upload a profile picture', async ({ page }) => {
+test('A customer can upload a profile picture', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'I Understand' }).click();
   await page.getByRole('link', { name: 'Login' }).click();
   await page.getByTestId('email').click();
-  await page.getByTestId('email').fill('test@user.com');
+  await page.getByTestId('email').fill('customer@test.com');
   await page.getByTestId('email').press('Tab');
   await page.getByTestId('password').fill('password');
   await page.getByTestId('login-button').click();
