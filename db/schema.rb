@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_09_111025) do
-ActiveRecord::Schema[7.0].define(version: 2024_03_15_135852) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_27_193528) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_trgm"
   enable_extension "plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -59,6 +59,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_15_135852) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "check_ins", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "poi_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "poi_id"], name: "index_check_ins_on_user_id_and_poi_id", unique: true
+  end
+
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -72,6 +80,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_15_135852) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "favourites", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "poi_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "poi_id"], name: "index_favourites_on_user_id_and_poi_id", unique: true
   end
 
   create_table "landing_page_visits", force: :cascade do |t|
@@ -89,6 +105,25 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_15_135852) do
 
   create_table "mailing_list", force: :cascade do |t|
     t.string "email", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "poi_pictures", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "poi_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "pois", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description", default: "", null: false
+    t.string "location", null: false
+    t.string "features", default: [], null: false, array: true
+    t.integer "likes", default: 0, null: false
+    t.float "latitude", null: false
+    t.float "longitude", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -1,20 +1,20 @@
 case Rails.env
 when "test"
-    User.find_or_create_by(email: "test@user.com") do |user|
+    User.find_or_create_by(email: "customer@test.com") do |user|
         user.password = "password"
         user.user_type = 0
-        user.nickname = "test_user"
+        user.nickname = "test_customer"
         user.description = "test_description"
 
       end
-    User.find_or_create_by(email: "test@admin.com") do |user|
+    User.find_or_create_by(email: "admin@test.com") do |user|
         user.password = "password"
         user.user_type = 1
-        user.nickname = "test_user"
+        user.nickname = "test_admin"
         user.description = "test_description"
 
     end
-    # User.find_or_create_by(email: "test@reporter.com") do |user|
+    # User.find_or_create_by(email: "reporter@test.com") do |user|
     #     user.password = "password"
     #     user.user_type = 2
     # end
@@ -24,50 +24,64 @@ when "test"
     Question.create(answer:"test_answer_2" , question:"test_question_2", upvotes:0, downvotes:0)
 
 when "development"
-    User.find_or_create_by(email: "test@user.com") do |user|
+    User.find_or_create_by(email: "customer@test.com") do |user|
         user.password = "password"
         user.user_type = 0
-        user.nickname = "test_user"
+        user.nickname = "test_customer"
         user.description = "test_description"
 
       end
-    User.find_or_create_by(email: "test@admin.com") do |user|
+      User.find_or_create_by(email: "customer2@test.com") do |user|
+        user.password = "password"
+        user.user_type = 0
+        user.nickname = "test_customer1"
+        user.description = "test1_description"
+
+      end
+    User.find_or_create_by(email: "admin@test.com") do |user|
         user.password = "password"
         user.user_type = 1
-        user.nickname = "test_user"
+        user.nickname = "test_admin"
         user.description = "test_description"
 
     end
-    User.find_or_create_by(email: "test@reporter.com") do |user|
+    User.find_or_create_by(email: "reporter@test.com") do |user|
         user.password = "password"
         user.user_type = 2
-        user.nickname = "test_user"
+        user.nickname = "test_reporter"
         user.description = "test_description"
 
     end
+
+    require_relative 'points_of_interest'
 
 when "production"
 
 when "demo"
-    User.find_or_create_by(email: "test@user.com") do |user|
+    User.find_or_create_by(email: "customer@demo.com") do |user|
         user.password = "password"
         user.user_type = 0
-        user.nickname = "test_user"
-        user.description = "test_description"
-
-      end
-    User.find_or_create_by(email: "test@admin.com") do |user|
+        user.nickname = "customer"
+        user.description = "I'm a regular customer who loves exploring new places."
+    end
+    User.find_or_create_by(email: "customer2@demo.com") do |user|
+        user.password = "password"
+        user.user_type = 0
+        user.nickname = "customer2"
+        user.description = "Adventure enthusiast and frequent traveler."
+    end
+    User.find_or_create_by(email: "admin@demo.com") do |user|
         user.password = "password"
         user.user_type = 1
-        user.nickname = "test_user"
-        user.description = "test_description"
-
+        user.nickname = "admin"
+        user.description = "admin_description"
     end
-    User.find_or_create_by(email: "test@reporter.com") do |user|
+    User.find_or_create_by(email: "reporter@demo.com") do |user|
         user.password = "password"
         user.user_type = 2
-        user.nickname = "test_user"
-        user.description = "test_description"
-
+        user.nickname = "reporter"
+        user.description = "reporter_description"
     end
+
+    require_relative 'points_of_interest'
 end

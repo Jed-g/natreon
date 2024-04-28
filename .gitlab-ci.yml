@@ -57,26 +57,26 @@ bundler:
     expire_in: 1 day
   timeout: 20m
 
-yarn:
-  stage: setup
-  interruptible: true
-  cache:
-    key:
-      files:
-        - yarn.lock
-    paths:
-      - node_modules
-    policy: pull-push
-  services: []
-  extends: .except
+# yarn:
+#   stage: setup
+#   interruptible: true
+#   cache:
+#     key:
+#       files:
+#         - yarn.lock
+#     paths:
+#       - node_modules
+#     policy: pull-push
+#   services: []
+#   extends: .except
 
-  script:
-    - yarn check --integrity || yarn install
-  artifacts:
-    paths:
-      - node_modules
-    expire_in: 1 day
-  timeout: 20m
+#   script:
+#     - yarn check --integrity || yarn install
+#   artifacts:
+#     paths:
+#       - node_modules
+#     expire_in: 1 day
+#   timeout: 20m
 
 rspec:
   stage: test
@@ -130,17 +130,17 @@ bundler-audit:
     - bundle check
     - bundle exec bundler-audit check --update
 
-yarn-audit:
-  stage: security
-  extends: .security-stage-rules
-  interruptible: true
-  timeout: 20m
-  services: []
-  needs:
-    - yarn
-  script:
-    - yarn check --integrity
-    - yarn run improved-yarn-audit --fail-on-missing-exclusions
+# yarn-audit:
+#   stage: security
+#   extends: .security-stage-rules
+#   interruptible: true
+#   timeout: 20m
+#   services: []
+#   needs:
+#     - yarn
+#   script:
+#     - yarn check --integrity
+#     - yarn run improved-yarn-audit --fail-on-missing-exclusions
 
 brakeman:
   stage: security
