@@ -124,5 +124,7 @@ Rails.application.routes.draw do
       get "/avatar", to: "customer/points_badges#avatar_dropdown_current_total_points"
       get "/in-progress", to: "customer/points_badges#all_in_progress"
     end
+
+    resources :posts, only: [:index, :create]
   end
 end

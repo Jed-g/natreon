@@ -52,6 +52,8 @@ class User < ApplicationRecord
   has_many :poi_pictures, foreign_key: :user_id
   has_many :submitted_picture_poi, through: :poi_pictures, source: :poi
 
+  has_many :posts
+
   def active_for_authentication?
     super && !deactivated
   end
