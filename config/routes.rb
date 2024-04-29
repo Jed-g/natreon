@@ -125,6 +125,6 @@ Rails.application.routes.draw do
       get "/in-progress", to: "customer/points_badges#all_in_progress"
     end
 
-    resources :posts, only: [:index, :create]
+    resources :posts, only: [:index, :create, :update, :destroy]
   end
 end

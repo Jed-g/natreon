@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class PostsController < ApplicationController
+  before_action :set_post, only: %i[update destroy]
+
   def index
-    @posts = Post.all.order(created_at: :desc)
-    render json: @posts.as_json(include: { user: { only: [:nickname] } })
+    @posts = Post.order(created_at: :desc)
+    render json: @posts.as_json(include: {user: {only: [:nickname]}})
   end
 
   def create
@@ -16,7 +18,24 @@ class PostsController < ApplicationController
     end
   end
 
+  def update
+    if @post.update(post_params)
+      render json: @post
+    else
+      render json: @post.errors, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @post.destroy
+    head :no_content
+  end
+
   private
+
+  def set_post
+    @post = Post.find(params[:id])
+  end
 
   def post_params
     params.require(:post).permit(:content)

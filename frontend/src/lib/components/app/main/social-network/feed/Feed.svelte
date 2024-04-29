@@ -1,57 +1,171 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { Textarea } from "$lib/components/ui/textarea/index.js";
-    import { Button } from "$lib/components/ui/button";
-    import * as Card from "$lib/components/ui/card/index.js";
+	import { onMount } from 'svelte';
+	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Button } from '$lib/components/ui/button';
+	import * as Card from '$lib/components/ui/card/index.js';
+	import { Trash, Pencil, Check, ClipboardX } from 'lucide-svelte';
 
-    let content = '';
-    let posts = [];
+	let content = '';
+	let isEditing: { [key: string]: boolean } = {};
+	let editedText = {};
+	let posts: any[] = [];
 
-    const createPost = async () => {
-        const response = await fetch('/api/posts', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-            },
-            body: JSON.stringify({ content })
-        });
-        if (response.ok) {
-            content = '';
-            await fetchPosts(); 
-        } else {
-            console.error('Post creation failed.');
-        }
-    };
+	const createPost = async () => {
+		const response = await fetch('/api/posts', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+			},
+			body: JSON.stringify({ content })
+		});
+		if (response.ok) {
+			content = '';
+			await fetchPosts();
+		} else {
+			console.error('Post creation failed');
+		}
+	};
 
-    const fetchPosts = async () => {
-        const response = await fetch('/api/posts', {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-            }
-        });
-        if (response.ok) {
-            posts = await response.json();
-        } else {
-            console.error('Failed to fetch posts.');
-        }
-    };
+	const fetchPosts = async () => {
+		const response = await fetch('/api/posts', {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+			}
+		});
+		if (response.ok) {
+			posts = await response.json();
+		} else {
+			console.error('Failed to get posts');
+		}
+	};
 
-    onMount(fetchPosts);
+	const updatePost = async (postId: string | number, editedText: string) => {
+		console.log(editedText);
+		const response = await fetch(`/api/posts/${postId}`, {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+			},
+			body: JSON.stringify({ post: { content: editedText } })
+		});
+		if (response.ok) {
+			isEditing[postId] = false;
+			let editedText: { [key: string]: string } = {};
+			await fetchPosts();
+		} else {
+			console.error('Post editing failed');
+		}
+	};
 
+	const deletePost = async (postId: any) => {
+		const response = await fetch(`/api/posts/${postId}`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+			}
+		});
+		if (response.ok) {
+			await fetchPosts();
+		} else {
+			console.error('Post deletion failed');
+		}
+	};
+
+	onMount(fetchPosts);
 </script>
 
 <Textarea bind:value={content} class="px-4 mb-2" placeholder="What's on your mind?" />
-<Button variant="outline" on:click={createPost}>Post</Button>
+<Button
+	variant="outline"
+	on:click={() => {
+		if (content.trim() !== '') {
+			createPost();
+		} else {
+			alert('You cannot make an empty post!');
+		}
+	}}>Post</Button
+>
 
 {#each posts as post (post.id)}
-<Card.Root >
-    <Card.Header>
-      <Card.Title>{post.user.nickname}</Card.Title>
-      <Card.Description>{new Date(post.created_at).toLocaleDateString("en-UK", { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</Card.Description>
-    </Card.Header>
-    <Card.Content>
-        {post.content}
-    </Card.Content>
-  </Card.Root>
+	<Card.Root class="card">
+		<Card.Header>
+			<Card.Title>{post.user.nickname}</Card.Title>
+
+			<div class="button-container">
+				<Button
+					on:click={() => {
+						isEditing[post.id] = true;
+						editedText[post.id] = post.content;
+					}}
+					class="icon-button"
+				>
+					<Pencil class="h-5 w-5" />
+				</Button>
+				<Button
+					on:click={() => {
+						if (confirm('Are you sure you want to delete this post?')) {
+							deletePost(post.id);
+						}
+					}}
+					class="icon-button bg-red-400 hover:bg-red-500"><Trash class="h-5 w-5" /></Button
+				>
+			</div>
+
+			<Card.Description>
+				{#if post.updated_at !== post.created_at}
+					{new Date(post.updated_at).toLocaleDateString('en-UK', {
+						year: 'numeric',
+						month: 'long',
+						day: 'numeric',
+						hour: '2-digit',
+						minute: '2-digit'
+					})}
+					<span> (edited)</span>
+				{:else}
+					{new Date(post.created_at).toLocaleDateString('en-UK', {
+						year: 'numeric',
+						month: 'long',
+						day: 'numeric',
+						hour: '2-digit',
+						minute: '2-digit'
+					})}
+				{/if}
+			</Card.Description>
+		</Card.Header>
+
+		<Card.Content>
+			{#if isEditing[post.id]}
+				<form class="flex w-full max-w-sm items-center space-x-2">
+					<Input class="max-w-xs" bind:value={editedText[post.id]} />
+					<!-- <input bind:value={editedText[post.id]} /> -->
+					<Button
+						on:click={() => {
+							if (editedText[post.id].trim() !== '') {
+								updatePost(post.id, editedText[post.id]);
+							} else {
+								alert('Post content cannot be empty');
+							}
+						}}><Check class="icon-button h-3 w-3" /></Button
+					>
+					<Button
+						on:click={() => (isEditing[post.id] = false)}
+						class="icon-button bg-red-400 hover:bg-red-500"><ClipboardX class="h-3 w-3" /></Button
+					>
+				</form>
+			{:else}
+				{post.content}
+			{/if}
+		</Card.Content>
+	</Card.Root>
 {/each}
+
+<style>
+	.button-container {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+	}
+</style>
