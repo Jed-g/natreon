@@ -37,6 +37,7 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 gem "activerecord-session_store"
+gem "active_storage_validations"
 gem "cancancan"
 gem "daemons"
 gem "delayed_job"
@@ -59,7 +60,7 @@ gem "rubocop-rspec"
 gem "sanitize_email"
 gem "sentry-rails"
 gem "sentry-ruby"
-gem "shakapacker"
+gem "shakapacker", "7.0.3"
 gem "simple_form"
 gem "whenever"
 

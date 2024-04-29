@@ -1,12 +1,13 @@
 <script lang="ts">
 	import Header from '$lib/components/admin/header/Header.svelte';
 	import SideMenu from '$lib/components/admin/sidemenu/SideMenu.svelte';
-	import AdminDashboardUrls from '$lib/enums/adminDashboardUrls.js';
+	import AdminDashboardUrls from '$lib/enums/AdminDashboardUrls';
 	import Overview from '$lib/components/admin/main/overview/Overview.svelte';
 	import Users from '$lib/components/admin/main/users/Users.svelte';
 	import Reviews from '$lib/components/admin/main/reviews/Reviews.svelte';
 	import QA from '$lib/components/admin/main/questions/QA.svelte';
 	import MailingList from '$lib/components/admin/main/mailinglist/MailingList.svelte';
+	import ManagePOIs from '$lib/components/admin/main/managepois/ManagePOIs.svelte';
 	import type { SvelteComponent } from 'svelte';
 
 	export let data;
@@ -27,6 +28,9 @@
 				break;
 			case AdminDashboardUrls.MAILING_LIST:
 				mainComponent = MailingList;
+				break;
+			case AdminDashboardUrls.MANAGE_POIS:
+				mainComponent = ManagePOIs;
 				break;
 			default:
 				mainComponent = Overview;

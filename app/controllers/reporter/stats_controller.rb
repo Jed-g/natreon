@@ -55,7 +55,7 @@ module Reporter
       entries = LandingPageVisit.all.group_by(&:session_id)
 
       counts = Hash.new(0)
-      entries.each do |_session_id, visits|
+      entries.each_value do |visits|
         paths = visits.pluck(:path_to_registration).map {|path| path.split("/") }
         unique_paths = paths.flatten(1).reject(&:empty?).uniq
         unique_paths.each {|path| counts[path] += 1 }

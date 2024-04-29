@@ -52,7 +52,12 @@ export const logIn = async (email: string, password: string) => {
  * @param password The password of the user to sign up.
  * @returns A Promise that resolves to a boolean indicating whether the sign up was successful.
  */
-export const signUp = async (email: string, nickname: string, description: string,  password: string) => {
+export const signUp = async (
+	email: string,
+	nickname: string,
+	description: string,
+	password: string
+) => {
 	try {
 		const response = await fetch('/api/auth/signup', {
 			method: 'POST',

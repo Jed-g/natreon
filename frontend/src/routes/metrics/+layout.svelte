@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '$lib/global.css';
 	import { authenticated } from '$lib/stores';
 	import { onDestroy, onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
