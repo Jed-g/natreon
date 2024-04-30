@@ -54,6 +54,12 @@ class User < ApplicationRecord
 
   has_many :posts
 
+  has_many :friend_requests, dependent: :destroy
+  has_many :pending_friends, through: :friend_requests, source: :friend
+
+  has_many :friendships, dependent: :destroy
+  has_many :friends, through: :friendships
+
   def active_for_authentication?
     super && !deactivated
   end
@@ -151,5 +157,9 @@ previous_threshold: previous_threshold}
       previous_threshold = threshold
       return_value
     end
+  end
+
+  def remove_friend(friend)
+    current_user.friends.destroy(friend)
   end
 end
