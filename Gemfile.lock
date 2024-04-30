@@ -357,8 +357,7 @@ GEM
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     sanitize_email (2.0.3)
-    selenium-webdriver (4.20.1)
-      base64 (~> 0.2)
+    selenium-webdriver (4.16.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -425,6 +424,7 @@ DEPENDENCIES
   active_storage_validations
   activerecord-session_store
   annotate
+  base64 (= 0.1.1)
   bcrypt_pbkdf (>= 1.0, < 2.0)
   bootsnap
   brakeman

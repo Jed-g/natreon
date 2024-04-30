@@ -63,6 +63,7 @@ gem "sentry-ruby"
 gem "shakapacker", "7.0.3"
 gem "simple_form"
 gem "whenever"
+gem "base64", "0.1.1"
 
 group :development do
   gem "annotate"
