@@ -17,7 +17,6 @@
 			}
 		});
 
-		// console.log(response);
 		if (!response.ok) {
 			const message = `[Connections.svelte] ERROR: ${response.status}`;
 			throw new Error(message);
@@ -77,7 +76,6 @@
 			throw new Error(message);
 		}
 
-		// console.log(response);
 		fetchUsers();
 		fetchFriends();
 		fetchFriendRequests();
@@ -98,7 +96,6 @@
 			throw new Error(message);
 		}
 
-		// console.log(response);
 		fetchUsers();
 		fetchFriends();
 		fetchFriendRequests();
@@ -111,9 +108,9 @@
 
 <h1 class="text-xl font-bold mb-4">Your Connections</h1>
 {#if friends.length === 0}
-	<p>Add some friends to get started!</p>
+	<p class="mb-8">Add some friends to get started!</p>
 {:else}
-	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
 		{#each friends as friend}
 			<Card.Root class="card">
 				<Card.Header>
@@ -124,50 +121,54 @@
 	</div>
 {/if}
 
-<h1 class="text-xl font-bold mb-4">Received Friend Requests</h1>
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-	{#each incomingFriendRequests as incomingFriend}
-		<Card.Root class="card">
-			<Card.Header>
-				<Card.Title>{incomingFriend.user.nickname}</Card.Title>
-			</Card.Header>
+{#if incomingFriendRequests.length !== 0}
+	<h1 class="text-xl font-bold mb-4">Received Friend Requests</h1>
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+		{#each incomingFriendRequests as incomingFriend}
+			<Card.Root class="card">
+				<Card.Header>
+					<Card.Title>{incomingFriend.user ? incomingFriend.user.nickname : 'Unknown'}</Card.Title>
+				</Card.Header>
 
-			<Card.Content>
-				<Button
-					on:click={() => {
-						console.log(incomingFriend.user.id);
-						acceptFriendRequest(incomingFriend.id);
-					}}>Accept</Button
-				>
-			</Card.Content>
-		</Card.Root>
-	{/each}
-</div>
+				<Card.Content>
+					<Button
+						on:click={() => {
+							console.log(incomingFriend.user.id);
+							acceptFriendRequest(incomingFriend.id);
+						}}>Accept</Button
+					>
+				</Card.Content>
+			</Card.Root>
+		{/each}
+	</div>
+{/if}
 
-<h1 class="text-xl font-bold mb-4">Sent Friend Requests</h1>
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-	{#each outgoingFriendRequests as outgoingFriend}
-		<Card.Root class="card">
-			<Card.Header>
-				<Card.Title>{outgoingFriend.friend ? outgoingFriend.friend.nickname : '???'}</Card.Title>
-			</Card.Header>
+{#if users.length !== 0}
+	<h1 class="text-xl font-bold mb-4">People you might know</h1>
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+		{#each users as user}
+			<Card.Root class="card">
+				<Card.Header>
+					<Card.Title>{user.nickname}</Card.Title>
+				</Card.Header>
 
-		</Card.Root>
-	{/each}
-</div>
+				<Card.Content>
+					<Button on:click={() => sendFriendRequest(user.id)}>Add Friend</Button>
+				</Card.Content>
+			</Card.Root>
+		{/each}
+	</div>
+{/if}
 
-<h1 class="text-xl font-bold mb-4">People you might know</h1>
-
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-	{#each users as user}
-		<Card.Root class="card">
-			<Card.Header>
-				<Card.Title>{user.nickname}</Card.Title>
-			</Card.Header>
-
-			<Card.Content>
-				<Button on:click={() => sendFriendRequest(user.id)}>Add Friend</Button>
-			</Card.Content>
-		</Card.Root>
-	{/each}
-</div>
+{#if outgoingFriendRequests.length !== 0}
+	<h1 class="text-xl font-bold mb-4">Sent Friend Requests</h1>
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+		{#each outgoingFriendRequests as outgoingFriend}
+			<Card.Root class="card">
+				<Card.Header>
+					<Card.Title>{outgoingFriend.friend ? outgoingFriend.friend.nickname : 'Unknown'}</Card.Title>
+				</Card.Header>
+			</Card.Root>
+		{/each}
+	</div>
+{/if}
