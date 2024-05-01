@@ -2,7 +2,10 @@
 
 class UsersController < ApplicationController
   def index
-    users = User.select(:id, :nickname)
+    friends_ids = current_user.friends.pluck(:id)
+    requested_friends_ids = current_user.friend_requests.pluck(:friend_id)
+    exclude_ids = friends_ids + requested_friends_ids + [current_user.id]
+    users = User.where.not(id: exclude_ids).select(:id, :nickname)
     render json: users
   end
 end

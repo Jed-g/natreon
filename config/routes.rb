@@ -131,8 +131,9 @@ Rails.application.routes.draw do
         put :accept
       end
     end
-    resources :friends, only: [:create, :index, :update, :destroy]
-    resources :users, only: [:index]
-    
+
+    resources :users, only: [:create, :index, :update, :destroy]
+    resources :friends, only: [:index, :destroy]
+
   end
 end
