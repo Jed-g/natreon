@@ -4,7 +4,8 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[update destroy]
 
   def index
-    @posts = Post.order(created_at: :desc)
+    friend_ids = current_user.friends.pluck(:id)
+    @posts = Post.where(user_id: friend_ids + [current_user.id]).order(created_at: :desc)
     render json: @posts.as_json(include: {user: {only: [:nickname]}})
   end
 

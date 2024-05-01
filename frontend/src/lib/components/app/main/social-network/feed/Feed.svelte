@@ -11,6 +11,20 @@
 	let editedText = {};
 	let posts: any[] = [];
 
+	let current_user = null;
+
+	onMount(async () => {
+		const response = await fetch('/api/users/show', {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+			}
+		});
+		if (response.ok) {
+			current_user = await response.json();
+			console.log(current_user);
+		}
+	});
+
 	const createPost = async () => {
 		const response = await fetch('/api/posts', {
 			method: 'POST',
@@ -90,7 +104,7 @@
 >
 
 {#each posts as post (post.id)}
-	<Card.Root class="card">
+	<Card.Root class="card m-2">
 		<Card.Header>
 			<Card.Title>{post.user.nickname}</Card.Title>
 

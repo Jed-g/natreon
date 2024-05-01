@@ -132,7 +132,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :users, only: [:create, :index, :update, :destroy]
+    resources :users, only: [:create, :index, :update, :destroy, :show]
     resources :friends, only: [:index, :destroy]
 
   end
