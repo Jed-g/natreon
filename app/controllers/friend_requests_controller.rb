@@ -5,15 +5,16 @@ class FriendRequestsController < ApplicationController
   before_action :set_friend_request, except: %i[index create]
 
   def index
-    @incoming = FriendRequest.where(friend: current_user)
-    @outgoing = current_user.friend_requests
+    @incoming = FriendRequest.where(friend: current_user).includes(:user)
+    @outgoing = current_user.friend_requests.includes(:friend)
 
-    render json: @incoming
+    render json: {incoming: @incoming.as_json(include: :user),
+                  outgoing: @outgoing.as_json(include: {friend: {only: :nickname}})}
   end
 
   def create
     friend = User.find(params[:friend_id])
-    @friend_request = current_user.friend_requests.new(friend: friend)
+    @friend_request = current_user.friend_requests.new(friend:)
 
     if @friend_request.save
       render :show, status: :created, location: @friend_request
@@ -37,5 +38,4 @@ class FriendRequestsController < ApplicationController
   def set_friend_request
     @friend_request = FriendRequest.find(params[:id])
   end
-
 end

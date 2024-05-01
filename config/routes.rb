@@ -126,7 +126,12 @@ Rails.application.routes.draw do
     end
 
     resources :posts, only: [:index, :create, :update, :destroy]
-    resources :friend_requests, only: [:create, :index, :update, :destroy]
+    resources :friend_requests, only: [:create, :index, :update, :destroy] do
+      member do
+        put :accept
+      end
+    end
+    resources :friends, only: [:create, :index, :update, :destroy]
     resources :users, only: [:index]
     
   end
