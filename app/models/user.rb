@@ -159,7 +159,7 @@ previous_threshold: previous_threshold}
     end
   end
 
-  def remove_friend(friend)
+  def remove_friend(friend, current_user)
     current_user.friends.destroy(friend)
   end
 end

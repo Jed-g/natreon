@@ -101,6 +101,26 @@
 		fetchFriendRequests();
 	};
 
+	const deleteFriend = async (friendId: any) => {
+		const response = await fetch(`/api/friends/${friendId}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+			},
+			body: JSON.stringify({ id: friendId })
+		});
+
+		if (!response.ok) {
+			const message = `[Connections.svelte] ERROR: ${response.status}`;
+			throw new Error(message);
+		}
+
+		fetchUsers();
+		fetchFriends();
+		fetchFriendRequests();
+	};
+
 	onMount(fetchUsers);
 	onMount(fetchFriends);
 	onMount(fetchFriendRequests);
@@ -116,6 +136,15 @@
 				<Card.Header>
 					<Card.Title>{friend.nickname}</Card.Title>
 				</Card.Header>
+				<Card.Content>
+					<Button
+						class="bg-red-500 text-white"
+						on:click={() => {
+							console.log(friend.id);
+							deleteFriend(friend.id);
+						}}>Delete</Button
+					>
+				</Card.Content>
 			</Card.Root>
 		{/each}
 	</div>
@@ -166,7 +195,9 @@
 		{#each outgoingFriendRequests as outgoingFriend}
 			<Card.Root class="card">
 				<Card.Header>
-					<Card.Title>{outgoingFriend.friend ? outgoingFriend.friend.nickname : 'Unknown'}</Card.Title>
+					<Card.Title
+						>{outgoingFriend.friend ? outgoingFriend.friend.nickname : 'Unknown'}</Card.Title
+					>
 				</Card.Header>
 			</Card.Root>
 		{/each}

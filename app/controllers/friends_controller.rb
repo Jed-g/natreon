@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class FriendsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_friend, only: :destroy
 
   def index
@@ -9,7 +10,7 @@ class FriendsController < ApplicationController
   end
 
   def destroy
-    current_user.remove_friend(@friend)
+    current_user.remove_friend(@friend, current_user)
     head :no_content
   end
 
