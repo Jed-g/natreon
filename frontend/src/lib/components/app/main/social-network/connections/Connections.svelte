@@ -101,6 +101,25 @@
 		fetchFriendRequests();
 	};
 
+	const rejectFriendRequest = async (friendRequestId: any) => {
+		const response = await fetch(`/api/friend_requests/${friendRequestId}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+			},
+		});
+
+		if (!response.ok) {
+			const message = `[Connections.svelte] ERROR: ${response.status}`;
+			throw new Error(message);
+		}
+
+		fetchUsers();
+		fetchFriends();
+		fetchFriendRequests();
+	}
+
 	const deleteFriend = async (friendId: any) => {
 		const response = await fetch(`/api/friends/${friendId}`, {
 			method: 'DELETE',
@@ -162,9 +181,14 @@
 				<Card.Content>
 					<Button
 						on:click={() => {
-							console.log(incomingFriend.user.id);
 							acceptFriendRequest(incomingFriend.id);
 						}}>Accept</Button
+					>
+					<Button
+						class="bg-red-500 text-white"
+						on:click={() => {
+							rejectFriendRequest(incomingFriend.id);
+						}}>Reject</Button
 					>
 				</Card.Content>
 			</Card.Root>
