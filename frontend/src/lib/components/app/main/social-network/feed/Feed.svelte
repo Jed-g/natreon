@@ -11,7 +11,7 @@
 	let editedText = {};
 	let posts: any[] = [];
 
-	let current_user = null;
+	let current_user: { id: any; } | null = null;
 
 	onMount(async () => {
 		const response = await fetch('/api/users/show', {
@@ -108,25 +108,27 @@
 		<Card.Header>
 			<Card.Title>{post.user.nickname}</Card.Title>
 
-			<div class="button-container">
-				<Button
-					on:click={() => {
-						isEditing[post.id] = true;
-						editedText[post.id] = post.content;
-					}}
-					class="icon-button"
-				>
-					<Pencil class="h-5 w-5" />
-				</Button>
-				<Button
-					on:click={() => {
-						if (confirm('Are you sure you want to delete this post?')) {
-							deletePost(post.id);
-						}
-					}}
-					class="icon-button bg-red-400 hover:bg-red-500"><Trash class="h-5 w-5" /></Button
-				>
-			</div>
+			{#if post.user.id === (current_user && current_user.id)}
+				<div class="button-container">
+					<Button
+						on:click={() => {
+							isEditing[post.id] = true;
+							editedText[post.id] = post.content;
+						}}
+						class="icon-button"
+					>
+						<Pencil class="h-5 w-5" />
+					</Button>
+					<Button
+						on:click={() => {
+							if (confirm('Are you sure you want to delete this post?')) {
+								deletePost(post.id);
+							}
+						}}
+						class="icon-button bg-red-400 hover:bg-red-500"><Trash class="h-5 w-5" /></Button
+					>
+				</div>
+			{/if}
 
 			<Card.Description>
 				{#if post.updated_at !== post.created_at}

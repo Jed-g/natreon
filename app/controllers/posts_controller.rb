@@ -2,11 +2,12 @@
 
 class PostsController < ApplicationController
   before_action :set_post, only: %i[update destroy]
+  before_action :authorize_post, only: %i[update destroy]
 
   def index
     friend_ids = current_user.friends.pluck(:id)
     @posts = Post.where(user_id: friend_ids + [current_user.id]).order(created_at: :desc)
-    render json: @posts.as_json(include: {user: {only: [:nickname]}})
+    render json: @posts.as_json(include: {user: {only: %i[id nickname]}})
   end
 
   def create
@@ -40,5 +41,11 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:content)
+  end
+
+  def authorize_post
+    return if @post.user_id == current_user.id
+
+    render json: {error: "Not authorized"}, status: :unauthorized
   end
 end
