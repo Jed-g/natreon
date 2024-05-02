@@ -83,6 +83,7 @@ RSpec.describe QuestionsController do
     before do
       @question = create(:question)
       session[:questions_upvoted] = []
+      session[:questions_downvoted] = [@question.id]
     end
 
     # rubocop:disable RSpec/InstanceVariable
@@ -109,6 +110,16 @@ RSpec.describe QuestionsController do
           @question.reload
         }.to change { @question.upvotes }.by(1)
       end
+
+      it 'decreases the downvotes count and removes the question ID from session[:questions_downvoted]' do
+        session[:questions_downvoted] = [@question.id]
+        post :upvote_question, params: { id: @question.id }
+        @question.reload
+  
+        expect(@question.downvotes).to eq(0)
+        expect(session[:questions_downvoted]).not_to include(@question.id.to_s)
+      end
+  
     end
     # rubocop:enable RSpec/InstanceVariable
 

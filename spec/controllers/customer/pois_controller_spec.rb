@@ -18,15 +18,45 @@ RSpec.describe Customer::PoisController, type: :controller do
       expect(response).to have_http_status :ok
     end
 
+    let(:current_user )  { user }
+    let(:poi1) { create(:poi) }
+    
+    let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpg'), 'image/jpg')}
+    let(:poi_picture) { create(:poi_picture, poi_id: poi1.id, user_id: user.id, picture: valid_picture) }
+
+    before do
+        poi1.poi_pictures << poi_picture
+        get :all, params: { north: poi1.latitude + 1, south: poi1.latitude - 1, east: poi1.longitude + 1, west: poi1.longitude - 1 }
+        @json_response = JSON.parse(response.body)
+    end
+
+    it 'returns the correct lngLat' do
+        expect(@json_response.first['lngLat']).to eq({ 'lng' => poi1.longitude, 'lat' => poi1.latitude })
+      end
+
     it "returns all pois in the specified range" do
         puts "response.body: #{response.body}"
-        expect(JSON.parse(response.body)["id"]).to include(poi.id)
+        expect(JSON.parse(response.body)["id"]).to include(poi1.id)
+    end
+
+    it 'returns bad request when coordinates are out of range' do
+      get :all, params: { north: 91, south: -91, east: 181, west: -181 }
+      expect(response).to have_http_status(:bad_request)
+    end
+
+    it 'returns bad request when north is less than south or east is less than west' do
+      get :all, params: { north: -1, south: 1, east: -1, west: 1 }
+      expect(response).to have_http_status(:bad_request)
     end
   end
 
   describe "GET #single_poi_by_id" do
     context "when poi exists" do
+      let(:current_user )  { user }
+      let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpg'), 'image/jpg')}
+      let(:poi_picture) { create(:poi_picture, poi_id: poi.id, user_id: user.id, picture: valid_picture) }
       before do
+        poi.poi_pictures << poi_picture
         get :single_poi_by_id, params: { id: poi.id }
       end
 
@@ -64,8 +94,13 @@ RSpec.describe Customer::PoisController, type: :controller do
   end
 
   describe "GET #search_by_name" do
+    let(:current_user )  { user }
+    let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpg'), 'image/jpg')}
+    let(:poi_picture) { create(:poi_picture, poi_id: poi.id, user_id: user.id, picture: valid_picture) }
     context "when poi exists" do
+
       before do
+        poi.poi_pictures << poi_picture
         get :search_by_name, params: { name: poi.name }
       end
 
