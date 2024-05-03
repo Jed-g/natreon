@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe PoiPicture, type: :model do
   let(:user) { create(:user, user_type: "customer") }
   let(:poi) { create(:poi) }
-  let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpg'), 'image/jpg')}
+  let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')}
   let(:poi_picture) { create(:poi_picture, poi_id: poi.id, user_id: user.id, picture: valid_picture) }
 
   describe '#picture_id' do

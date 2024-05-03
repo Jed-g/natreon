@@ -24,7 +24,7 @@ RSpec.describe Customer::CheckInController do
 
         context 'when user has not checked in at the poi' do
             let(:current_user) { user }
-            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpg'), 'image/jpg')}
+            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')}
             let(:poi_picture) { create(:poi_picture, poi_id: poi.id, user_id: user.id, picture: valid_picture) }
             it 'returns poi with checkedIn set to false' do
                 poi.poi_pictures << poi_picture
@@ -42,7 +42,7 @@ RSpec.describe Customer::CheckInController do
 
         context 'when user has checked in at the poi' do
             let(:current_user) { user }
-            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpg'), 'image/jpg')}
+            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')}
             let(:poi_picture) { create(:poi_picture, poi_id: poi.id, user_id: user.id, picture: valid_picture) }
             
             it 'does not return the poi' do
@@ -124,7 +124,7 @@ RSpec.describe Customer::CheckInController do
             let(:current_user) { user }
             let(:poi2) { create(:poi) }
             let(:poi3) { create(:poi) }
-            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpg'), 'image/jpg')}
+            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')}
             let(:poi_picture2) { create(:poi_picture, poi_id: poi2.id, user_id: user.id, picture: valid_picture) }
             let(:poi_picture3) { create(:poi_picture, poi_id: poi3.id, user_id: user.id, picture: valid_picture) }
 

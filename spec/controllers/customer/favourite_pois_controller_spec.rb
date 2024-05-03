@@ -14,7 +14,7 @@ RSpec.describe Customer::FavouritePoisController do
             let(:current_user) { user }
             let(:poi1) { create(:poi) }
             let(:poi2) { create(:poi) }
-            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpg'), 'image/jpg')}
+            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')}
             let(:poi_picture1) { create(:poi_picture, poi_id: poi1.id, user_id: user.id, picture: valid_picture) }
             let(:poi_picture2) { create(:poi_picture, poi_id: poi2.id, user_id: user.id, picture: valid_picture) }
 

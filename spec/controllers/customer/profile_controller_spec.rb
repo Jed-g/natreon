@@ -52,7 +52,7 @@ RSpec.describe Customer::ProfileController do
   describe "PUT #update_profile_picture" do
     context "with valid params" do
       let(:valid_picture) {
-        Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpg'), 'image/jpg')
+        Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')
       }
 
       let (:current_user) { user }
