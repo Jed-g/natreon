@@ -82,7 +82,7 @@ test('A customer can upload a profile picture', async ({ page }) => {
   await page.locator('[data-testid="settings-button"]').first().click();
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
-  const imagePath = path.join(__dirname, 'image0001.jpg');
+  const imagePath = path.join(__dirname, 'image0001.jpeg');
   const inputFile = await page.getByLabel('Profile Picture:');
   await inputFile.setInputFiles(imagePath);
   await page.getByRole('button', { name: 'Upload Profile Picture' }).click();

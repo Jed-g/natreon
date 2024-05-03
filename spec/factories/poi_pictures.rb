@@ -8,14 +8,10 @@
 #  poi_id     :bigint           not null
 #  user_id    :bigint           not null
 #
-class PoiPicture < ApplicationRecord
-  belongs_to :user
-  belongs_to :poi
 
-  has_one_attached :picture
-  validates :picture, content_type: ['image/png', 'image/jpeg']
+FactoryBot.define do
+    factory :poi_picture do
+        
 
-  def picture_id
-    picture.attachment.blob_id if picture.attached?
-  end
+    end
 end
