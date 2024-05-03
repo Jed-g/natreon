@@ -110,6 +110,10 @@ module Customer
       return render_internal_server_error if @user.nil?
     end
 
+    def render_not_found
+      render json: { error: "Not Found" }, status: :not_found
+    end
+
     def validate_params
       params.require(:north)
       params.require(:south)
