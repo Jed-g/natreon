@@ -2,6 +2,10 @@
 
 require "rails_helper"
 
+RSpec.configure do |config|
+  config.include RSpec::Benchmark::Matchers
+end
+
 RSpec.describe QuestionsController do
   let(:user) { create(:user, user_type: "customer") }
   let(:question) { create(:question) }
@@ -14,6 +18,9 @@ RSpec.describe QuestionsController do
   describe "#all_questions" do
     it "returns a list of all the questions" do
       get :all_questions
+      expect {
+        get :all_questions
+      }.to perform_under(50).ms
       expect(response).to have_http_status :ok
       json_response = response.parsed_body
 
@@ -42,6 +49,9 @@ RSpec.describe QuestionsController do
 
       it "creates a new question and returns a success message" do
         post :submit_question, params: {question: valid_question}
+        expect {
+          post :submit_question, params: {question: valid_question}
+      }.to perform_under(50).ms
         expect(response).to have_http_status :ok
         json_response = response.parsed_body
 

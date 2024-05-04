@@ -1,5 +1,13 @@
 
 require 'rails_helper'
+require "rspec-benchmark"
+require 'spec_helper'
+
+
+
+RSpec.configure do |config|
+  config.include RSpec::Benchmark::Matchers
+end
 
 RSpec.describe Customer::PoisController, type: :controller do
   let(:user) { create(:user, user_type: "customer") }

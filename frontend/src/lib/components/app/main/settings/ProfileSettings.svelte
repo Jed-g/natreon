@@ -132,7 +132,7 @@
 	onMount(getUserProfile);
 </script>
 
-<div class="grow flex flex-col items-center justify-center">
+<div class="flex flex-wrap justify-between">
 	{#if loading}
 		<div class="grow flex items-center justify-center">
 			<span class="loading loading-ring loading-lg" />
@@ -144,15 +144,16 @@
 			>
 		</div>
 	{:else}
-		<div class="p-6 bg-green-700 rounded shadow-md w-full md:w-3/4 lg:w-1/2">
+		<div class="relative card h-full w-full md:w-3/4 max-w-3xl md:max-h-[32rem] max-h-none flex bg-base-200 shadow-xl p-6 flex-col">
+			{#if !isEditing}
 			<div class="mb-4">
-				<h2 class="text-2xl font-bold mb-2">Details</h2>
+				<h2 class="text-2xl font-bold mb-2">User Details</h2>
 				<div>
 					<Label for="nickname">Nickname:</Label>
 					<Input
 						id="nickname"
 						bind:value={user.nickname}
-						readonly={isEditing && undefined}
+						readonly
 						class={'mt-1 block w-full rounded-md shadow-sm focus:border-green-300 ' +
 							(isEditing ? 'bg-card' : 'bg-muted')}
 					/>
@@ -180,24 +181,43 @@
 					rows={5}
 					cols={50}
 					bind:value={user.description}
-					readonly={isEditing && undefined}
+					readonly
 					class={'mt-1 block w-full rounded-md shadow-sm focus:border-green-300 ' +
 						(isEditing ? 'bg-card' : 'bg-muted')}
 				/>
 			</div>
 
-			{#if !isEditing}
-				<Button variant="outline" class="mt-4" on:click={toggleEdit}>Edit Profile</Button>
+			<Button variant="outline" class="btn bg-green-500 text-white mt-4" on:click={toggleEdit}>Edit Profile</Button>
 			{/if}
 
 			{#if isEditing}
-				<div class="text-white text-2xl text-center mt-2">Editing Profile</div>
-				<Button variant="outline" class="mt-4" on:click={saveChanges}>Save Changes</Button>
+			<h2 class="text-2xl font-bold mb-2">Editing User Details</h2>
+				<div>
+					<Label for="edit-email">Edit Nickname:</Label>
+					<Input
+						id="edit-nickname"
+						type="text"
+						bind:value={user.nickname}
+						class='mt-1 block w-full rounded-md shadow-sm focus:border-green-300 '
+					/>
+				</div>
+		
+				<div>
+					<Label for="edit-description">Edit Description:</Label>
+					<Textarea
+						id="edit-description"
+						rows={5}
+						cols={50}
+						bind:value={user.description}
+						class="mt-1 block w-full rounded-md shadow-sm focus:border-green-300"
+					/>
+				</div>
+		
+				<Button variant="outline" class=" bg-green-500 mt-4" on:click={saveChanges}>Save Changes</Button>
 			{/if}
 		</div>
 
-		<div class="mb-4 p-6 bg-green-700 text-white rounded shadow-md mt-6 w-full md:w-3/4 lg:w-1/2">
-			<div class="mb-4">
+		<div class="relative card h-full w-full md:w-3/4 max-w-3xl max-h-none flex bg-base-200 shadow-xl p-6 flex-col">
 				<h2 class="text-2xl font-bold mb-2">Profile Picture</h2>
 				{#if user.profile_picture === undefined}
 					<Card.Root class="mb-2">
@@ -226,9 +246,9 @@
 					on:change={selectFile}
 					class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"
 				/>
-			</div>
+			
 
-			<Button variant="outline" class="mt-4" on:click={handleUpload}>Upload Profile Picture</Button>
+			<Button variant="outline" class="bg-green-500 mt-4" on:click={handleUpload}>Upload Profile Picture</Button>
 		</div>
 	{/if}
 </div>
