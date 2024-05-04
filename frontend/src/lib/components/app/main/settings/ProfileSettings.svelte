@@ -154,7 +154,7 @@
 						id="nickname"
 						bind:value={user.nickname}
 						readonly
-						class={'mt-1 block w-full rounded-md shadow-sm focus:border-green-300 ' +
+						class={'mt-1 block w-full rounded-md shadow-sm ' +
 							(isEditing ? 'bg-card' : 'bg-muted')}
 					/>
 					{#if nicknameMin3}
@@ -170,7 +170,7 @@
 					type="text"
 					value={user.email}
 					readonly
-					class="mt-1 block w-full rounded-md shadow-sm focus:border-green-300 bg-muted"
+					class="mt-1 block w-full rounded-md shadow-sm  bg-muted"
 				/>
 			</div>
 
@@ -182,7 +182,7 @@
 					cols={50}
 					bind:value={user.description}
 					readonly
-					class={'mt-1 block w-full rounded-md shadow-sm focus:border-green-300 ' +
+					class={'mt-1 block w-full rounded-md shadow-sm bg-muted ' +
 						(isEditing ? 'bg-card' : 'bg-muted')}
 				/>
 			</div>
@@ -198,7 +198,7 @@
 						id="edit-nickname"
 						type="text"
 						bind:value={user.nickname}
-						class='mt-1 block w-full rounded-md shadow-sm focus:border-green-300 '
+						class='mt-1 block w-full rounded-md shadow-sm focus:border-green-300 bg-muted '
 					/>
 				</div>
 		
@@ -209,7 +209,7 @@
 						rows={5}
 						cols={50}
 						bind:value={user.description}
-						class="mt-1 block w-full rounded-md shadow-sm focus:border-green-300"
+						class="mt-1 block w-full rounded-md shadow-sm focus:border-green-300 bg-muted"
 					/>
 				</div>
 		

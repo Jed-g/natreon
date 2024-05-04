@@ -72,7 +72,7 @@
 			data-testid="settings-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			class="flex items-center text-sm justify-start"
-			><Settings2 class="h-5 w-5 mr-2" />Settings</Button
+			><Settings2 class="h-5 w-5 mr-2" />Profile Settings</Button
 		>
 	</li>
 	<div class="grow" />
