@@ -126,6 +126,10 @@ Rails.application.routes.draw do
     end
 
     resources :posts, only: [:index, :create, :update, :destroy]
+    resources :posts do
+      post 'like', on: :member
+    end
+
     resources :friend_requests, only: [:create, :index, :update, :destroy] do
       member do
         put :accept

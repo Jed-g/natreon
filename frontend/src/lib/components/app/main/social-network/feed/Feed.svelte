@@ -4,24 +4,19 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card/index.js';
-	import { Trash, Pencil, Check, ClipboardX } from 'lucide-svelte';
+	import { Trash, Pencil, Check, ClipboardX, ThumbsUp } from 'lucide-svelte';
 
 	let content = '';
 	let isEditing: { [key: string]: boolean } = {};
 	let editedText = {};
 	let posts: any[] = [];
 
-	let current_user: { id: any; } | null = null;
+	let current_user: { id: any } | null = null;
 
 	onMount(async () => {
-		const response = await fetch('/api/users/show', {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
-			}
-		});
+		const response = await fetch('/api/users/show', {});
 		if (response.ok) {
 			current_user = await response.json();
-			console.log(current_user);
 		}
 	});
 
@@ -29,8 +24,7 @@
 		const response = await fetch('/api/posts', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({ content })
 		});
@@ -43,11 +37,7 @@
 	};
 
 	const fetchPosts = async () => {
-		const response = await fetch('/api/posts', {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
-			}
-		});
+		const response = await fetch('/api/posts', {});
 		if (response.ok) {
 			posts = await response.json();
 		} else {
@@ -56,18 +46,15 @@
 	};
 
 	const updatePost = async (postId: string | number, editedText: string) => {
-		console.log(editedText);
 		const response = await fetch(`/api/posts/${postId}`, {
 			method: 'PUT',
 			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({ post: { content: editedText } })
 		});
 		if (response.ok) {
 			isEditing[postId] = false;
-			let editedText: { [key: string]: string } = {};
 			await fetchPosts();
 		} else {
 			console.error('Post editing failed');
@@ -76,7 +63,18 @@
 
 	const deletePost = async (postId: any) => {
 		const response = await fetch(`/api/posts/${postId}`, {
-			method: 'DELETE',
+			method: 'DELETE'
+		});
+		if (response.ok) {
+			await fetchPosts();
+		} else {
+			console.error('Post deletion failed');
+		}
+	};
+
+	const likePost = async (postId: any) => {
+		const response = await fetch(`/api/posts/${postId}/like`, {
+			method: 'POST',
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem('jwt')}`
 			}
@@ -84,7 +82,7 @@
 		if (response.ok) {
 			await fetchPosts();
 		} else {
-			console.error('Post deletion failed');
+			console.error('Post liking failed');
 		}
 	};
 
@@ -172,7 +170,22 @@
 					>
 				</form>
 			{:else}
-				{post.content}
+				<div class="flex justify-between items-center">
+					<p>{post.content}</p>
+					{#if post.user_id !== current_user?.id}
+						<div class="flex items-center">
+							<Button
+								on:click={() => {
+									console.log(`liked: ${post.id}`);
+									likePost(post.id);
+								}}
+								><div class="flex space-x-1">
+									<ThumbsUp /><span>{post.likes_count}</span>
+								</div></Button
+							>
+						</div>
+					{/if}
+				</div>
 			{/if}
 		</Card.Content>
 	</Card.Root>

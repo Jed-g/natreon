@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PostsController < ApplicationController
-  before_action :set_post, only: %i[update destroy]
+  before_action :set_post, only: %i[show update destroy like]
   before_action :authorize_post, only: %i[update destroy]
 
   def index
@@ -31,6 +31,23 @@ class PostsController < ApplicationController
   def destroy
     @post.destroy
     head :no_content
+  end
+
+  def like
+    like = @post.likes.find_by(user: current_user)
+  
+    if like
+      like.destroy
+      render json: { message: 'post unliked' }, status: :ok
+    else
+      like = @post.likes.build(user: current_user)
+  
+      if like.save
+        render json: @post, status: :created
+      else
+        render json: like.errors, status: :unprocessable_entity
+      end
+    end
   end
 
   private

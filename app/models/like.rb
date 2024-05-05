@@ -1,28 +1,24 @@
-# frozen_string_literal: true
-
 # == Schema Information
 #
-# Table name: posts
+# Table name: likes
 #
 #  id         :bigint           not null, primary key
-#  content    :text
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  post_id    :bigint           not null
 #  user_id    :bigint           not null
 #
 # Indexes
 #
-#  index_posts_on_user_id  (user_id)
+#  index_likes_on_post_id  (post_id)
+#  index_likes_on_user_id  (user_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (post_id => posts.id)
 #  fk_rails_...  (user_id => users.id)
 #
-class Post < ApplicationRecord
+class Like < ApplicationRecord
   belongs_to :user
-  has_many :likes, dependent: :destroy
-
-  def as_json(options={})
-    super(options).merge({likes_count: likes.count})
-  end
+  belongs_to :post
 end
