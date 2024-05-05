@@ -4,21 +4,15 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[show update destroy like]
   before_action :authorize_post, only: %i[update destroy]
 
-  # def index
-  #   friend_ids = current_user.friends.pluck(:id)
-  #   @posts = Post.where(user_id: friend_ids + [current_user.id]).order(created_at: :desc)
-  #   render json: @posts.as_json(include: {user: {only: %i[id nickname]}})
-  # end
-
   def index
     friend_ids = current_user.friends.pluck(:id)
     @posts = Post.where(user_id: friend_ids + [current_user.id]).order(created_at: :desc)
     render json: @posts.as_json(include: {
-      user: {only: %i[id nickname]},
-      comments: {
-        include: {user: {only: %i[id nickname]}}
-      }
-    })
+                                  user:     {only: %i[id nickname]},
+                                  comments: {
+                                    include: {user: {only: %i[id nickname]}}
+                                  }
+                                })
   end
 
   def create
@@ -46,13 +40,13 @@ class PostsController < ApplicationController
 
   def like
     like = @post.likes.find_by(user: current_user)
-  
+
     if like
       like.destroy
-      render json: { message: 'post unliked' }, status: :ok
+      render json: {message: "post unliked"}, status: :ok
     else
       like = @post.likes.build(user: current_user)
-  
+
       if like.save
         render json: @post, status: :created
       else

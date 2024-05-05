@@ -104,6 +104,17 @@
 		commentContent[postId] = '';
 	}
 
+	async function deleteComment(postId: any, commentId: any) {
+		const response = await fetch(`/api/posts/${postId}/comments/${commentId}`, {
+			method: 'DELETE'
+		});
+		if (response.ok) {
+			await fetchPosts();
+		} else {
+			console.error('Comment deletion failed');
+		}
+	}
+
 	onMount(fetchPosts);
 </script>
 
@@ -219,12 +230,33 @@
 					</Card.Header>
 					<Card.Content>
 						<p>{comment.content}</p>
+
+						{#if comment.user.id === (current_user && current_user.id)}
+							<div class="flex justify-end mt-4">
+								<Button
+									on:click={() => {
+										if (confirm('Are you sure you want to delete this comment?')) {
+											console.log(post.id, comment.id);
+											deleteComment(post.id, comment.id);
+										}
+									}}
+									class="icon-button bg-red-400 hover:bg-red-500"><Trash class="h-5 w-5" /></Button
+								>
+							</div>
+						{/if}
 					</Card.Content>
 				</Card.Root>
 			{/each}
 
-			<form on:submit|preventDefault={() => createComment(post.id)} class="flex justify-between mt-4">
-				<Input bind:value={commentContent[post.id]}  placeholder="Add a comment" class="w-full mr-2" />
+			<form
+				on:submit|preventDefault={() => createComment(post.id)}
+				class="flex justify-between mt-4"
+			>
+				<Input
+					bind:value={commentContent[post.id]}
+					placeholder="Write a comment..."
+					class="w-full mr-2"
+				/>
 				<button type="submit" disabled={!commentContent[post.id]}>Submit</button>
 			</form>
 		</Card.Content>

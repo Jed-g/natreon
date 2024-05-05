@@ -2,6 +2,8 @@
 
 class CommentsController < ApplicationController
   before_action :set_post
+  before_action :set_comment, only: %i[update destroy]
+  before_action :authorize_comment, only: %i[update destroy]
 
   def index
     @comments = @post.comments
@@ -39,10 +41,16 @@ class CommentsController < ApplicationController
   end
 
   def set_comment
-    @comment = @post.comments.find(params[:id])
+    @comment = Comment.find(params[:id])
   end
 
   def comment_params
     params.require(:comment).permit(:content)
+  end
+
+  def authorize_comment
+    return if @comment.user_id == current_user.id
+
+    render json: {error: "Not authorized"}, status: :unauthorized
   end
 end
