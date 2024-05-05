@@ -202,15 +202,31 @@
 					</div>
 				</div>
 			{/if}
-			<form on:submit|preventDefault={() => createComment(post.id)}>
-				<input bind:value={commentContent[post.id]} placeholder="add a comment" />
-				<button type="submit">Submit</button>
-			</form>
+
 			{#each post.comments as comment (comment.id)}
-				<div class="comment">
-					<p>{`${comment.user.nickname}: ${comment.content}`}</p>
-				</div>
+				<Card.Root class="mt-4">
+					<Card.Header>
+						<Card.Title>{comment.user.nickname}</Card.Title>
+						<Card.Description>
+							{new Date(comment.created_at).toLocaleDateString('en-UK', {
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric',
+								hour: '2-digit',
+								minute: '2-digit'
+							})}
+						</Card.Description>
+					</Card.Header>
+					<Card.Content>
+						<p>{comment.content}</p>
+					</Card.Content>
+				</Card.Root>
 			{/each}
+
+			<form on:submit|preventDefault={() => createComment(post.id)} class="flex justify-between mt-4">
+				<Input bind:value={commentContent[post.id]}  placeholder="Add a comment" class="w-full mr-2" />
+				<button type="submit" disabled={!commentContent[post.id]}>Submit</button>
+			</form>
 		</Card.Content>
 	</Card.Root>
 {/each}
