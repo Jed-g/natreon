@@ -80,4 +80,15 @@
 			><Icon icon={mapMarkerIcon} height={24} class="scale-125 mr-2" />Manage POIs</a
 		>
 	</li>
+	<div class="my-1" />
+	<li>
+		<a
+			class:font-semibold={slug === AdminDashboardUrls.MANAGE_COMMENTS}
+			class:active={slug === AdminDashboardUrls.MANAGE_COMMENTS}
+			href={`/admin${AdminDashboardUrls.MANAGE_COMMENTS ? '/' + AdminDashboardUrls.MANAGE_COMMENTS : ''}`}
+			data-testid="manage-comments-button"
+			on:click={() => dispatch('sideMenuItemClicked')}
+			><Icon icon={cardAccountMailIcon} height={24} class="scale-125 mr-2" />Manage Comments</a
+		>
+	</li>	
 </ul>

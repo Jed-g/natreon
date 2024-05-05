@@ -109,6 +109,14 @@ module Customer
 
       return render_internal_server_error if @user.nil?
     end
+    
+    def total_comments
+      comments.count
+    end
+  
+    def latest_comment
+      comments.order(created_at: :desc).first
+    end
 
     def validate_params
       params.require(:north)
