@@ -186,8 +186,7 @@
 						(isEditing ? 'bg-card' : 'bg-muted')}
 				/>
 			</div>
-
-			<Button variant="outline" class="btn bg-green-500 text-white mt-4" on:click={toggleEdit}>Edit Profile</Button>
+			<Button on:click={toggleEdit}>Edit Profile</Button>
 			{/if}
 
 			{#if isEditing}
@@ -212,8 +211,7 @@
 						class="mt-1 block w-full rounded-md shadow-sm focus:border-green-300 bg-muted"
 					/>
 				</div>
-		
-				<Button variant="outline" class=" bg-green-500 mt-4" on:click={saveChanges}>Save Changes</Button>
+				<Button on:click={saveChanges}>Save Changes</Button>
 			{/if}
 		</div>
 
@@ -247,8 +245,7 @@
 					class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"
 				/>
 			
-
-			<Button variant="outline" class="bg-green-500 mt-4" on:click={handleUpload}>Upload Profile Picture</Button>
+			<Button on:click={handleUpload}>Upload Profile Picture</Button>
 		</div>
 	{/if}
 </div>

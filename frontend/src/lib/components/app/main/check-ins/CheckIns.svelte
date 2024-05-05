@@ -55,7 +55,7 @@
 	<Card.Root class="relative p-4 h-full">
 		<div bind:this={cardHeader}>
 			<Card.Header class="p-0 pb-4 space-y-0">
-				<Card.Title class="mb-3">Check-ins</Card.Title>
+				<Card.Title tag="h2" class="mb-3">Check-ins</Card.Title>
 				<Separator />
 			</Card.Header>
 		</div>
