@@ -4,10 +4,21 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[show update destroy like]
   before_action :authorize_post, only: %i[update destroy]
 
+  # def index
+  #   friend_ids = current_user.friends.pluck(:id)
+  #   @posts = Post.where(user_id: friend_ids + [current_user.id]).order(created_at: :desc)
+  #   render json: @posts.as_json(include: {user: {only: %i[id nickname]}})
+  # end
+
   def index
     friend_ids = current_user.friends.pluck(:id)
     @posts = Post.where(user_id: friend_ids + [current_user.id]).order(created_at: :desc)
-    render json: @posts.as_json(include: {user: {only: %i[id nickname]}})
+    render json: @posts.as_json(include: {
+      user: {only: %i[id nickname]},
+      comments: {
+        include: {user: {only: %i[id nickname]}}
+      }
+    })
   end
 
   def create

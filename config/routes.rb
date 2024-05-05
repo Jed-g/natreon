@@ -125,9 +125,10 @@ Rails.application.routes.draw do
       get "/in-progress", to: "customer/points_badges#all_in_progress"
     end
 
-    resources :posts, only: [:index, :create, :update, :destroy]
-    resources :posts do
+    resources :posts, only: [:index, :create, :update, :destroy] do
       post 'like', on: :member
+    
+      resources :comments, only: [:create, :update, :destroy]
     end
 
     resources :friend_requests, only: [:create, :index, :update, :destroy] do

@@ -10,6 +10,7 @@
 	let isEditing: { [key: string]: boolean } = {};
 	let editedText = {};
 	let posts: any[] = [];
+	let commentContent: any = {};
 
 	let current_user: { id: any } | null = null;
 
@@ -86,6 +87,23 @@
 		}
 	};
 
+	async function createComment(postId: any) {
+		const response = await fetch(`/api/posts/${postId}/comments`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ content: commentContent[postId] } as { content: string })
+		});
+
+		if (!response.ok) {
+			console.error('Post comment failed');
+		}
+
+		fetchPosts();
+		commentContent[postId] = '';
+	}
+
 	onMount(fetchPosts);
 </script>
 
@@ -154,7 +172,6 @@
 			{#if isEditing[post.id]}
 				<form class="flex w-full max-w-sm items-center space-x-2">
 					<Input class="max-w-xs" bind:value={editedText[post.id]} />
-					<!-- <input bind:value={editedText[post.id]} /> -->
 					<Button
 						on:click={() => {
 							if (editedText[post.id].trim() !== '') {
@@ -172,21 +189,28 @@
 			{:else}
 				<div class="flex justify-between items-center">
 					<p>{post.content}</p>
-					{#if post.user_id !== current_user?.id}
-						<div class="flex items-center">
-							<Button
-								on:click={() => {
-									console.log(`liked: ${post.id}`);
-									likePost(post.id);
-								}}
-								><div class="flex space-x-1">
-									<ThumbsUp /><span>{post.likes_count}</span>
-								</div></Button
-							>
-						</div>
-					{/if}
+					<div class="flex items-center">
+						<Button
+							on:click={() => {
+								console.log(`liked: ${post.id}`);
+								likePost(post.id);
+							}}
+							><div class="flex space-x-1">
+								<ThumbsUp /><span>{post.likes_count}</span>
+							</div></Button
+						>
+					</div>
 				</div>
 			{/if}
+			<form on:submit|preventDefault={() => createComment(post.id)}>
+				<input bind:value={commentContent[post.id]} placeholder="add a comment" />
+				<button type="submit">Submit</button>
+			</form>
+			{#each post.comments as comment (comment.id)}
+				<div class="comment">
+					<p>{`${comment.user.nickname}: ${comment.content}`}</p>
+				</div>
+			{/each}
 		</Card.Content>
 	</Card.Root>
 {/each}
