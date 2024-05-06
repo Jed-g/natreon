@@ -73,7 +73,7 @@
 			deactivateAction={deactivateUser}
 			activateAction={activateUser}
 			tableFieldFormatters={{ user_type: (value) => value.toUpperCase() }}
-			tableHeaders={['Email', 'User Type', 'Deactivated?']}
+			tableHeaders={['Email', 'User Type', 'Active', '']}
 			tableName={'User Management'}
 		/>
 	</div>

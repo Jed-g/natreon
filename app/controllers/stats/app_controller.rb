@@ -4,9 +4,15 @@ module Stats
   class AppController < ApplicationController
     # rubocop:disable Metrics/AbcSize
     def register_new_page_visit
-      return render_bad_request if geolocation_from_ip(request.remote_ip).nil?
+      coords = geolocation_from_ip(request.remote_ip)
+      return render_bad_request if coords.nil?
 
-      page_visit = AppVisit.new(session_id: session.id, ip_address: request.remote_ip)
+      country = country_from_ip(request.remote_ip)
+      return render_bad_request if country.nil?
+
+      user = current_user
+      page_visit = AppVisit.new(session_id: session.id, ip_address: request.remote_ip, latitude: coords[:lat],
+                                longitude: coords[:lon], country:, email: user.email)
       return render_internal_server_error unless page_visit.valid?
 
       page_visit.save
@@ -19,9 +25,16 @@ module Stats
     def register_new_page_visit_with_ip_param
       ip = params[:ip]
       return render_bad_request if ip.nil?
-      return render_bad_request if geolocation_from_ip(ip).nil?
 
-      page_visit = AppVisit.new(session_id: session.id, ip_address: ip)
+      coords = geolocation_from_ip(ip)
+      return render_bad_request if coords.nil?
+
+      country = country_from_ip(ip)
+      return render_bad_request if country.nil?
+
+      user = current_user
+      page_visit = AppVisit.new(session_id: session.id, ip_address: ip, latitude: coords[:lat],
+                                longitude: coords[:lon], country:, email: user.email)
       return render_internal_server_error unless page_visit.valid?
 
       page_visit.save
