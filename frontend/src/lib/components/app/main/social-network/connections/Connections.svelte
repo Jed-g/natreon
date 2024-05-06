@@ -7,13 +7,13 @@
 	let friends: any[] = [];
 	let incomingFriendRequests: any[] = [];
 	let outgoingFriendRequests: any[] = [];
+	let blockedUsers: string | any[] = [];
 
 	const fetchUsers = async () => {
 		const response = await fetch('/api/users', {
 			method: 'GET',
 			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+				'Content-Type': 'application/json'
 			}
 		});
 
@@ -29,8 +29,7 @@
 		const response = await fetch('/api/friends', {
 			method: 'GET',
 			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+				'Content-Type': 'application/json'
 			}
 		});
 
@@ -40,14 +39,32 @@
 		}
 
 		friends = await response.json();
+		console.log('Friends:', friends);
+
+		const blockedResponse = await fetch('/api/blocks', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!blockedResponse.ok) {
+			const message = `[Connections.svelte] ERROR: ${blockedResponse.status}`;
+			throw new Error(message);
+		}
+
+		const blockedUsers = await blockedResponse.json();
+		console.log('Blocked users:', blockedUsers);
+		const unblockedUsers = friends.filter((user: { id: any }) => !blockedUsers.includes(user.id));
+
+		friends = unblockedUsers;
 	};
 
 	const fetchFriendRequests = async () => {
 		const response = await fetch('/api/friend_requests', {
 			method: 'GET',
 			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+				'Content-Type': 'application/json'
 			}
 		});
 
@@ -65,8 +82,7 @@
 		const response = await fetch('/api/friend_requests', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({ friend_id: userId })
 		});
@@ -85,8 +101,7 @@
 		const response = await fetch(`/api/friend_requests/${friendRequestId}`, {
 			method: 'PUT',
 			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({ friend_id: friendRequestId })
 		});
@@ -105,9 +120,8 @@
 		const response = await fetch(`/api/friend_requests/${friendRequestId}`, {
 			method: 'DELETE',
 			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
-			},
+				'Content-Type': 'application/json'
+			}
 		});
 
 		if (!response.ok) {
@@ -118,14 +132,13 @@
 		fetchUsers();
 		fetchFriends();
 		fetchFriendRequests();
-	}
+	};
 
 	const deleteFriend = async (friendId: any) => {
 		const response = await fetch(`/api/friends/${friendId}`, {
 			method: 'DELETE',
 			headers: {
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
+				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({ id: friendId })
 		});
@@ -140,9 +153,73 @@
 		fetchFriendRequests();
 	};
 
+	const blockUser = async (userId: any) => {
+		const response = await fetch(`/api/users/block/${userId}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const message = `[Connections.svelte] ERROR: ${response.status}`;
+			throw new Error(message);
+		} else {
+			deleteFriend(userId);
+		}
+
+		fetchUsers();
+		fetchFriends();
+		fetchBlockedUsers();
+	};
+
+	const unblockUser = async (userId: any) => {
+		const response = await fetch(`/api/users/unblock/${userId}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const message = `[Connections.svelte] ERROR: ${response.status}`;
+			throw new Error(message);
+		}
+
+		fetchUsers();
+		fetchFriends();
+		fetchBlockedUsers();
+	};
+
+	const fetchBlockedUsers = async () => {
+		const response = await fetch('/api/blocks', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		if (!response.ok) {
+			const message = `[Connections.svelte] ERROR: ${response.status}`;
+			throw new Error(message);
+		}
+
+		blockedUsers = await response.json();
+		fetchUsers();
+		fetchFriends();
+		fetchFriendRequests();
+	};
+
 	onMount(fetchUsers);
 	onMount(fetchFriends);
 	onMount(fetchFriendRequests);
+	onMount(fetchBlockedUsers);
+
+	$: users = users.filter(
+		(user) =>
+			Array.isArray(blockedUsers) &&
+			!blockedUsers.some((blockedUser: { id: any }) => blockedUser.id === user.id)
+	);
 </script>
 
 <h1 class="text-xl font-bold mb-4">Your Connections</h1>
@@ -162,6 +239,13 @@
 							console.log(friend.id);
 							deleteFriend(friend.id);
 						}}>Delete</Button
+					>
+					<Button
+						class="bg-yellow-500 text-white"
+						on:click={() => {
+							console.log(`Friend ID: ${friend.id}`);
+							blockUser(friend.id);
+						}}>Block</Button
 					>
 				</Card.Content>
 			</Card.Root>
@@ -223,6 +307,23 @@
 						>{outgoingFriend.friend ? outgoingFriend.friend.nickname : 'Unknown'}</Card.Title
 					>
 				</Card.Header>
+			</Card.Root>
+		{/each}
+	</div>
+{/if}
+
+{#if blockedUsers.length !== 0}
+	<h1 class="text-xl font-bold mb-4">Blocked</h1>
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+		{#each blockedUsers as user}
+			<Card.Root class="card">
+				<Card.Header>
+					<Card.Title>{user.nickname}</Card.Title>
+				</Card.Header>
+				<Card.Content>
+					<!-- <Button on:click={() => console.log(user.id)}>Unblock User</Button> -->
+					<Button on:click={() => unblockUser(user.id)}>Unblock User</Button>
+				</Card.Content>
 			</Card.Root>
 		{/each}
 	</div>

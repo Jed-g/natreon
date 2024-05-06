@@ -138,6 +138,9 @@ Rails.application.routes.draw do
     end
 
     resources :users, only: [:create, :index, :update, :destroy, :show]
+    post 'users/block/:id', to: 'blocks#block', as: 'block_user'
+    delete 'users/unblock/:id', to: 'blocks#unblock', as: 'unblock_user'
+    resources :blocks, only: [:create, :index, :update, :destroy]
     resources :friends, only: [:index, :destroy]
 
   end

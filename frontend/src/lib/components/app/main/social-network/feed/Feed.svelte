@@ -44,6 +44,7 @@
 		} else {
 			console.error('Failed to get posts');
 		}
+		
 	};
 
 	const updatePost = async (postId: string | number, editedText: string) => {

@@ -61,6 +61,9 @@ class User < ApplicationRecord
   has_many :friendships, dependent: :destroy
   has_many :friends, through: :friendships
 
+  has_many :blocks
+  has_many :blocked_users, through: :blocks, source: :blocked_user
+  
   def active_for_authentication?
     super && !deactivated
   end
