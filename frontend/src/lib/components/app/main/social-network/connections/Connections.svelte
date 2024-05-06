@@ -39,7 +39,6 @@
 		}
 
 		friends = await response.json();
-		console.log('Friends:', friends);
 
 		const blockedResponse = await fetch('/api/blocks', {
 			method: 'GET',
@@ -168,6 +167,7 @@
 			deleteFriend(userId);
 		}
 
+		rejectFriendRequest(userId);
 		fetchUsers();
 		fetchFriends();
 		fetchBlockedUsers();
