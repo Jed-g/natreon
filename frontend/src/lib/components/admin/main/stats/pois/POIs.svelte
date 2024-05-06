@@ -170,7 +170,7 @@
 		ALL_POI_VIEWS_WITH_DUPLICATES = 'allPOIViewsWithDuplicates'
 	}
 
-	let currentViewModeForPOIViewCounts: ViewMode = ViewMode.UNIQUE_APP_VISIT_GROUPED;
+	let currentViewModeForPOIViewCounts: ViewMode = ViewMode.UNIQUE_USER_GROUPED;
 
 	onMount(getPOIs);
 </script>

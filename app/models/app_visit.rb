@@ -19,8 +19,6 @@
 class AppVisit < ApplicationRecord
   self.table_name = "app_visits"
 
-  # Uncomment once deployed and app_visits table data cleared
-  # validate :email_exists_in_user
   validate :viewed_pois_exist
 
   private
@@ -30,8 +28,4 @@ class AppVisit < ApplicationRecord
       errors.add(:viewed_pois, "contains invalid poi_id: #{poi_id}") unless Poi.exists?(id: poi_id)
     end
   end
-
-  # def email_exists_in_user
-  #   errors.add(:email, "is not associated with any user") unless User.exists?(email: email)
-  # end
 end

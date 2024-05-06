@@ -2,6 +2,8 @@
 
 module Stats
   class AppController < ApplicationController
+    before_action :authorize_customer_controllers
+
     # rubocop:disable Metrics/AbcSize
     def register_new_page_visit
       coords = geolocation_from_ip(request.remote_ip)

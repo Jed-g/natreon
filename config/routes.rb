@@ -72,6 +72,7 @@ Rails.application.routes.draw do
     scope "admin/stats" do
       get "logins", to: "admin/stats/logins#all"
       get "pois", to: "admin/stats/pois#all"
+      get "points-badges", to: "admin/stats/points_badges#all"
     end
 
     get "/reporter/stats/globe", to: "reporter/stats#globe"
