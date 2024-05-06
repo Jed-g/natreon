@@ -3,6 +3,14 @@
 require "rails_helper"
 
 RSpec.describe Stats::ReporterPageController do
+  let(:user) { create(:user, user_type: "reporter") }
+  let(:admin) { create(:user, user_type: "admin") }
+  let(:current_user) { user } 
+
+  before do
+    allow(controller).to receive(:current_user).and_return(current_user)
+  end
+  
   describe "#register_new_page_visit" do
     context "with valid geolocation" do
       let(:valid_coords) { {lat: 23.456, lon: 45.678} }
