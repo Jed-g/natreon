@@ -104,6 +104,7 @@
 			>
 				<HoverCard.Trigger>
 					<Toggle
+						aria-label="Show Favourites Only"
 						class="text-secondary-foreground hover:text-accent-foreground data-[state=off]:hover:bg-accent data-[state=off]:bg-background data-[state=on]:bg-primary data-[state=on]:hover:brightness-90 data-[state=on]:text-error-content"
 						bind:pressed={onlyShowFavourites}><Heart /></Toggle
 					>

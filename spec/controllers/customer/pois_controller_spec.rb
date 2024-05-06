@@ -1,5 +1,13 @@
 
 require 'rails_helper'
+require "rspec-benchmark"
+require 'spec_helper'
+
+
+
+RSpec.configure do |config|
+  config.include RSpec::Benchmark::Matchers
+end
 
 RSpec.describe Customer::PoisController, type: :controller do
   let(:user) { create(:user, user_type: "customer") }
@@ -18,7 +26,16 @@ RSpec.describe Customer::PoisController, type: :controller do
       expect(response).to have_http_status :ok
     end
 
-    let(:current_user )  { user }
+    it "will perform in under 4 seconds under high data loads" do
+      1000.times do
+        create(:poi)
+      end
+      expect {
+        get :all, params: { north: 90, south: -90, east: 180, west: -180 }
+      }.to perform_under(4000).ms
+    end
+
+    let(:current_user )  { user } 
     let(:poi1) { create(:poi) }
     
     let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')}
@@ -81,6 +98,15 @@ RSpec.describe Customer::PoisController, type: :controller do
   describe "GET #all_poi_features" do
     before do
       get :all_poi_features
+    end
+
+    it "will perform in under 4 seconds under high data loads" do
+      1000.times do
+        create(:poi)
+      end
+      expect {
+        get :all_poi_features
+      }.to perform_under(4000).ms
     end
 
     it "returns a success response" do
