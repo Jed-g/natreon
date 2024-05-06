@@ -20,19 +20,42 @@ RSpec.describe Customer::CheckInController do
             end
         end
 
-        context 'when user has already checked into a POI' do
+        let(:poi) { create(:poi) }
+
+        context 'when user has not checked in at the poi' do
             let(:current_user) { user }
-            let(:poi2) { create(:poi) }
-          
-            it 'does not include the checked-in POI in the response' do
-                user.check_ins.create!(poi: poi)
-                user.check_ins.create!(poi: poi2)
+            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')}
+            let(:poi_picture) { create(:poi_picture, poi_id: poi.id, user_id: user.id, picture: valid_picture) }
+            it 'returns poi with checkedIn set to false' do
+                poi.poi_pictures << poi_picture
+                post :check_in_candidates, params: { latitude: poi.latitude, longitude: poi.longitude, accuracy_meters: 1.0 }
+
+                expect(response).to be_successful
+
+                json_response = JSON.parse(response.body)
+
+                json_response.each do |poi|
+                    expect(poi['checkedIn']).to eq(false)
+                end
+            end
+        end
+
+        context 'when user has checked in at the poi' do
+            let(:current_user) { user }
+            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')}
+            let(:poi_picture) { create(:poi_picture, poi_id: poi.id, user_id: user.id, picture: valid_picture) }
             
-                allow(controller).to receive(:params).and_return(latitude: '1.0', longitude: '1.0', accuracy_meters: '1.0')
-            
-                get :check_in_candidates
-            
-                expect(response.body).not_to include(poi2.id.to_s)
+            it 'does not return the poi' do
+                poi.poi_pictures << poi_picture
+                current_user.check_ins.create(poi: poi)
+
+                post :check_in_candidates, params: { latitude: poi.latitude, longitude: poi.longitude, accuracy_meters: 1.0 }
+
+                expect(response).to be_successful
+
+                json_response = JSON.parse(response.body)
+
+                expect(json_response).not_to include(poi)
             end
         end
     end
@@ -101,12 +124,17 @@ RSpec.describe Customer::CheckInController do
             let(:current_user) { user }
             let(:poi2) { create(:poi) }
             let(:poi3) { create(:poi) }
+            let(:valid_picture) {Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')}
+            let(:poi_picture2) { create(:poi_picture, poi_id: poi2.id, user_id: user.id, picture: valid_picture) }
+            let(:poi_picture3) { create(:poi_picture, poi_id: poi3.id, user_id: user.id, picture: valid_picture) }
 
         
             it 'returns all checked in pois for the user' do
                 user.check_ins.create(poi: poi)
                 user.check_ins.create(poi: poi2)
                 user.check_ins.create(poi: poi3)
+                poi2.poi_pictures << poi_picture2
+                poi3.poi_pictures << poi_picture3
                 get :all
             
                 expect(response).to be_successful
@@ -115,7 +143,7 @@ RSpec.describe Customer::CheckInController do
             
                 expect(json_response.size).to eq(3)
                 json_response.each do |poi|
-                    expect(poi.keys).to include('lngLat', 'name', 'id', 'isFavourite', 'description', 'features', 'likes', 'checkedIn', 'comments')
+                    expect(poi.keys).to include('lngLat', 'name', 'id', 'isFavourite', 'description', 'features', 'pictures', 'likes', 'checkedIn', 'comments')
                 end
             end
         end

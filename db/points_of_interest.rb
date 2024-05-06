@@ -9,6 +9,8 @@ POINTS_OF_INTEREST = [
         "The bandstand performances are always enjoyable.",
         "Love seeing the ducks and fish in the pond."
     ]},
+    {latitude: 53.39059, longitude: -1.50906, name: 'Bole Hill Recreation Ground', location: 'sheffield', 
+    description: 'Bolehill Recreation Ground, known locally as The Bole Hills is a public open space in the suburb of Crookes within the city of Sheffield, England.',features: FEATURES.sample(rand(1..5)), likes: rand(0..1000) , comments:[]},
     {latitude: 53.480759, longitude: -2.242631, name: 'Manchester', location: 'manchester', description: 'dummy desc', features: FEATURES.sample(rand(1..5)), likes: rand(0..1000) , comments:[]},
     {latitude: 53.408371, longitude: -2.978481, name: 'Liverpool', location: 'liverpool', description: 'dummy desc', features: FEATURES.sample(rand(1..5)), likes: rand(0..1000) , comments:[]},
     {latitude: 52.486243, longitude: -1.890401, name: 'Birmingham', location: 'birmingham', description: 'dummy desc', features: FEATURES.sample(rand(1..5)), likes: rand(0..1000) , comments:[]},

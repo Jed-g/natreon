@@ -6,11 +6,11 @@
 #
 #  id                     :bigint           not null, primary key
 #  deactivated            :boolean          default(FALSE)
-#  description            :string           not null
+#  description            :string           default("DEFAULT"), not null
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  jti                    :string           not null
-#  nickname               :string           not null
+#  nickname               :string           default("DEFAULT"), not null
 #  remember_created_at    :datetime
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
@@ -41,7 +41,7 @@ class User < ApplicationRecord
 
   has_one_attached :profile_picture
 
-  validates :profile_picture, content_type: ['image/png', 'image/jpg', 'image/jpeg']
+  validates :profile_picture, content_type: ['image/png', 'image/jpeg']
 
   has_many :favourites, foreign_key: :user_id
   has_many :favourite_pois, through: :favourites, source: :poi

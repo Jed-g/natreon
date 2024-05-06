@@ -33,6 +33,14 @@ RSpec.describe Admin::PoisController, type: :controller do
     end
   end
 
+  describe '#all_poi_feature_options' do
+    let(:current_user) { admin }  
+    it 'returns all POI feature options' do
+      get :all_poi_feature_options
+      expect(response.body).to eq({ allPOIFeatureOptions: Poi::FEATURES }.to_json)
+    end
+  end
+
   describe "POST #create_poi" do
     context "with valid params" do
       let(:valid_attributes) {

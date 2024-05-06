@@ -294,7 +294,7 @@
 		open={true}
 		onOpenChange={(newOpenValue) => newOpenValue || (() => (pictureFullScreen = null))()}
 	>
-		<Dialog.Content class="h-[90%] max-w-[90%] p-8">
+		<Dialog.Content class="h-[90%] max-w-[90%] overflow-y-auto p-8">
 			<Dialog.Header>
 				<Dialog.Description class="flex grow">
 					<Card.Root class="flex grow">

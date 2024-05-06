@@ -118,7 +118,7 @@
 		loadingAutoSuggestData = false;
 	};
 
-	$: if (searchQuery) {
+	$: if (searchQuery?.trim()) {
 		fetchMatchingPointsOfInterest();
 		fetchAutoSuggest();
 	}

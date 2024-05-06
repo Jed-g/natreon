@@ -57,6 +57,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_001440) do
     t.integer "time_spent_seconds", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "latitude", default: "0.0", null: false
+    t.decimal "longitude", default: "0.0", null: false
+    t.string "country", default: "DEFAULT", null: false
+    t.string "email", default: "DEFAULT", null: false
+    t.bigint "viewed_pois", default: [], null: false, array: true
   end
 
   create_table "blocks", force: :cascade do |t|
@@ -228,8 +233,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_001440) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "jti", null: false
-    t.string "nickname", null: false
-    t.string "description", null: false
+    t.string "nickname", default: "DEFAULT", null: false
+    t.string "description", default: "DEFAULT", null: false
     t.boolean "deactivated", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
