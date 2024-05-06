@@ -5,7 +5,7 @@
 	const getAllReviews = async () => {
 		const response = await fetch('/api/admin/reviews');
 		const data = await response.json();
-		console.log(data.users);
+
 		return data.users;
 	};
 

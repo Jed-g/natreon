@@ -134,11 +134,14 @@
 		<div bind:this={cardHeader}>
 			<Card.Header class="p-0 pb-4 space-y-0">
 				<div class="flex justify-between mb-3 items-center">
-					<Card.Title>Points & Badges</Card.Title>
+					<Card.Title tag="h2">Points & Badges</Card.Title>
 					<Popover.Root portal={null}>
 						<Popover.Trigger asChild let:builder>
-							<Button builders={[builder]} variant="secondary" size="icon"
-								><Info class="h-5 w-5" /></Button
+							<Button
+								aria-label="Additional Information"
+								builders={[builder]}
+								variant="secondary"
+								size="icon"><Info class="h-5 w-5" /></Button
 							>
 						</Popover.Trigger>
 						<Popover.Content class="w-80">
