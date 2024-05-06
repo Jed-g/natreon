@@ -1,41 +1,45 @@
 <script lang="ts">
-	import ManagementTable from '$lib/components/admin/main/comments/ManagementTable.svelte';
-	import { authenticated } from '$lib/stores';
+    import ManagementTable from '$lib/components/admin/main/comments/ManagementTable.svelte';
+    import { authenticated } from '$lib/stores';
 
     const getAllComments = async () => {
-        const response = await fetch('/api/admin/comments'); // Update the API endpoint to fetch comments
+        console.log("Fetching all comments...");
+        const response = await fetch('/api/admin/comments'); // Fetch comments from this endpoint
         const data = await response.json();
+        console.log("Comments fetched:", data);
         return data.comments;
     };
 
     const updateComment = async (id: number, values: Record<string, string>) => {
-        const response = await fetch('/api/admin/comments', { // Update the API endpoint to update comments
-            method: 'POST',
-            body: JSON.stringify({ id, comment: values.comment, rating: values.rating }), // Assuming comment and rating are the properties of a comment
+        console.log("Updating comment with ID:", id);
+        console.log("New values:", values);
+        const response = await fetch(`/api/admin/comments/${id}`, { // Update comment using this endpoint
+            method: 'PUT', // Assuming you are updating a comment using PUT method
+            body: JSON.stringify({ comment: values.comment, rating: values.rating }), // Assuming comment and rating are properties of a comment
             headers: {
                 'Content-Type': 'application/json'
             }
         });
         authenticated.verify();
         const data = await response.json();
+        console.log("Update response:", data);
         return data;
     };
 
     const deleteComment = async (id: number) => {
-        const response = await fetch('/api/admin/comments', { // Update the API endpoint to delete comments
+        console.log("Deleting comment with ID:", id);
+        const response = await fetch(`/api/admin/comments/${id}`, { // Delete comment using this endpoint
             method: 'DELETE',
-            body: JSON.stringify({ id }),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
         authenticated.verify();
         const data = await response.json();
+        console.log("Delete response:", data);
         return data;
     };
-
 </script>
-
 
 <div class="relative p-6 h-full w-full">
     <div class="relative card flex bg-base-100 shadow-xl p-6 flex-col h-full w-full overflow-x-auto">
@@ -43,7 +47,7 @@
             getItemsAction={getAllComments}
             editAction={updateComment}
             deleteAction={deleteComment}
-            tableHeaders={['Comment', 'Rating']} 
+            tableHeaders={['User Name','Poi Name','Comment', 'Rating']} 
             tableName={'Comments'} 
         />
     </div>

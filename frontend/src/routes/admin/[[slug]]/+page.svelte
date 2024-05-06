@@ -8,6 +8,8 @@
 	import QA from '$lib/components/admin/main/questions/QA.svelte';
 	import MailingList from '$lib/components/admin/main/mailinglist/MailingList.svelte';
 	import ManagePOIs from '$lib/components/admin/main/managepois/ManagePOIs.svelte';
+	import Comments from '$lib/components/admin/main/comments/Comments.svelte';
+
 	import type { SvelteComponent } from 'svelte';
 
 	export let data;
@@ -18,9 +20,11 @@
 	$: {
 		switch (data.slug) {
 			case AdminDashboardUrls.USERS:
+				console.log("Setting mainComponent to Users");
 				mainComponent = Users;
 				break;
 			case AdminDashboardUrls.REVIEWS:
+				console.log("Setting mainComponent to Reviews");
 				mainComponent = Reviews;
 				break;
 			case AdminDashboardUrls.QA:
@@ -32,7 +36,12 @@
 			case AdminDashboardUrls.MANAGE_POIS:
 				mainComponent = ManagePOIs;
 				break;
+			case AdminDashboardUrls.Comments:
+				console.log("Setting mainComponent to Comments");
+				mainComponent = Comments;
+				break;
 			default:
+				console.log("Setting mainComponent to Overview");
 				mainComponent = Overview;
 				break;
 		}

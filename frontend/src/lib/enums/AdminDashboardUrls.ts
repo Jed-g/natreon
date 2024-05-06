@@ -6,7 +6,7 @@ enum AdminDashboardUrls {
 	MAILING_LIST = 'mailing-list',
 	REPORT_RESPONSE = 'report-response',
 	MANAGE_POIS = 'manage-pois',
-	MANAGE_COMMENTS = 'comments' 
+	Comments = 'comments' 
 }
 
 export default AdminDashboardUrls;
