@@ -11,6 +11,7 @@
 #  latitude           :decimal(, )      default(0.0), not null
 #  longitude          :decimal(, )      default(0.0), not null
 #  time_spent_seconds :integer          default(0), not null
+#  viewed_pois        :bigint           default([]), not null, is an Array
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #  session_id         :string           not null
@@ -20,8 +21,15 @@ class AppVisit < ApplicationRecord
 
   # Uncomment once deployed and app_visits table data cleared
   # validate :email_exists_in_user
+  validate :viewed_pois_exist
 
-  # private
+  private
+
+  def viewed_pois_exist
+    viewed_pois.each do |poi_id|
+      errors.add(:viewed_pois, "contains invalid poi_id: #{poi_id}") unless Poi.exists?(id: poi_id)
+    end
+  end
 
   # def email_exists_in_user
   #   errors.add(:email, "is not associated with any user") unless User.exists?(email: email)

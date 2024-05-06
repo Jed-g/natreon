@@ -61,5 +61,23 @@ module Stats
       render json: {message: "Page visit updated successfully"}
     end
     # rubocop:enable Metrics/AbcSize
+
+    # rubocop:disable Metrics/AbcSize
+    def register_new_poi_click
+      poi_id = params[:poi_id].to_i
+      return render_bad_request if poi_id.nil? || !Poi.exists?(id: poi_id)
+
+      visit_id = session[:visit_id]
+      return render_bad_request if visit_id.nil? || !AppVisit.exists?(id: visit_id)
+
+      page_visit = AppVisit.find(visit_id)
+      page_visit.viewed_pois.push(poi_id)
+      if page_visit.save
+        render json: {message: "POI click registered successfully"}
+      else
+        render_internal_server_error
+      end
+    end
+    # rubocop:enable Metrics/AbcSize
   end
 end

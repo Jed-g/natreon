@@ -41,8 +41,8 @@
 				const validationResult = LoginType.decode(login);
 
 				if (isRight(validationResult)) {
-					const poiValidated: Login = validationResult.right;
-					dataIntermediate.push(poiValidated);
+					const loginValidated: Login = validationResult.right;
+					dataIntermediate.push(loginValidated);
 				} else {
 					console.error('Invalid Login object received from API: ', validationResult.left);
 				}

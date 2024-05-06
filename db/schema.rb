@@ -61,6 +61,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_05_224531) do
     t.decimal "longitude", default: "0.0", null: false
     t.string "country", default: "DEFAULT", null: false
     t.string "email", default: "DEFAULT", null: false
+    t.bigint "viewed_pois", default: [], null: false, array: true
   end
 
   create_table "check_ins", force: :cascade do |t|

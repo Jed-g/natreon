@@ -19,7 +19,7 @@
 		switch (slug) {
 			case AdminDashboardUrls.STATS_LOGINS:
 				statisticsComponent = Logins;
-				pageTitle = 'Logins';
+				pageTitle = 'Logins (App Visits)';
 				break;
 			case AdminDashboardUrls.STATS_POIS:
 				statisticsComponent = POIs;
