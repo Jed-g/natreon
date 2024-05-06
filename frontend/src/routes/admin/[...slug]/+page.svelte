@@ -8,15 +8,16 @@
 	import QA from '$lib/components/admin/main/questions/QA.svelte';
 	import MailingList from '$lib/components/admin/main/mailinglist/MailingList.svelte';
 	import ManagePOIs from '$lib/components/admin/main/managepois/ManagePOIs.svelte';
+	import Stats from '$lib/components/admin/main/stats/Stats.svelte';
 	import type { SvelteComponent } from 'svelte';
 
-	export let data;
+	export let data: { slug: string };
 	let menuClosed = true;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let mainComponent: (new (...args: any[]) => SvelteComponent) | null = null;
 
 	$: {
-		switch (data.slug) {
+		switch (data.slug.split('/')[0]) {
 			case AdminDashboardUrls.USERS:
 				mainComponent = Users;
 				break;
@@ -31,6 +32,9 @@
 				break;
 			case AdminDashboardUrls.MANAGE_POIS:
 				mainComponent = ManagePOIs;
+				break;
+			case AdminDashboardUrls.STATS:
+				mainComponent = Stats;
 				break;
 			default:
 				mainComponent = Overview;
@@ -47,11 +51,11 @@
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
-		class="relative flex grow bg-base-200 md:brightness-100 overflow-x-hidden"
+		class="relative flex grow bg-base-200 md:brightness-100 overflow-hidden"
 		class:brightness-50={!menuClosed}
 		on:click={() => (menuClosed = true)}
 	>
-		<svelte:component this={mainComponent} />
+		<svelte:component this={mainComponent} slug={data.slug} />
 	</div>
 </div>
 

@@ -230,6 +230,11 @@
 
 	let geolocationDisabled = false;
 
+	const registerPOIClick = (id: number) =>
+		fetch('/api/stats/app/register-new-poi-click?poi_id=' + encodeURIComponent(id), {
+			method: 'POST'
+		});
+
 	onMount(async () => {
 		const ipGeolocationRequest = async () => {
 			try {
@@ -402,6 +407,7 @@
 				on:click={() => {
 					idOfSelectedPOI = id;
 					map.flyTo({ center: lngLat, padding: { top: 300 } });
+					registerPOIClick(id);
 				}}
 				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 text-black shadow-2xl focus:outline-2 focus:outline-black' +
 					(idOfSelectedPOI === id ? ' border-4 box-content' : '') +
