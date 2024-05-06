@@ -8,21 +8,21 @@
 
 	let content = '';
 	let isEditing: { [key: string]: boolean } = {};
-	let editedText = {};
+	let editedText: { [key: string]: string } = {};
 	let posts: any[] = [];
 	let commentContent: any = {};
 
 	let current_user: { id: any } | null = null;
 
 	onMount(async () => {
-		const response = await fetch('/api/users/show', {});
+		const response = await fetch('/api/social/users/show', {});
 		if (response.ok) {
 			current_user = await response.json();
 		}
 	});
 
 	const createPost = async () => {
-		const response = await fetch('/api/posts', {
+		const response = await fetch('/api/social/posts', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -38,7 +38,7 @@
 	};
 
 	const fetchPosts = async () => {
-		const response = await fetch('/api/posts', {});
+		const response = await fetch('/api/social/posts', {});
 		if (response.ok) {
 			posts = await response.json();
 		} else {
@@ -48,7 +48,7 @@
 	};
 
 	const updatePost = async (postId: string | number, editedText: string) => {
-		const response = await fetch(`/api/posts/${postId}`, {
+		const response = await fetch(`/api/social/posts/${postId}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
@@ -64,7 +64,7 @@
 	};
 
 	const deletePost = async (postId: any) => {
-		const response = await fetch(`/api/posts/${postId}`, {
+		const response = await fetch(`/api/social/posts/${postId}`, {
 			method: 'DELETE'
 		});
 		if (response.ok) {
@@ -75,11 +75,11 @@
 	};
 
 	const likePost = async (postId: any) => {
-		const response = await fetch(`/api/posts/${postId}/like`, {
+		const response = await fetch(`/api/social/posts/${postId}/like`, {
 			method: 'POST',
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem('jwt')}`
-			}
+			// headers: {
+			// 	Authorization: `Bearer ${localStorage.getItem('jwt')}`
+			// }
 		});
 		if (response.ok) {
 			await fetchPosts();
@@ -89,7 +89,7 @@
 	};
 
 	async function createComment(postId: any) {
-		const response = await fetch(`/api/posts/${postId}/comments`, {
+		const response = await fetch(`/api/social/posts/${postId}/comments`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -106,7 +106,7 @@
 	}
 
 	async function deleteComment(postId: any, commentId: any) {
-		const response = await fetch(`/api/posts/${postId}/comments/${commentId}`, {
+		const response = await fetch(`/api/social/posts/${postId}/comments/${commentId}`, {
 			method: 'DELETE'
 		});
 		if (response.ok) {
@@ -119,7 +119,7 @@
 	onMount(fetchPosts);
 </script>
 
-<Textarea bind:value={content} class="px-4 mb-2" placeholder="What's on your mind?" />
+<Textarea bind:value={content} class="px-4 mb-2 focus-visible:mx-1 focus-visible:mt-1 focus-visible:w-[calc(100%-0.5rem)]" placeholder="What's on your mind?" />
 <Button
 	variant="outline"
 	on:click={() => {
