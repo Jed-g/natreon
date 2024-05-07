@@ -4,6 +4,7 @@
 #
 #  id         :bigint           not null, primary key
 #  rating     :integer
+#  reported   :boolean          default(FALSE)
 #  text       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

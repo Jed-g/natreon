@@ -2,26 +2,14 @@
 <script lang="ts">
     import ManagementTable from '$lib/components/admin/main/comments/ManagementTable.svelte';
     import { authenticated } from '$lib/stores';
+	import { toast } from 'svelte-sonner';
+
 
     const getAllComments = async () => {
         console.log("Fetching all comments...");
         const response = await fetch('/api/admin/comments'); // Fetch comments from this endpoint
         const data = await response.json();
         console.log("Comments fetched:", data);
-        return data;
-    };
-
-    const deleteComment = async (id: number) => {
-        console.log("Deleting comment with ID:", id);
-        const response = await fetch(`/api/admin/comments/${id}`, { // Delete comment using this endpoint
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        authenticated.verify();
-        const data = await response.json();
-        console.log("Delete response:", data);
         return data;
     };
 
@@ -37,6 +25,39 @@
         authenticated.verify();
         const data = await response.json();
         console.log("Change comment status response:", data);
+
+        // Show toast notification
+        if (response.ok) {
+            toast.success('Comment report status changed successfully!')
+            getAllComments();
+        } else {
+            toast.error('Failed to change comment report status');
+        }
+
+        return data;
+    };
+
+    // Function to handle comment deletion
+    const deleteComment = async (id: number) => {
+        console.log("Deleting comment with ID:", id);
+        const response = await fetch(`/api/admin/comments/${id}`, { // Delete comment using this endpoint
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        authenticated.verify();
+        const data = await response.json();
+        console.log("Delete response:", data);
+
+        // Show toast notification
+        if (response.ok) {
+            toast.success('Comment deleted successfully!');
+            getAllComments();
+        } else {
+            toast.error('Failed to delete comment');
+        }
+
         return data;
     };
 </script>
