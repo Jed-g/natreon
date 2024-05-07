@@ -57,10 +57,10 @@ Rails.application.routes.draw do
     delete "/admin/questions", to: "admin/questions#delete_question"
     get "/admin/mailinglist", to: "admin/mailing_list#all_emails"
     get "/admin/report-response", to: "admin/mailing_list#all_emails"
-    get "/admin/comments", to: "admin/comments#all_comments"
-    post "/admin/comments", to: "admin/comments#create_comment"
-    patch "/admin/comments/:id/toggle_report_status", to: "admin/comments#toggle_report_status"
-    delete "/admin/comments/:id", to: "admin/comments#delete_comment"
+    get "/admin/comments", to: "admin/poi_comments#all_comments"
+    post "/admin/comments", to: "admin/poi_comments#create_comment"
+    patch "/admin/comments/:id/toggle_report_status", to: "admin/poi_comments#toggle_report_status"
+    delete "/admin/comments/:id", to: "admin/poi_comments#delete_comment"
     
     get "/admin/pois", to: "admin/pois#all_pois"
     post "/admin/pois", to: "admin/pois#create_poi"
@@ -124,9 +124,9 @@ Rails.application.routes.draw do
     end
     
     scope "comments" do
-      get "/", to: "customer/comments#all"
-      post "/", to: "customer/comments#create"
-      post "/:id/report", to: "customer/comments#report"
+      get "/", to: "customer/poi_comments#all"
+      post "/", to: "customer/poi_comments#create"
+      post "/:id/report", to: "customer/poi_comments#report"
 
     end
 
