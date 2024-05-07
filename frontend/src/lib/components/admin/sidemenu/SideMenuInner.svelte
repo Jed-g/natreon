@@ -10,6 +10,7 @@
 	import mapMarkerIcon from '@iconify-icons/mdi/map-marker';
 
 	export let slug: string | undefined;
+	console.log(slug);
 
 	const dispatch = createEventDispatcher();
 </script>
@@ -83,9 +84,9 @@
 	<div class="my-1" />
 	<li>
 		<a
-			class:font-semibold={slug === AdminDashboardUrls.Comments}
-			class:active={slug === AdminDashboardUrls.Comments}
-			href={`/admin${AdminDashboardUrls.Comments ? '/' + AdminDashboardUrls.Comments : ''}`}
+			class:font-semibold={slug === AdminDashboardUrls.COMMENTS}
+			class:active={slug === AdminDashboardUrls.COMMENTS}
+			href={`/admin${AdminDashboardUrls.COMMENTS ? '/' + AdminDashboardUrls.COMMENTS : ''}`}
 			data-testid="manage-comments-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			><Icon icon={cardAccountMailIcon} height={24} class="scale-125 mr-2" />Manage Comments</a

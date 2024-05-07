@@ -16,6 +16,7 @@
 
     // Define the Comment type
     interface Comment {
+		id: number;
         userId: number;
         nickname: string;
         poiId: number;
@@ -30,11 +31,17 @@
     // Define comments variable
     let comments: Comment[] = [];
 
-	const getComments = async () => {
+    const getComments = async (poiId: number | undefined) => {
         try {
-            const response = await fetch('/api/comments');
+            let url = '/api/comments';
+            if (poiId !== undefined) {
+                url += `?poiId=${poiId}`;
+            }
+            const response = await fetch(url);
             if (response.ok) {
-                comments = await response.json();
+                const data = await response.json();
+                console.log('Fetched comments:', data); // Log the fetched comments
+                comments = data;
             } else {
                 console.error('Failed to fetch comments:', response.statusText);
             }
@@ -68,7 +75,7 @@
                 });
                 if (response.ok) {
                     // Refresh comments after adding a new one
-                    getComments();
+                    getComments(poi.id);
                     newComment = ''; // Clear the input field after adding comment
                 } else {
                     console.error('Failed to add ViewDetails comment:', response.statusText);
@@ -141,12 +148,30 @@
 		}
 	};
 
-	function reportComment(comment: string): any {
-		throw new Error('Function not implemented. and yarn updated');
-	};
+    async function reportComment(commentId: number): Promise<void> {
+        try {
+            const response = await fetch(`/api/comments/${commentId}/report`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reported: true })
+            });
+            if (response.ok) {
+                // Optionally, update the UI to reflect the reported status
+                toast.success('Comment reported successfully.');
+            } else {
+                throw new Error('Failed to report comment.');
+            }
+        } catch (error) {
+            console.error('Error reporting comment:', error);
+            toast.error('An error occurred while reporting the comment.');
+        }
+    }
+
 
 	onMount(() => {
-	getComments(); // Call the getComments function when the component mounts
+	getComments(poi.id); // Call the getComments function when the component mounts
 	});
 </script>
 
@@ -182,7 +207,7 @@
                                 <div class="comment-rating text-white">{comment.rating}</div>
                             </div>
                             <div class="comment-info w-1/4"> <!-- Fourth column for report buttons -->
-                                <button class="report-button py-2 px-4 bg-red-600 text-white rounded-lg" on:click={() => reportComment(comment.text)}>Report</button>
+                                <button class="report-button py-2 px-4 bg-red-600 text-white rounded-lg" on:click={() => reportComment(comment.id)}>Report</button>
                             </div>
                         </div>
                     {/each}

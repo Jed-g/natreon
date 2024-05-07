@@ -36,7 +36,7 @@
 			case AdminDashboardUrls.MANAGE_POIS:
 				mainComponent = ManagePOIs;
 				break;
-			case AdminDashboardUrls.Comments:
+			case AdminDashboardUrls.COMMENTS:
 				console.log("Setting mainComponent to Comments");
 				mainComponent = Comments;
 				break;

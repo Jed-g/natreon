@@ -1,3 +1,4 @@
+<!-- Your main Svelte component -->
 <script lang="ts">
     import ManagementTable from '$lib/components/admin/main/comments/ManagementTable.svelte';
     import { authenticated } from '$lib/stores';
@@ -7,22 +8,6 @@
         const response = await fetch('/api/admin/comments'); // Fetch comments from this endpoint
         const data = await response.json();
         console.log("Comments fetched:", data);
-        return data.comments;
-    };
-
-    const updateComment = async (id: number, values: Record<string, string>) => {
-        console.log("Updating comment with ID:", id);
-        console.log("New values:", values);
-        const response = await fetch(`/api/admin/comments/${id}`, { // Update comment using this endpoint
-            method: 'PUT', // Assuming you are updating a comment using PUT method
-            body: JSON.stringify({ comment: values.comment, rating: values.rating }), // Assuming comment and rating are properties of a comment
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        authenticated.verify();
-        const data = await response.json();
-        console.log("Update response:", data);
         return data;
     };
 
@@ -39,16 +24,31 @@
         console.log("Delete response:", data);
         return data;
     };
+
+    // Function to toggle report status
+    const toggleReportStatus = async (id: number) => {
+        console.log("Toggling report status for comment with ID:", id);
+        const response = await fetch(`/api/admin/comments/${id}/toggle_report_status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        authenticated.verify();
+        const data = await response.json();
+        console.log("Change comment status response:", data);
+        return data;
+    };
 </script>
 
 <div class="relative p-6 h-full w-full">
     <div class="relative card flex bg-base-100 shadow-xl p-6 flex-col h-full w-full overflow-x-auto">
         <ManagementTable
             getItemsAction={getAllComments}
-            editAction={updateComment}
             deleteAction={deleteComment}
+            toggleReportStatusAction={toggleReportStatus}
             tableHeaders={['User Name','Poi Name','Comment', 'Rating']} 
-            tableName={'Comments'} 
+            tableName={'Reported Comments'} 
         />
     </div>
 </div>
