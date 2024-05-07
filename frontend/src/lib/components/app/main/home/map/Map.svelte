@@ -153,6 +153,8 @@
 		return JSON.stringify(obj, Object.keys(obj).sort());
 	};
 
+	let updatePOIDataCancelTokenSource: CancelTokenSource = axios.CancelToken.source();
+
 	const updatePOIData = async () => {
 		const mapBound = map.getBounds();
 		const north = mapBound._ne.lat;
@@ -174,13 +176,23 @@
 			return;
 		}
 
+		if (updatePOIDataCancelTokenSource) {
+			updatePOIDataCancelTokenSource.cancel();
+		}
+		updatePOIDataCancelTokenSource = axios.CancelToken.source();
+		const cancelToken = updatePOIDataCancelTokenSource.token;
+
 		previousPOIRequestParams = paramsFormatted;
 		const params = new URLSearchParams(paramsFormatted);
 
-		const response = await fetch(`/api/poi?${params.toString()}`);
+		const response = await axios
+			.get(`/api/poi?${params.toString()}`, {
+				cancelToken
+			})
+			.catch((error) => error);
 
-		if (response.ok) {
-			const data = await response.json();
+		if (response.status === 200 && response.data) {
+			const data = response.data;
 
 			data.forEach((newPOI: any) => {
 				const validationResult = POIType.decode(newPOI);
