@@ -131,5 +131,27 @@ Rails.application.routes.draw do
       get "/avatar", to: "customer/points_badges#avatar_dropdown_current_total_points"
       get "/in-progress", to: "customer/points_badges#all_in_progress"
     end
+
+    namespace :customer, path: '' do
+      namespace :social, path: 'social' do
+        resources :posts, only: [:index, :create, :update, :destroy] do
+          post 'like', on: :member
+        
+          resources :comments, only: [:create, :update, :destroy]
+        end
+
+        resources :friend_requests, only: [:create, :index, :update, :destroy] do
+          member do
+            put :accept
+          end
+        end
+
+        resources :users, only: [:create, :index, :update, :destroy, :show]
+        post 'users/block/:id', to: 'blocks#block', as: 'block_user'
+        delete 'users/unblock/:id', to: 'blocks#unblock', as: 'unblock_user'
+        resources :blocks, only: [:create, :index, :update, :destroy]
+        resources :friends, only: [:index, :destroy]
+      end
+    end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: poi_pictures
@@ -10,8 +12,6 @@
 #
 
 FactoryBot.define do
-    factory :poi_picture do
-        
-
-    end
+  factory :poi_picture do
+  end
 end

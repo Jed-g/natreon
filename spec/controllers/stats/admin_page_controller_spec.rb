@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Stats::AdminPageController do
   let(:user) { create(:user, user_type: "customer") }
   let(:admin) { create(:user, user_type: "admin") }
-  let(:current_user) { admin } 
+  let(:current_user) { admin }
 
   before do
     allow(controller).to receive(:current_user).and_return(current_user)
