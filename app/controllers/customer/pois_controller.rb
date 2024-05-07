@@ -70,7 +70,8 @@ module Customer
                        .includes([:poi_pictures])
 
       combined_query = Poi.from("(#{similarity_query.to_sql} UNION #{ilike_query.to_sql}) as pois")
-                          .order("similarity_score DESC")
+                          .select('DISTINCT ON (id) *')
+                          .order("id, similarity_score DESC")
                           .limit(MAXIMUM_NUMBER_OF_POI_SEARCH_RESULTS)
 
       pois_formatted = combined_query.map do |poi|
