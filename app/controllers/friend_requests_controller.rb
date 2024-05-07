@@ -40,4 +40,3 @@ class FriendRequestsController < ApplicationController
     @friend_request = FriendRequest.find(params[:id])
   end
 end
-

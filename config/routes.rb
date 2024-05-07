@@ -140,7 +140,7 @@ Rails.application.routes.draw do
           resources :comments, only: [:create, :update, :destroy]
         end
 
-        resources :friend_requests, only: [:create, :index, :update, :destroy] do
+        resources :friend_requests, only: [:create, :index, :update, :destroy, :show] do
           member do
             put :accept
           end

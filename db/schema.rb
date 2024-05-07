@@ -188,14 +188,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_07_164206) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
-  create_table "posts", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.text "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_posts_on_user_id"
-  end
-
   create_table "questions", force: :cascade do |t|
     t.text "question", default: "", null: false
     t.text "answer"
@@ -242,8 +234,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_07_164206) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "jti", null: false
-    t.string "nickname", default: "DEFAULT", null: false
-    t.string "description", default: "DEFAULT", null: false
+    t.string "nickname", null: false
+    t.string "description", null: false
     t.boolean "deactivated", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
