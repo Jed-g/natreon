@@ -67,6 +67,14 @@ class Customer::CommentsController < ApplicationController
     end
   end
 
+  def get_total_comment_user
+    Rails.logger.debug "Received user ID: #{@user.id}"  # Log the user ID
+    
+    # Find the total number of comments associated with the specified user ID
+    total_comments = Comment.where(user_id: @user.id).count
+  
+    render json: { total_comments: total_comments }
+  end
 
   private
 
