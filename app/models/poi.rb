@@ -13,6 +13,10 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
+# Indexes
+#
+#  index_pois_on_name  (name) UNIQUE
+#
 class Poi < ApplicationRecord
   self.table_name = 'pois'
 

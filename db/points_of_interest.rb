@@ -57,4 +57,4 @@ POINTS_OF_INTEREST = POINTS_OF_INTEREST.map do |point|
     point
 end
 
-Poi.upsert_all(POINTS_OF_INTEREST, record_timestamps: true)
+Poi.upsert_all(POINTS_OF_INTEREST, unique_by: [:name], record_timestamps: true)
