@@ -40,7 +40,9 @@ class Poi < ApplicationRecord
   validates :longitude, numericality: {greater_than_or_equal_to: -180, less_than_or_equal_to: 180}
   validates :name, length: {minimum: 3}, format: {with: /\A[a-z0-9 ]+\z/i}
 
-  has_many :favourites
+  has_many :comments, foreign_key: :poi_id
+
+  has_many :favourites, foreign_key: :poi_id
   has_many :favourite_users, through: :favourites, source: :user
 
   has_many :check_ins

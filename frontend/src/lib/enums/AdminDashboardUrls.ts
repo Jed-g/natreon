@@ -9,7 +9,8 @@ enum AdminDashboardUrls {
 	STATS = 'stats',
 	STATS_LOGINS = 'stats/logins',
 	STATS_POIS = 'stats/pois',
-	STATS_POINTS_BADGES = 'stats/points-badges'
+	STATS_POINTS_BADGES = 'stats/points-badges',
+	COMMENTS = 'comments' 
 }
 
 export default AdminDashboardUrls;

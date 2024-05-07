@@ -92,22 +92,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_07_164206) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.text "content"
+    t.bigint "poi_id", null: false
     t.bigint "user_id", null: false
-    t.bigint "post_id", null: false
+    t.string "text"
+    t.integer "rating"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["post_id"], name: "index_comments_on_post_id"
-    t.index ["user_id"], name: "index_comments_on_user_id"
-  end
-
-  create_table "comments", force: :cascade do |t|
-    t.text "content"
-    t.bigint "user_id", null: false
-    t.bigint "post_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["post_id"], name: "index_comments_on_post_id"
+    t.boolean "reported", default: false
+    t.index ["poi_id"], name: "index_comments_on_poi_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
@@ -291,26 +283,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_07_164206) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "blocks", "users"
-  add_foreign_key "blocks", "users", column: "blocked_user_id"
-  add_foreign_key "comments", "posts"
+  add_foreign_key "comments", "pois"
   add_foreign_key "comments", "users"
-  add_foreign_key "friend_requests", "users"
-  add_foreign_key "friend_requests", "users", column: "friend_id"
-  add_foreign_key "friendships", "users"
-  add_foreign_key "friendships", "users", column: "friend_id"
-  add_foreign_key "likes", "posts"
-  add_foreign_key "likes", "users"
-  add_foreign_key "posts", "users"
-  add_foreign_key "blocks", "users"
-  add_foreign_key "blocks", "users", column: "blocked_user_id"
-  add_foreign_key "comments", "posts"
-  add_foreign_key "comments", "users"
-  add_foreign_key "friend_requests", "users"
-  add_foreign_key "friend_requests", "users", column: "friend_id"
-  add_foreign_key "friendships", "users"
-  add_foreign_key "friendships", "users", column: "friend_id"
-  add_foreign_key "likes", "posts"
-  add_foreign_key "likes", "users"
-  add_foreign_key "posts", "users"
 end

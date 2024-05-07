@@ -22,7 +22,9 @@ when "test"
     Review.create(rating: 4, content:"trial_content_2", author:"author_2", upvotes: 10, downvotes:2)
     Question.create(answer:nil , question:"test_question_1", upvotes:0, downvotes:0)
     Question.create(answer:"test_answer_2" , question:"test_question_2", upvotes:0, downvotes:0)
-
+    # Create sample comments associated with the POI
+    Comment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
+    Comment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
 when "development"
     User.find_or_create_by(email: "customer@test.com") do |user|
         user.password = "password"
@@ -52,7 +54,8 @@ when "development"
         user.description = "test_description"
 
     end
-
+    Comment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
+    Comment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
     require_relative 'points_of_interest'
 
 when "production"
@@ -82,6 +85,7 @@ when "demo"
         user.nickname = "reporter"
         user.description = "reporter_description"
     end
-
+    Comment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
+    Comment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
     require_relative 'points_of_interest'
 end

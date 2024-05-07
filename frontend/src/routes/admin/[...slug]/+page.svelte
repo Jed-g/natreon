@@ -8,12 +8,13 @@
 	import QA from '$lib/components/admin/main/questions/QA.svelte';
 	import MailingList from '$lib/components/admin/main/mailinglist/MailingList.svelte';
 	import ManagePOIs from '$lib/components/admin/main/managepois/ManagePOIs.svelte';
+	import Comments from '$lib/components/admin/main/comments/Comments.svelte';
+
 	import Stats from '$lib/components/admin/main/stats/Stats.svelte';
 	import type { SvelteComponent } from 'svelte';
 
 	export let data: { slug: string };
 	let menuClosed = true;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let mainComponent: (new (...args: any[]) => SvelteComponent) | null = null;
 
 	$: {
@@ -33,6 +34,8 @@
 			case AdminDashboardUrls.MANAGE_POIS:
 				mainComponent = ManagePOIs;
 				break;
+			case AdminDashboardUrls.COMMENTS:
+				mainComponent = Comments;
 			case AdminDashboardUrls.STATS:
 				mainComponent = Stats;
 				break;

@@ -10,6 +10,7 @@
 		return data.users;
 	};
 
+
 	const updateUser = async (id: number, values: Record<string, string>) => {
 		const response = await fetch('/api/admin/users', {
 			method: 'POST',
