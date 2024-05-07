@@ -114,7 +114,7 @@
 		}
 	}
 
-	const VALID_TYPES = ['image/png', 'image/jpeg'];
+	const VALID_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
 	function selectFile(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (
@@ -228,17 +228,11 @@
             <button on:click={addNewComment} class="bg-blue-500 text-white rounded-lg px-4 py-2 mt-4">Add Comment</button>
         </div>
 
-		<div class="mb-4 text-white rounded shadow-md mt-6 w-full md:w-3/4 lg:w-1/2">
-			<div class="mb-4">
-				<label for="poi-picture">Upload a picture of this location!</label>
-				<input
-					id="poi-picture"
-					type="file"
-					accept="image/png, image/jpeg"
-					on:change={selectFile}
-					class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"
-				/>
-			</div>
+        <div class="mb-4 text-white rounded shadow-md mt-6 w-full md:w-3/4 lg:w-1/2">
+            <div class="mb-4">
+                <label for="poi-picture">Upload a picture of this location!</label>
+                <input id="poi-picture" type="file" accept="image/png, image/jpg, image/jpeg" on:change={selectFile} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
+            </div>
 
             <Button variant="secondary" class="mt-4" on:click={handleUpload}>Upload Picture</Button>
         </div>
@@ -246,7 +240,6 @@
 </Dialog.Root>
 
 <style>
-	/* Add some styling to center the details and add a border */
 	.details-container {
 		position: fixed;
 		top: 50%;
@@ -257,7 +250,7 @@
 		border: 2px solid #ccc;
 		border-radius: 8px;
 		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		z-index: 999; /* Ensure the details appear on top of other content */
+		z-index: 999; 
 		color: white;
 		max-width: 400px;
 		width: 200%;
@@ -268,8 +261,8 @@
 	}
 
 	.comments-scroll {
-		max-height: 200px; /* Adjust the height as needed */
-		overflow-y: auto; /* Enable vertical scrolling */
+		max-height: 200px; 
+		overflow-y: auto;
 	}
 
 	.comment-wrapper {
