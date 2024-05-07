@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: pois
@@ -14,7 +16,7 @@
 #  updated_at  :datetime         not null
 #
 class Poi < ApplicationRecord
-  self.table_name = 'pois'
+  self.table_name = "pois"
 
   FEATURES = [
     "Natural Landmark",
@@ -34,18 +36,18 @@ class Poi < ApplicationRecord
   validates :longitude, numericality: {greater_than_or_equal_to: -180, less_than_or_equal_to: 180}
   validates :name, length: {minimum: 3}, format: {with: /\A[a-z0-9 ]+\z/i}
 
-  has_many :favourites, foreign_key: :poi_id
+  has_many :favourites
   has_many :favourite_users, through: :favourites, source: :user
 
-  has_many :check_ins, foreign_key: :poi_id
+  has_many :check_ins
   has_many :checked_in_users, through: :check_ins, source: :user
 
-  has_many :poi_pictures, foreign_key: :poi_id
+  has_many :poi_pictures
   has_many :submitted_picture_user, through: :poi_pictures, source: :user
 
   validates_each :features do |record, attr, value|
     value.each do |feature|
-      record.errors.add(attr, 'contains invalid feature') unless FEATURES.include?(feature)
+      record.errors.add(attr, "contains invalid feature") unless FEATURES.include?(feature)
     end
   end
 end

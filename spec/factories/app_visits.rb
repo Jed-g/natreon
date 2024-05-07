@@ -20,7 +20,7 @@ FactoryBot.define do
   factory :app_visit do
     # id { 1 }
     # country { 'United Kingdom' }
-    email {"test@test.com"}
+    email { "test@test.com" }
     ip_address { "192.168.1.1" }
     # latitude {23}
     # longitude {56}

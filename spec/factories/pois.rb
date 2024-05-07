@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: pois
@@ -14,18 +16,17 @@
 #  updated_at  :datetime         not null
 #
 
-
 FEATURES = Poi::FEATURES
 
 FactoryBot.define do
   factory :poi do
-    latitude {54.978252} 
-    longitude {-1.617439}
-    name {'Newcastle upon Tyne'}
-    location {'newcastle'}
-    description {'dummy desc'}
-    features {FEATURES.sample(rand(1..5))}
-    likes {0}
+    latitude { 54.978252 }
+    longitude { -1.617439 }
+    name { "Newcastle upon Tyne" }
+    location { "newcastle" }
+    description { "dummy desc" }
+    features { FEATURES.sample(rand(1..5)) }
+    likes { 0 }
 
     # name { "MyString" }
     # description { "MyText" }

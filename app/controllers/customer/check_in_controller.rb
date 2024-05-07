@@ -3,7 +3,7 @@
 module Customer
   class CheckInController < ApplicationController
     before_action :authorize_customer_controllers, :get_user
-    before_action :process_params, only: [:check_in_candidates, :register_check_in]
+    before_action :process_params, only: %i[check_in_candidates register_check_in]
 
     MAXIMUM_DISTANCE_FOR_CHECK_IN_THRESHOLD_METERS = 500
     def check_in_candidates
@@ -23,7 +23,7 @@ module Customer
 
       return render_bad_request if distance - @accuracy_meters > MAXIMUM_DISTANCE_FOR_CHECK_IN_THRESHOLD_METERS
 
-      check_in = @user.check_ins.create(poi: poi)
+      check_in = @user.check_ins.create(poi:)
 
       if check_in.persisted?
         render json: {message: "OK"}
@@ -85,13 +85,15 @@ module Customer
     end
 
     def valid_decimal?(str)
-      true if Float(str) rescue false
+      true if Float(str)
+    rescue StandardError
+      false
     end
 
     def get_user
       @user = current_user
 
-      return render_internal_server_error if @user.nil?
+      render_internal_server_error if @user.nil?
     end
 
     def haversine_distance(lat1, lng1, lat2, lng2)
@@ -106,11 +108,10 @@ module Customer
       delta_lat = lat2_rad - lat1_rad
       delta_lng = lng2_rad - lng1_rad
 
-      a = Math.sin(delta_lat / 2)**2 + Math.cos(lat1_rad) * Math.cos(lat2_rad) * Math.sin(delta_lng / 2)**2
+      a = (Math.sin(delta_lat / 2)**2) + (Math.cos(lat1_rad) * Math.cos(lat2_rad) * (Math.sin(delta_lng / 2)**2))
       c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
-      distance_m = earth_radius_m * c
-      distance_m
+      earth_radius_m * c
     end
 
     def check_in_candidates_haversine(user_latitude, user_longitude, user_accuracy_meters)
@@ -124,7 +125,7 @@ module Customer
         }, latitude: user_latitude, longitude: user_longitude,
       maximum_distance: MAXIMUM_DISTANCE_FOR_CHECK_IN_THRESHOLD_METERS + user_accuracy_meters)
 
-      pois_formatted = pois.map do |poi|
+      pois.map do |poi|
         next if poi.check_ins.exists?(user: @user)
 
         {
@@ -140,8 +141,6 @@ module Customer
           comments:    [] # Add later...
         }
       end.compact
-
-      pois_formatted
     end
   end
 end

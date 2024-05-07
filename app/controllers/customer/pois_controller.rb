@@ -115,7 +115,7 @@ module Customer
     def get_user
       @user = current_user
 
-      return render_internal_server_error if @user.nil?
+      render_internal_server_error if @user.nil?
     end
 
     def render_not_found
@@ -138,9 +138,9 @@ module Customer
         return render_bad_request
       end
 
-      unless @north >= @south && @east >= @west
-        return render_bad_request
-      end
+      return if @north >= @south && @east >= @west
+
+      render_bad_request
     end
   end
 end

@@ -41,15 +41,15 @@ class User < ApplicationRecord
 
   has_one_attached :profile_picture
 
-  validates :profile_picture, content_type: ['image/png', 'image/jpeg']
+  validates :profile_picture, content_type: ["image/png", "image/jpeg"]
 
-  has_many :favourites, foreign_key: :user_id
+  has_many :favourites
   has_many :favourite_pois, through: :favourites, source: :poi
 
-  has_many :check_ins, foreign_key: :user_id
+  has_many :check_ins
   has_many :checked_in_pois, through: :check_ins, source: :poi
 
-  has_many :poi_pictures, foreign_key: :user_id
+  has_many :poi_pictures
   has_many :submitted_picture_poi, through: :poi_pictures, source: :poi
 
   has_many :posts
@@ -63,7 +63,7 @@ class User < ApplicationRecord
 
   has_many :blocks
   has_many :blocked_users, through: :blocks, source: :blocked_user
-  
+
   def active_for_authentication?
     super && !deactivated
   end
@@ -102,8 +102,8 @@ class User < ApplicationRecord
                else
                  "LOCKED"
                end
-      return_value = {badge: badge, status: status, threshold: threshold,
-      previous_threshold: previous_threshold}
+      return_value = {badge:, status:, threshold:,
+      previous_threshold:}
       previous_threshold = threshold
       return_value
     end
@@ -120,8 +120,8 @@ class User < ApplicationRecord
                else
                  "LOCKED"
                end
-      return_value = {badge: badge, status: status, threshold: threshold,
-      previous_threshold: previous_threshold}
+      return_value = {badge:, status:, threshold:,
+      previous_threshold:}
       previous_threshold = threshold
       return_value
     end
@@ -138,8 +138,8 @@ class User < ApplicationRecord
                else
                  "LOCKED"
                end
-      return_value = {badge: badge, status: status, threshold: threshold,
-previous_threshold: previous_threshold}
+      return_value = {badge:, status:, threshold:,
+previous_threshold:}
       previous_threshold = threshold
       return_value
     end
@@ -156,8 +156,8 @@ previous_threshold: previous_threshold}
                else
                  "LOCKED"
                end
-      return_value = {badge: badge, status: status, threshold: threshold,
-      previous_threshold: previous_threshold}
+      return_value = {badge:, status:, threshold:,
+      previous_threshold:}
       previous_threshold = threshold
       return_value
     end
