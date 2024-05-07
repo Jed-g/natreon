@@ -17,6 +17,7 @@ class FriendRequestsController < ApplicationController
     @friend_request = current_user.friend_requests.new(friend:)
 
     if @friend_request.save
+      FriendRequestMailer.friend_request(@friend_request).deliver_now
       render :show, status: :created, location: @friend_request
     else
       render json: @friend_request.errors, status: :unprocessable_entity
