@@ -40,7 +40,7 @@
     // Function to handle comment deletion
     const deleteComment = async (id: number) => {
         console.log("Deleting comment with ID:", id);
-        const response = await fetch(`/api/admin/comments/${id}`, { // Delete comment using this endpoint
+        const response = await fetch(`/api/admin/comments/${id}`, { 
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -50,7 +50,6 @@
         const data = await response.json();
         console.log("Delete response:", data);
 
-        // Show toast notification
         if (response.ok) {
             toast.success('Comment deleted successfully!');
             getAllComments();
