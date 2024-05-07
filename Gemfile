@@ -71,6 +71,8 @@ group :development do
   gem "bundler-audit"
   gem "letter_opener"
   gem "web-console"
+  gem "bullet"
+  gem "rspec-benchmark"
 
   gem "capistrano"
   gem "capistrano-bundler", require: false

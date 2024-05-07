@@ -10,8 +10,8 @@
 	const dispatch = createEventDispatcher();
 </script>
 
-<ul class="menu menu-lg p-4 min-h-full text-base-content flex-nowrap">
-	<li>
+<ul class="menu menu-lg p-4 min-h-full text-base-content flex-nowrap" role="tablist">
+	<li role="tab">
 		<Button
 			variant={!slug ? 'secondary' : 'outline'}
 			href={`/app${AppUrls.HOME ? '/' + AppUrls.HOME : ''}`}
@@ -21,7 +21,7 @@
 		>
 	</li>
 	<div class="my-1" />
-	<li>
+	<li role="tab">
 		<Button
 			variant={slug?.split('/')[0] === AppUrls.SOCIAL_NETWORK ? 'secondary' : 'outline'}
 			href={`/app${AppUrls.SOCIAL_NETWORK ? '/' + AppUrls.SOCIAL_NETWORK : ''}`}
@@ -32,7 +32,7 @@
 		>
 	</li>
 	<div class="my-1" />
-	<li>
+	<li role="tab">
 		<Button
 			variant={slug?.split('/')[0] === AppUrls.POINTS_AND_BADGES ? 'secondary' : 'outline'}
 			href={`/app${AppUrls.POINTS_AND_BADGES ? '/' + AppUrls.POINTS_AND_BADGES : ''}`}
@@ -43,7 +43,7 @@
 		>
 	</li>
 	<div class="my-1" />
-	<li>
+	<li role="tab">
 		<Button
 			variant={slug?.split('/')[0] === AppUrls.CHECK_INS ? 'secondary' : 'outline'}
 			href={`/app${AppUrls.CHECK_INS ? '/' + AppUrls.CHECK_INS : ''}`}
@@ -54,7 +54,7 @@
 		>
 	</li>
 	<div class="my-1" />
-	<li>
+	<li role="tab">
 		<Button
 			variant={slug?.split('/')[0] === AppUrls.FAVOURITES ? 'secondary' : 'outline'}
 			href={`/app${AppUrls.FAVOURITES ? '/' + AppUrls.FAVOURITES : ''}`}
@@ -65,19 +65,19 @@
 		>
 	</li>
 	<div class="my-1" />
-	<li>
+	<li role="tab">
 		<Button
 			variant={slug?.split('/')[0] === AppUrls.SETTINGS ? 'secondary' : 'outline'}
 			href={`/app${AppUrls.SETTINGS ? '/' + AppUrls.SETTINGS : ''}`}
 			data-testid="settings-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
 			class="flex items-center text-sm justify-start"
-			><Settings2 class="h-5 w-5 mr-2" />Settings</Button
+			><Settings2 class="h-5 w-5 mr-2" />Profile Settings</Button
 		>
 	</li>
 	<div class="grow" />
 	<div class="my-2" />
-	<li>
+	<li role="tab">
 		<LogoutButton variant="secondary" />
 	</li>
 </ul>

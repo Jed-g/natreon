@@ -41,7 +41,7 @@ class User < ApplicationRecord
 
   has_one_attached :profile_picture
 
-  validates :profile_picture, content_type: ['image/png', 'image/jpg', 'image/jpeg']
+  validates :profile_picture, content_type: ['image/png', 'image/jpeg']
 
   has_many :comments, foreign_key: :user_id
 

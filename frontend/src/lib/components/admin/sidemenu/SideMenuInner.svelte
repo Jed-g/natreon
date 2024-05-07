@@ -8,6 +8,7 @@
 	import commentQuestionIcon from '@iconify-icons/mdi/comment-question';
 	import cardAccountMailIcon from '@iconify-icons/mdi/card-account-mail';
 	import mapMarkerIcon from '@iconify-icons/mdi/map-marker';
+	import informationOutline from '@iconify-icons/mdi/information-outline';
 
 	export let slug: string | undefined;
 	console.log(slug);
@@ -29,8 +30,8 @@
 	<div class="my-1" />
 	<li>
 		<a
-			class:font-semibold={slug === AdminDashboardUrls.USERS}
-			class:active={slug === AdminDashboardUrls.USERS}
+			class:font-semibold={slug?.split('/')[0] === AdminDashboardUrls.USERS}
+			class:active={slug?.split('/')[0] === AdminDashboardUrls.USERS}
 			href={`/admin${AdminDashboardUrls.USERS ? '/' + AdminDashboardUrls.USERS : ''}`}
 			data-testid="users-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
@@ -40,8 +41,19 @@
 	<div class="my-1" />
 	<li>
 		<a
-			class:font-semibold={slug === AdminDashboardUrls.REVIEWS}
-			class:active={slug === AdminDashboardUrls.REVIEWS}
+			class:font-semibold={slug?.split('/')[0] === AdminDashboardUrls.STATS}
+			class:active={slug?.split('/')[0] === AdminDashboardUrls.STATS}
+			href={`/admin${AdminDashboardUrls.STATS ? '/' + AdminDashboardUrls.STATS : ''}`}
+			data-testid="statistics-button"
+			on:click={() => dispatch('sideMenuItemClicked')}
+			><Icon icon={informationOutline} height={24} class="scale-125 mr-2" />Statistics</a
+		>
+	</li>
+	<div class="my-1" />
+	<li>
+		<a
+			class:font-semibold={slug?.split('/')[0] === AdminDashboardUrls.REVIEWS}
+			class:active={slug?.split('/')[0] === AdminDashboardUrls.REVIEWS}
 			href={`/admin${AdminDashboardUrls.REVIEWS ? '/' + AdminDashboardUrls.REVIEWS : ''}`}
 			data-testid="reviews-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
@@ -51,8 +63,8 @@
 	<div class="my-1" />
 	<li>
 		<a
-			class:font-semibold={slug === AdminDashboardUrls.QA}
-			class:active={slug === AdminDashboardUrls.QA}
+			class:font-semibold={slug?.split('/')[0] === AdminDashboardUrls.QA}
+			class:active={slug?.split('/')[0] === AdminDashboardUrls.QA}
 			href={`/admin${AdminDashboardUrls.QA ? '/' + AdminDashboardUrls.QA : ''}`}
 			data-testid="qa-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
@@ -62,8 +74,8 @@
 	<div class="my-1" />
 	<li>
 		<a
-			class:font-semibold={slug === AdminDashboardUrls.MAILING_LIST}
-			class:active={slug === AdminDashboardUrls.MAILING_LIST}
+			class:font-semibold={slug?.split('/')[0] === AdminDashboardUrls.MAILING_LIST}
+			class:active={slug?.split('/')[0] === AdminDashboardUrls.MAILING_LIST}
 			href={`/admin${AdminDashboardUrls.MAILING_LIST ? '/' + AdminDashboardUrls.MAILING_LIST : ''}`}
 			data-testid="mailing-list-button"
 			on:click={() => dispatch('sideMenuItemClicked')}
@@ -73,8 +85,8 @@
 	<div class="my-1" />
 	<li>
 		<a
-			class:font-semibold={slug === AdminDashboardUrls.MANAGE_POIS}
-			class:active={slug === AdminDashboardUrls.MANAGE_POIS}
+			class:font-semibold={slug?.split('/')[0] === AdminDashboardUrls.MANAGE_POIS}
+			class:active={slug?.split('/')[0] === AdminDashboardUrls.MANAGE_POIS}
 			href={`/admin${AdminDashboardUrls.MANAGE_POIS ? '/' + AdminDashboardUrls.MANAGE_POIS : ''}`}
 			data-testid="manage-pois-button"
 			on:click={() => dispatch('sideMenuItemClicked')}

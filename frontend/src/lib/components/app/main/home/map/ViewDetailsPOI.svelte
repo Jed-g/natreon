@@ -114,7 +114,7 @@
 		}
 	}
 
-	const VALID_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
+	const VALID_TYPES = ['image/png', 'image/jpeg'];
 	function selectFile(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (
@@ -228,13 +228,82 @@
             <button on:click={addNewComment} class="bg-blue-500 text-white rounded-lg px-4 py-2 mt-4">Add Comment</button>
         </div>
 
-        <div class="mb-4 text-white rounded shadow-md mt-6 w-full md:w-3/4 lg:w-1/2">
-            <div class="mb-4">
-                <label for="poi-picture">Upload a picture of this location!</label>
-                <input id="poi-picture" type="file" accept="image/png, image/jpg, image/jpeg" on:change={selectFile} class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300" />
-            </div>
+		<div class="mb-4 text-white rounded shadow-md mt-6 w-full md:w-3/4 lg:w-1/2">
+			<div class="mb-4">
+				<label for="poi-picture">Upload a picture of this location!</label>
+				<input
+					id="poi-picture"
+					type="file"
+					accept="image/png, image/jpeg"
+					on:change={selectFile}
+					class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"
+				/>
+			</div>
 
             <Button variant="secondary" class="mt-4" on:click={handleUpload}>Upload Picture</Button>
         </div>
     </Dialog.Content>
 </Dialog.Root>
+
+<style>
+	/* Add some styling to center the details and add a border */
+	.details-container {
+		position: fixed;
+		top: 50%;
+		left: 40%;
+		transform: translate(-50%, -50%);
+		background-color: rgb(16, 16, 16);
+		padding: 20px;
+		border: 2px solid #ccc;
+		border-radius: 8px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		z-index: 999; /* Ensure the details appear on top of other content */
+		color: white;
+		max-width: 400px;
+		width: 200%;
+	}
+
+	.comment-container {
+		margin-top: 20px;
+	}
+
+	.comments-scroll {
+		max-height: 200px; /* Adjust the height as needed */
+		overflow-y: auto; /* Enable vertical scrolling */
+	}
+
+	.comment-wrapper {
+		display: flex;
+		align-items: center;
+	}
+
+	.comment {
+		flex: 1;
+		background-color: #333;
+		padding: 10px;
+		border-radius: 8px;
+		margin-bottom: 10px;
+	}
+
+	.report-button {
+		margin-left: 10px;
+		padding: 8px 12px;
+		background-color: #f44336;
+		color: white;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+	.report-button:hover {
+		background-color: #d32f2f;
+	}
+
+	h2 {
+		margin-top: 0;
+	}
+
+	ul {
+		padding-left: 20px;
+	}
+</style>

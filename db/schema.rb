@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_06_191944) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_05_224531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -57,6 +57,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_06_191944) do
     t.integer "time_spent_seconds", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "latitude", default: "0.0", null: false
+    t.decimal "longitude", default: "0.0", null: false
+    t.string "country", default: "DEFAULT", null: false
+    t.string "email", default: "DEFAULT", null: false
+    t.bigint "viewed_pois", default: [], null: false, array: true
   end
 
   create_table "check_ins", force: :cascade do |t|
