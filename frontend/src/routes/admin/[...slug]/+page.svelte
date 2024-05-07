@@ -45,7 +45,7 @@
 
 <Header bind:menuClosed />
 <div class="relative flex grow height">
-	<div class="overflow-y-auto">
+	<div class="overflow-y-auto shrink-0">
 		<SideMenu bind:menuClosed slug={data.slug} />
 	</div>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
