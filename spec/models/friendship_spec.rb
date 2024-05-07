@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: friendships
@@ -18,8 +20,8 @@
 #  fk_rails_...  (friend_id => users.id)
 #  fk_rails_...  (user_id => users.id)
 #
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Friendship, type: :model do
+RSpec.describe Friendship do
   pending "add some examples to (or delete) #{__FILE__}"
 end

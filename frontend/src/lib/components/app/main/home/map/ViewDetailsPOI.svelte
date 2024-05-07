@@ -53,7 +53,7 @@
 		}
 	}
 
-	const VALID_TYPES = ['image/png', 'image/jpg', 'image/jpeg'];
+	const VALID_TYPES = ['image/png', 'image/jpeg'];
 	function selectFile(event: Event) {
 		const input = event.target as HTMLInputElement;
 		if (
@@ -136,7 +136,7 @@
 				<input
 					id="poi-picture"
 					type="file"
-					accept="image/png, image/jpg, image/jpeg"
+					accept="image/png, image/jpeg"
 					on:change={selectFile}
 					class="mt-1 block w-full rounded-md text-white shadow-sm focus:border-green-300"
 				/>

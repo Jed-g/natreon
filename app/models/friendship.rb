@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: friendships
@@ -21,8 +23,7 @@
 class Friendship < ApplicationRecord
   after_create :create_inverse_relationship
   after_destroy :destroy_inverse_relationship
-  validates :user, presence: true
-  validates :friend, presence: true, uniqueness: { scope: :user }
+  validates :friend, uniqueness: {scope: :user}
   validate :not_self
 
   belongs_to :user

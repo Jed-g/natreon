@@ -42,8 +42,8 @@ test('A customer can edit their nickname', async ({ page }) => {
   await page.getByTestId('login-button').click();
   await page.locator('[data-testid="settings-button"]').first().click();
   await page.getByRole('button', { name: 'Edit Profile' }).click();
-  await page.getByLabel('Nickname:').click();
-  await page.getByLabel('Nickname:').fill('customer223');
+  await page.locator('#edit-nickname').click();
+  await page.locator('#edit-nickname').fill('customer223');
   await page.getByRole('button', { name: 'Save Changes' }).click();
   await page.getByRole('list').click();
   await page.getByRole('link', { name: 'Home' }).click();
@@ -62,8 +62,8 @@ test('A customer can edit their description', async ({ page }) => {
   await page.getByTestId('login-button').click();
   await page.locator('[data-testid="settings-button"]').first().click();
   await page.getByRole('button', { name: 'Edit Profile' }).click();
-  await page.getByLabel('Description:').click();
-  await page.getByLabel('Description:').fill('this is a description');
+  await page.getByLabel('Edit Description:').click();
+  await page.getByLabel('Edit Description:').fill('this is a description');
   await page.getByRole('button', { name: 'Save Changes' }).click();
   await page.getByRole('link', { name: 'Home' }).click();
   await page.getByRole('link', { name: 'Settings' }).click();
@@ -82,7 +82,7 @@ test('A customer can upload a profile picture', async ({ page }) => {
   await page.locator('[data-testid="settings-button"]').first().click();
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
-  const imagePath = path.join(__dirname, 'image0001.jpg');
+  const imagePath = path.join(__dirname, 'image0001.jpeg');
   const inputFile = await page.getByLabel('Profile Picture:');
   await inputFile.setInputFiles(imagePath);
   await page.getByRole('button', { name: 'Upload Profile Picture' }).click();

@@ -155,7 +155,7 @@
 		</div>
 		<div class="form-control">
 			<label class="label" for="description">
-				<span class="label-text">Description</span>
+				<span class="label-text">Introduce yourself</span>
 			</label>
 			<textarea
 				placeholder="description"

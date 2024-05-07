@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: poi_pictures
@@ -13,7 +15,7 @@ class PoiPicture < ApplicationRecord
   belongs_to :poi
 
   has_one_attached :picture
-  validates :picture, content_type: ['image/png', 'image/jpg', 'image/jpeg']
+  validates :picture, content_type: ["image/png", "image/jpeg"]
 
   def picture_id
     picture.attachment.blob_id if picture.attached?

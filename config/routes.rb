@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     get "/stats/app/register-new-page-visit", to: "stats/app#register_new_page_visit"
     post "/stats/app/register-new-page-visit-with-ip-param", to: "stats/app#register_new_page_visit_with_ip_param"
     post "/stats/app/update-page-visit", to: "stats/app#update_page_visit"
+    post "/stats/app/register-new-poi-click", to: "stats/app#register_new_poi_click"
 
     get "/admin/users", to: "admin/users#all_users"
     post "/admin/users", to: "admin/users#update_user"
@@ -67,6 +68,12 @@ Rails.application.routes.draw do
     get "/admin/stats/all-visits", to: "admin/stats#all_visits"
     get "/admin/stats/route-visits", to: "admin/stats#route_visits"
     get "/admin/stats/overall-details", to: "admin/stats#overall_details"
+
+    scope "admin/stats" do
+      get "logins", to: "admin/stats/logins#all"
+      get "pois", to: "admin/stats/pois#all"
+      get "points-badges", to: "admin/stats/points_badges#all"
+    end
 
     get "/reporter/stats/globe", to: "reporter/stats#globe"
     get "/reporter/stats/all-visits", to: "reporter/stats#all_visits"
@@ -125,23 +132,26 @@ Rails.application.routes.draw do
       get "/in-progress", to: "customer/points_badges#all_in_progress"
     end
 
-    resources :posts, only: [:index, :create, :update, :destroy] do
-      post 'like', on: :member
-    
-      resources :comments, only: [:create, :update, :destroy]
-    end
+    namespace :customer, path: '' do
+      namespace :social, path: 'social' do
+        resources :posts, only: [:index, :create, :update, :destroy] do
+          post 'like', on: :member
+        
+          resources :comments, only: [:create, :update, :destroy]
+        end
 
-    resources :friend_requests, only: [:create, :index, :update, :destroy] do
-      member do
-        put :accept
+        resources :friend_requests, only: [:create, :index, :update, :destroy] do
+          member do
+            put :accept
+          end
+        end
+
+        resources :users, only: [:create, :index, :update, :destroy, :show]
+        post 'users/block/:id', to: 'blocks#block', as: 'block_user'
+        delete 'users/unblock/:id', to: 'blocks#unblock', as: 'unblock_user'
+        resources :blocks, only: [:create, :index, :update, :destroy]
+        resources :friends, only: [:index, :destroy]
       end
     end
-
-    resources :users, only: [:create, :index, :update, :destroy, :show]
-    post 'users/block/:id', to: 'blocks#block', as: 'block_user'
-    delete 'users/unblock/:id', to: 'blocks#unblock', as: 'unblock_user'
-    resources :blocks, only: [:create, :index, :update, :destroy]
-    resources :friends, only: [:index, :destroy]
-
   end
 end

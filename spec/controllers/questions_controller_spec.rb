@@ -2,6 +2,10 @@
 
 require "rails_helper"
 
+RSpec.configure do |config|
+  config.include RSpec::Benchmark::Matchers
+end
+
 RSpec.describe QuestionsController do
   let(:user) { create(:user, user_type: "customer") }
   let(:question) { create(:question) }
@@ -14,6 +18,9 @@ RSpec.describe QuestionsController do
   describe "#all_questions" do
     it "returns a list of all the questions" do
       get :all_questions
+      expect {
+        get :all_questions
+      }.to perform_under(50).ms
       expect(response).to have_http_status :ok
       json_response = response.parsed_body
 
@@ -42,6 +49,9 @@ RSpec.describe QuestionsController do
 
       it "creates a new question and returns a success message" do
         post :submit_question, params: {question: valid_question}
+        expect {
+          post :submit_question, params: {question: valid_question}
+        }.to perform_under(50).ms
         expect(response).to have_http_status :ok
         json_response = response.parsed_body
 
@@ -83,6 +93,7 @@ RSpec.describe QuestionsController do
     before do
       @question = create(:question)
       session[:questions_upvoted] = []
+      session[:questions_downvoted] = [@question.id]
     end
 
     # rubocop:disable RSpec/InstanceVariable
@@ -108,6 +119,15 @@ RSpec.describe QuestionsController do
           post :upvote_question, params: {id: @question.id}
           @question.reload
         }.to change { @question.upvotes }.by(1)
+      end
+
+      it "decreases the downvotes count and removes the question ID from session[:questions_downvoted]" do
+        session[:questions_downvoted] = [@question.id]
+        post :upvote_question, params: {id: @question.id}
+        @question.reload
+
+        expect(@question.downvotes).to eq(0)
+        expect(session[:questions_downvoted]).not_to include(@question.id.to_s)
       end
     end
     # rubocop:enable RSpec/InstanceVariable

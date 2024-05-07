@@ -122,11 +122,17 @@
 					<Avatar.Fallback><span class="loading loading-ring loading-lg" /></Avatar.Fallback>
 				{:else if !error}
 					{#if user.profile_picture !== undefined}
-						<Avatar.Image src={user.profile_picture} alt="Profile Picture" class="bg-card" />
+						<Avatar.Image
+							src={user.profile_picture}
+							alt="Profile Picture"
+							aria-label="Profile Picture"
+							class="bg-card"
+						/>
 					{/if}
-					<Avatar.Fallback><User class="h-5 w-5" /></Avatar.Fallback>
+					<Avatar.Fallback aria-label="Profile Picture"><User class="h-5 w-5" /></Avatar.Fallback>
 				{:else}
-					<Avatar.Fallback class="bg-error text-2xl">!</Avatar.Fallback>
+					<Avatar.Fallback aria-label="Profile Picture" class="bg-error text-2xl">!</Avatar.Fallback
+					>
 				{/if}
 			</Avatar.Root>
 		</Button>

@@ -10,7 +10,7 @@
 	let blockedUsers: string | any[] = [];
 
 	const fetchUsers = async () => {
-		const response = await fetch('/api/users', {
+		const response = await fetch('/api/social/users', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -26,7 +26,7 @@
 	};
 
 	const fetchFriends = async () => {
-		const response = await fetch('/api/friends', {
+		const response = await fetch('/api/social/friends', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -40,7 +40,7 @@
 
 		friends = await response.json();
 
-		const blockedResponse = await fetch('/api/blocks', {
+		const blockedResponse = await fetch('/api/social/blocks', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -60,7 +60,7 @@
 	};
 
 	const fetchFriendRequests = async () => {
-		const response = await fetch('/api/friend_requests', {
+		const response = await fetch('/api/social/friend_requests', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
@@ -78,7 +78,7 @@
 	};
 
 	const sendFriendRequest = async (userId: any) => {
-		const response = await fetch('/api/friend_requests', {
+		const response = await fetch('/api/social/friend_requests', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -97,7 +97,7 @@
 	};
 
 	const acceptFriendRequest = async (friendRequestId: any) => {
-		const response = await fetch(`/api/friend_requests/${friendRequestId}`, {
+		const response = await fetch(`/api/social/friend_requests/${friendRequestId}`, {
 			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
@@ -116,7 +116,7 @@
 	};
 
 	const rejectFriendRequest = async (friendRequestId: any) => {
-		const response = await fetch(`/api/friend_requests/${friendRequestId}`, {
+		const response = await fetch(`/api/social/friend_requests/${friendRequestId}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -134,7 +134,7 @@
 	};
 
 	const deleteFriend = async (friendId: any) => {
-		const response = await fetch(`/api/friends/${friendId}`, {
+		const response = await fetch(`/api/social/friends/${friendId}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -153,7 +153,7 @@
 	};
 
 	const blockUser = async (userId: any) => {
-		const response = await fetch(`/api/users/block/${userId}`, {
+		const response = await fetch(`/api/social/users/block/${userId}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -174,7 +174,7 @@
 	};
 
 	const unblockUser = async (userId: any) => {
-		const response = await fetch(`/api/users/unblock/${userId}`, {
+		const response = await fetch(`/api/social/users/unblock/${userId}`, {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
@@ -192,7 +192,7 @@
 	};
 
 	const fetchBlockedUsers = async () => {
-		const response = await fetch('/api/blocks', {
+		const response = await fetch('/api/social/blocks', {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'

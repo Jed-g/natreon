@@ -10,7 +10,7 @@ test('An account can be successfully created', async ({ page }) => {
 	await page.getByTestId('email').press('Tab');
 	await page.getByPlaceholder('nickname').click();
 	await page.getByPlaceholder('nickname').fill('featuretest');
-	await page.getByText('Description').click();
+	await page.getByText('Introduce yourself').click();
 	await page.getByPlaceholder('description').click();
 	await page.getByPlaceholder('description').fill('this is a feature test');
 	await page.getByPlaceholder('password', { exact: true }).click();

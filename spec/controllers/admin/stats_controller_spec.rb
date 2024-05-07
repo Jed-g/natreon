@@ -16,11 +16,17 @@ RSpec.describe Admin::StatsController do
       let(:current_user) { admin }
 
       before do
+        create_list(:landing_page_visit, 3)
         get :globe
       end
 
       it "returns a 200 response" do
         expect(response).to have_http_status :ok
+      end
+
+      it "returns the correct data" do
+        data = response.parsed_body
+        expect(data["unique"].length).to eq(1)
       end
     end
 

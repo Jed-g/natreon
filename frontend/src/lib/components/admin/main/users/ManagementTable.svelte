@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Check, X } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import type { SvelteComponent } from 'svelte';
 
@@ -103,6 +104,22 @@
 						{#each Object.keys(item).filter((key) => key !== 'id') as key, index (index)}
 							{#if Object.keys(tableFieldFormatters).includes(key)}
 								<td>{tableFieldFormatters[key](item[key])}</td>
+							{:else if key === 'deactivated'}
+								{#if !item[key]}
+									<td
+										><div
+											class="rounded-full bg-green-900 w-7 h-7 flex items-center justify-center"
+										>
+											<Check />
+										</div></td
+									>
+								{:else}
+									<td
+										><div class="rounded-full bg-red-900 w-7 h-7 flex items-center justify-center">
+											<X />
+										</div></td
+									>
+								{/if}
 							{:else}
 								<td>{item[key]}</td>
 							{/if}
@@ -120,20 +137,23 @@
 									updateTableUiState();
 								}}>Delete</button
 							>
-							<button
-								class="btn btn-warning"
-								on:click={async () => {
-									await deactivateAction(item.id);
-									updateTableUiState();
-								}}>Deactivate</button
-							>
-							<button
-								class="btn btn-success"
-								on:click={async () => {
-									await activateAction(item.id);
-									updateTableUiState();
-								}}>Activate</button
-							>
+							{#if item.deactivated}
+								<button
+									class="btn btn-success"
+									on:click={async () => {
+										await activateAction(item.id);
+										updateTableUiState();
+									}}>Activate</button
+								>
+							{:else}
+								<button
+									class="btn btn-warning"
+									on:click={async () => {
+										await deactivateAction(item.id);
+										updateTableUiState();
+									}}>Deactivate</button
+								>
+							{/if}
 						</td>
 					</tr>
 				{/each}

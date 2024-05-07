@@ -153,6 +153,8 @@
 		return JSON.stringify(obj, Object.keys(obj).sort());
 	};
 
+	let updatePOIDataCancelTokenSource: CancelTokenSource = axios.CancelToken.source();
+
 	const updatePOIData = async () => {
 		const mapBound = map.getBounds();
 		const north = mapBound._ne.lat;
@@ -174,13 +176,23 @@
 			return;
 		}
 
+		if (updatePOIDataCancelTokenSource) {
+			updatePOIDataCancelTokenSource.cancel();
+		}
+		updatePOIDataCancelTokenSource = axios.CancelToken.source();
+		const cancelToken = updatePOIDataCancelTokenSource.token;
+
 		previousPOIRequestParams = paramsFormatted;
 		const params = new URLSearchParams(paramsFormatted);
 
-		const response = await fetch(`/api/poi?${params.toString()}`);
+		const response = await axios
+			.get(`/api/poi?${params.toString()}`, {
+				cancelToken
+			})
+			.catch((error) => error);
 
-		if (response.ok) {
-			const data = await response.json();
+		if (response.status === 200 && response.data) {
+			const data = response.data;
 
 			data.forEach((newPOI: any) => {
 				const validationResult = POIType.decode(newPOI);
@@ -229,6 +241,11 @@
 	let userNickname: string;
 
 	let geolocationDisabled = false;
+
+	const registerPOIClick = (id: number) =>
+		fetch('/api/stats/app/register-new-poi-click?poi_id=' + encodeURIComponent(id), {
+			method: 'POST'
+		});
 
 	onMount(async () => {
 		const ipGeolocationRequest = async () => {
@@ -402,6 +419,7 @@
 				on:click={() => {
 					idOfSelectedPOI = id;
 					map.flyTo({ center: lngLat, padding: { top: 300 } });
+					registerPOIClick(id);
 				}}
 				class={'z-10 grid h-8 w-8 place-items-center rounded-full border border-zinc-600 text-black shadow-2xl focus:outline-2 focus:outline-black' +
 					(idOfSelectedPOI === id ? ' border-4 box-content' : '') +

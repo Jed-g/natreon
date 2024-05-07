@@ -6,7 +6,7 @@ module Customer
     before_action :validate_params, only: [:all]
 
     def all
-      pois = Poi.where(latitude: @south..@north, longitude: @west..@east)
+      pois = Poi.where(latitude: @south..@north, longitude: @west..@east).includes([:poi_pictures])
       pois_formatted = pois.map do |poi|
         {
           lngLat:      {lng: poi.longitude, lat: poi.latitude},
@@ -61,11 +61,20 @@ module Customer
 
       return render_bad_request if poi_name_query_string.blank?
 
-      pois = Poi.where("similarity(name, ?) > #{SIMILARITY_THRESHOLD}", poi_name_query_string)
-                .order(Arel.sql('similarity(name, ' + ActiveRecord::Base.connection.quote(poi_name_query_string) + ') DESC'))
-                .limit(MAXIMUM_NUMBER_OF_POI_SEARCH_RESULTS)
+      similarity_query = Poi.select("pois.*, similarity(name, #{ActiveRecord::Base.connection.quote(poi_name_query_string)}) as similarity_score")
+                            .where("similarity(name, ?) > #{SIMILARITY_THRESHOLD}", poi_name_query_string)
+                            .includes([:poi_pictures])
 
-      pois_formatted = pois.map do |poi|
+      ilike_query = Poi.select("pois.*, 0 as similarity_score")
+                       .where("name ILIKE ?", "#{poi_name_query_string}%")
+                       .includes([:poi_pictures])
+
+      combined_query = Poi.from("(#{similarity_query.to_sql} UNION #{ilike_query.to_sql}) as pois")
+                          .select('DISTINCT ON (id) *')
+                          .order("id, similarity_score DESC")
+                          .limit(MAXIMUM_NUMBER_OF_POI_SEARCH_RESULTS)
+
+      pois_formatted = combined_query.map do |poi|
         {
           lngLat:      {lng: poi.longitude, lat: poi.latitude},
           name:        poi.name,
@@ -107,11 +116,11 @@ module Customer
     def get_user
       @user = current_user
 
-      return render_internal_server_error if @user.nil?
+      render_internal_server_error if @user.nil?
     end
 
     def render_not_found
-      render json: { error: "Not Found" }, status: :not_found
+      render json: {error: "Not Found"}, status: :not_found
     end
 
     def validate_params
@@ -130,9 +139,9 @@ module Customer
         return render_bad_request
       end
 
-      unless @north >= @south && @east >= @west
-        return render_bad_request
-      end
+      return if @north >= @south && @east >= @west
+
+      render_bad_request
     end
   end
 end

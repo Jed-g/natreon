@@ -38,6 +38,7 @@ gem "bootsnap", require: false
 
 gem "activerecord-session_store"
 gem "active_storage_validations"
+gem "base64", "0.1.1"
 gem "cancancan"
 gem "daemons"
 gem "delayed_job"
@@ -67,8 +68,10 @@ gem "whenever"
 group :development do
   gem "annotate"
   gem "brakeman"
+  gem "bullet"
   gem "bundler-audit"
   gem "letter_opener"
+  gem "rspec-benchmark"
   gem "web-console"
 
   gem "capistrano"

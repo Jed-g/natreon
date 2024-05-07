@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: pois
@@ -13,14 +15,29 @@
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #
+# Indexes
+#
+#  index_pois_on_name  (name) UNIQUE
+#
+
+FEATURES = Poi::FEATURES
+
 FactoryBot.define do
   factory :poi do
-    name { "MyString" }
-    description { "MyText" }
-    location { "MyString" }
-    features { "MyText" }
-    likes { 1 }
-    latitude { 1.5 }
-    longitude { 1.5 }
+    latitude { 54.978252 }
+    longitude { -1.617439 }
+    name { "Newcastle upon Tyne" }
+    location { "newcastle" }
+    description { "dummy desc" }
+    features { FEATURES.sample(rand(1..5)) }
+    likes { 0 }
+
+    # name { "MyString" }
+    # description { "MyText" }
+    # location { "MyString" }
+    # features { ["Natural Landmark"] }
+    # likes { 1 }
+    # latitude { 1.5 }
+    # longitude { 1.5 }
   end
 end
