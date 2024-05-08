@@ -148,10 +148,10 @@ Rails.application.routes.draw do
         resources :posts, only: [:index, :create, :update, :destroy] do
           post 'like', on: :member
         
-          resources :comments, only: [:create, :update, :destroy]
+          resources :comments, only: [:index, :create, :update, :destroy]
         end
 
-        resources :friend_requests, only: [:create, :index, :update, :destroy] do
+        resources :friend_requests, only: [:create, :index, :update, :destroy, :show] do
           member do
             put :accept
           end

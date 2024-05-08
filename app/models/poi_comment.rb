@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: poi_comments
@@ -22,12 +24,9 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class PoiComment < ApplicationRecord
-    belongs_to :user
-    belongs_to :poi
-  
-    validates :user_id, presence: true
-    validates :poi_id, presence: true
-    validates :text, presence: true
-    validates :rating, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
-  end
-  
+  belongs_to :user
+  belongs_to :poi
+
+  validates :text, presence: true
+  validates :rating, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 5}
+end

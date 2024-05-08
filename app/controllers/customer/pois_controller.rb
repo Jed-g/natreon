@@ -70,7 +70,7 @@ module Customer
                        .includes([:poi_pictures])
 
       combined_query = Poi.from("(#{similarity_query.to_sql} UNION #{ilike_query.to_sql}) as pois")
-                          .select('DISTINCT ON (id) *')
+                          .select("DISTINCT ON (id) *")
                           .order("id, similarity_score DESC")
                           .limit(MAXIMUM_NUMBER_OF_POI_SEARCH_RESULTS)
 
@@ -118,11 +118,11 @@ module Customer
 
       render_internal_server_error if @user.nil?
     end
-    
+
     def total_comments
       comments.count
     end
-  
+
     def latest_comment
       comments.order(created_at: :desc).first
     end

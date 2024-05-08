@@ -14,7 +14,7 @@ RSpec.describe Customer::FavouritePoisController do
     context "with valid params" do
       let(:current_user) { user }
       let(:poi1) { create(:poi) }
-      let(:poi2) { create(:poi) }
+      let(:poi2) { create(:poi, name: "test1") }
       let(:valid_picture) {
         Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/image0001.jpeg"), "image/jpeg")
       }

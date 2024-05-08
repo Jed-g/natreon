@@ -133,8 +133,8 @@ RSpec.describe Customer::CheckInController do
 
     context "when user has checked in at multiple pois" do
       let(:current_user) { user }
-      let(:poi2) { create(:poi) }
-      let(:poi3) { create(:poi) }
+      let(:poi2) { create(:poi, name: "test1") }
+      let(:poi3) { create(:poi, name: "test2") }
       let(:valid_picture) {
         Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/image0001.jpeg"), "image/jpeg")
       }

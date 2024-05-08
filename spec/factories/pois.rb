@@ -26,7 +26,7 @@ FactoryBot.define do
   factory :poi do
     latitude { 54.978252 }
     longitude { -1.617439 }
-    name { "Newcastle upon Tyne" }
+    sequence(:name) {|n| "POI #{n}" }
     location { "newcastle" }
     description { "dummy desc" }
     features { FEATURES.sample(rand(1..5)) }

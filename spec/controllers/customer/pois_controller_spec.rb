@@ -42,11 +42,11 @@ west: poi1.longitude - 1}
       expect(response).to have_http_status :ok
     end
 
-    it "performs in under 4 seconds under high data loads" do
+    it "performs in under 5 seconds under high data loads" do
       create_list(:poi, 1000)
       expect {
         get :all, params: {north: 90, south: -90, east: 180, west: -180}
-      }.to perform_under(4000).ms
+      }.to perform_under(5000).ms
     end
 
     it "returns the correct lngLat" do

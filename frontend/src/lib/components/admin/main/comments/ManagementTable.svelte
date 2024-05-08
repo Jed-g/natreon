@@ -1,16 +1,14 @@
 
 <script lang="ts">
-    // Import dependencies
+    
     import { onMount } from 'svelte';
 
-    // Define props
     export let getItemsAction: () => Promise<any[]>;
     export let deleteAction: (id: number) => Promise<void>;
     export let toggleReportStatusAction: (id: number) => Promise<void>;
     export let tableName: string;
     export let tableHeaders: string[];
 
-    // Define state variables
     let loading = true;
     let items: any[];
 

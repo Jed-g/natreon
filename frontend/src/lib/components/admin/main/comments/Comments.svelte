@@ -1,13 +1,13 @@
-<!-- Your main Svelte component -->
+
 <script lang="ts">
     import ManagementTable from '$lib/components/admin/main/comments/ManagementTable.svelte';
     import { authenticated } from '$lib/stores';
 	import { toast } from 'svelte-sonner';
 
-
+    // Function to get all comments
     const getAllComments = async () => {
         console.log("Fetching all comments...");
-        const response = await fetch('/api/admin/comments'); // Fetch comments from this endpoint
+        const response = await fetch('/api/admin/comments');
         const data = await response.json();
         console.log("Comments fetched:", data);
         return data;
@@ -26,7 +26,6 @@
         const data = await response.json();
         console.log("Change comment status response:", data);
 
-        // Show toast notification
         if (response.ok) {
             toast.success('Comment report status changed successfully!')
             getAllComments();
