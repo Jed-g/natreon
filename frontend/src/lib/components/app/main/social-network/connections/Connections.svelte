@@ -269,10 +269,13 @@
 
 <h1 class="text-xl font-bold mb-4">Your Connections</h1>
 <Button
-	on:click={() => (open = true)}
+	on:click={() => {
+		searchQuery = '';
+		open = true;
+	}}
 	class="text-secondary-foreground w-full bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground mb-4"
 >
-	<div class="flex gap-2 items-center ">
+	<div class="flex gap-2 items-center">
 		<Search />
 		<p class="text-sm">Search users...</p>
 	</div>
