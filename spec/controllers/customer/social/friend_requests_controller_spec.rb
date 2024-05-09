@@ -33,7 +33,7 @@ RSpec.describe Customer::Social::FriendRequestsController do
       expect(response.parsed_body["outgoing"].length).to eq(1)
     end
 
-    it "will perform under 3 seconds under high data loads" do
+    it "will perform under 2 seconds under high data loads" do
       user = User.first
       1000.times do |i|
         friend = User.create!(email: "user#{i}@test.com", password: "password", password_confirmation: "password")
