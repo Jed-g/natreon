@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     post "/stats/landing/registration-completed", to: "stats/landing_page#registration_completed"
 
     get "/stats/admin/register-new-page-visit", to: "stats/admin_page#register_new_page_visit"
+    post "/stats/admin/register-new-page-visit", to: "stats/admin_page#register_new_page_visit"
     post "/stats/admin/register-new-page-visit-with-ip-param", to: "stats/admin_page#register_new_page_visit_with_ip_param"
     post "/stats/admin/update-page-visit", to: "stats/admin_page#update_page_visit"
 
@@ -61,6 +62,8 @@ Rails.application.routes.draw do
     post "/admin/comments", to: "admin/comments#create_comment"
     patch "/admin/comments/:id/toggle_report_status", to: "admin/comments#toggle_report_status"
     delete "/admin/comments/:id", to: "admin/comments#delete_comment"
+    post '/api/comments/:id/send_email_notification', to: 'admin/comments#send_email_notification'
+
     
     get "/admin/pois", to: "admin/pois#all_pois"
     post "/admin/pois", to: "admin/pois#create_poi"

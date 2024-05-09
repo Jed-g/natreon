@@ -47,6 +47,7 @@ module Admin
         comment = Comment.find_by(id: params[:id])
         if comment
           if comment.destroy
+
             render json: { message: 'Comment deleted successfully' }, status: :ok
           else
             render json: { error: 'Failed to delete comment' }, status: :unprocessable_entity
@@ -55,12 +56,27 @@ module Admin
           render json: { error: 'Comment not found' }, status: :not_found
         end
       end
+
+      def create_email
+        comment = Comment.find(params[:id])
+        @friend_request = current_user.friend_requests.new(friend: friend)
       
-      # In your controller action
+        if @friend_request.save
+          FriendRequestMailer.friend_request(@friend_request).deliver_now
+          render :show, status: :created, location: @friend_request
+        else
+          render json: @friend_request.errors, status: :unprocessable_entity
+        end
+      end
+
       def toggle_report_status
         @comment = Comment.find(params[:id])
+      
+        # Log the id parameter
+        Rails.logger.info("ID received in toggle_report_status: #{params[:id]}")
+      
         @comment.update(reported: !@comment.reported)
-        # Redirect or render appropriate response
+        render json: { message: 'Status is changed to ok' }
       end
 
       private
