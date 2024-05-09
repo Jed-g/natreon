@@ -85,8 +85,6 @@
 
 	const sendFriendRequest = async (userId: any) => {
 		await fetchFriendRequests();
-		console.log(outgoingFriendRequests);
-
 		if (outgoingFriendRequests.some((request) => String(request.friend_id) === String(userId))) {
 			window.alert('Friend request already sent!');
 			return;

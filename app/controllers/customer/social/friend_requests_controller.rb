@@ -24,6 +24,7 @@ module Customer
         @friend_request = current_user.friend_requests.new(friend:)
 
         if @friend_request.save
+          FriendRequestMailer.friend_request(@friend_request).deliver_now
           render :show, status: :created, location: customer_social_friend_request_url(@friend_request)
         else
           render json: @friend_request.errors, status: :unprocessable_entity
