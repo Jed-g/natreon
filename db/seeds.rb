@@ -14,6 +14,13 @@ when "test"
         user.description = "test_description"
 
     end
+    User.find_or_create_by(email: "customer1@test.com") do |user|
+        user.password = "password"
+        user.user_type = 0
+        user.nickname = "test_customer1"
+        user.description = "test_description"
+
+      end
     # User.find_or_create_by(email: "reporter@test.com") do |user|
     #     user.password = "password"
     #     user.user_type = 2
@@ -54,6 +61,7 @@ when "development"
         user.description = "test_description"
 
     end
+
     PoiComment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
     PoiComment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
     require_relative 'points_of_interest'

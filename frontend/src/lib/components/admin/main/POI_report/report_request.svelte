@@ -6,10 +6,10 @@
     id: string;
     description: string;
     features: string[];
-    comments: string[]; // Add the 'comment' variable here
+    comments: string[];
 };
     async function deleteComment(id: string) {
-      // Your delete comment logic here
+     
     }
 </script>
   

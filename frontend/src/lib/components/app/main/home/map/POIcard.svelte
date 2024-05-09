@@ -4,7 +4,7 @@
 	import { quintOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
-	import ViewDetailsPOI from './ViewDetailsPOI.svelte'; // Assuming the file name is ViewDetailsPOI.svelte
+	import ViewDetailsPOI from './ViewDetailsPOI.svelte';
 	import type { POI } from './Map.svelte';
 	import * as HoverCard from '$lib/components/ui/hover-card';
 	import { Toggle } from '$lib/components/ui/toggle';
@@ -246,7 +246,6 @@
 	</Card.Root>
 </div>
 
-<!-- Display ViewDetailsPOI component when selectedPOI is not null -->
 {#if detailsOpen}
 	<ViewDetailsPOI bind:poi {refreshPOIs} onClose={() => (detailsOpen = false)} {userNickname} />
 {/if}

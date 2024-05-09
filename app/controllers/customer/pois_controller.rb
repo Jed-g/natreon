@@ -18,7 +18,7 @@ module Customer
           likes:       poi.likes,
           pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
           checkedIn:   poi.check_ins.exists?(user: @user),
-          comments:    [] # Add later...
+          comments:    [] 
         }
       end
 
@@ -44,7 +44,7 @@ module Customer
         likes:       poi.likes,
         pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
         checkedIn:   poi.check_ins.exists?(user: @user),
-        comments:    [] # Add later...
+        comments:    [] 
       }
 
       render json: poi_formatted
@@ -85,7 +85,7 @@ module Customer
           likes:       poi.likes,
           pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
           checkedIn:   poi.check_ins.exists?(user: @user),
-          comments:    [] # Add later...
+          comments:    [] 
         }
       end
 
@@ -96,9 +96,9 @@ module Customer
       poi_id = params[:poi_id]
       @poi = Poi.find_by(id: poi_id)
 
-      return render_not_found unless @poi # Handle case where POI is not found
+      return render_not_found unless @poi
 
-      picture = params[:picture] # Assuming you're sending the pictures as part of the request params
+      picture = params[:picture]
       poi_picture = @poi.poi_pictures.build(user: @user)
       poi_picture.picture.attach(picture)
 

@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "rspec-benchmark"
+require "spec_helper"
+
+RSpec.configure do |config|
+  config.include RSpec::Benchmark::Matchers
+end
 
 RSpec.describe Customer::Social::PostsController do
   let(:user) { create(:user) }
@@ -25,6 +31,13 @@ RSpec.describe Customer::Social::PostsController do
                                                 }
                                               }).deep_symbolize_keys
       expect(actual_response).to eq([expected_response])
+    end
+
+    it " will perform under 3.5 seconds under high data loads" do
+      1000.times do
+        Post.create!(content: "Test content", user: User.first)
+      end
+      expect { get :index }.to perform_under(3500).ms
     end
   end
 
