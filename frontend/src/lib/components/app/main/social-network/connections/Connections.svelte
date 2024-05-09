@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 	import * as Command from '$lib/components/ui/command';
 
+	let current_user: { id: any } | null = null;
 	let users: any[] = [];
 	let friends: any[] = [];
 	let incomingFriendRequests: any[] = [];
@@ -59,7 +60,6 @@
 		}
 
 		const blockedUsers = await blockedResponse.json();
-		console.log('Blocked users:', blockedUsers);
 		const unblockedUsers = friends.filter((user: { id: any }) => !blockedUsers.includes(user.id));
 
 		friends = unblockedUsers;
@@ -84,6 +84,13 @@
 	};
 
 	const sendFriendRequest = async (userId: any) => {
+		await fetchFriendRequests();
+		console.log(outgoingFriendRequests);
+
+		if (outgoingFriendRequests.some((request) => String(request.friend_id) === String(userId))) {
+			window.alert('Friend request already sent!');
+			return;
+		}
 		const response = await fetch('/api/social/friend_requests', {
 			method: 'POST',
 			headers: {
@@ -221,15 +228,34 @@
 		const response = await fetch(
 			`/api/social/users/search-by-nickname?nickname=${encodeURIComponent(searchQuery)}`
 		);
-		const data = await response.json();
+		let data = await response.json();
+
+		// remove current usr from search results to stop them adding self
+		data = data.filter((user: { id: any }) => user.id !== current_user?.id);
 		matchingUsers = data;
 		loading = false;
 	};
 
+	// get random users from the list of all and put them in peopke you might know
+	function getRandomUsers(users: any[]) {
+		const shuffledUsers = users.sort(() => 0.5 - Math.random());
+		return shuffledUsers.slice(0, 5);
+	}
+
+	// grab users, friends, frienqRequests and blocked users from the API
 	onMount(fetchUsers);
 	onMount(fetchFriends);
 	onMount(fetchFriendRequests);
 	onMount(fetchBlockedUsers);
+
+	// get current user from API
+	onMount(async () => {
+		const response = await fetch('/api/social/users/show', {});
+		if (response.ok) {
+			current_user = await response.json();
+		}
+	});
+
 	$: if (searchQuery?.trim()) {
 		searchUsers();
 	}
@@ -244,16 +270,16 @@
 <h1 class="text-xl font-bold mb-4">Your Connections</h1>
 <Button
 	on:click={() => (open = true)}
-	class="text-secondary-foreground w-full sm:max-w-md bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground mb-4"
+	class="text-secondary-foreground w-full bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground mb-4"
 >
-	<div class="flex gap-2 items-center">
+	<div class="flex gap-2 items-center ">
 		<Search />
 		<p class="text-sm">Search users...</p>
 	</div>
 </Button>
 
 <Command.Dialog bind:open shouldFilter={false} loop>
-	<Command.Input placeholder={'Search by name…'} bind:value={searchQuery}/>
+	<Command.Input placeholder={'Search by name…'} bind:value={searchQuery} />
 	<Command.List class="my-2">
 		{#if loading}
 			<Command.Loading>
@@ -271,12 +297,18 @@
 				{#each matchingUsers as user (user.id)}
 					<Command.Item
 						value={user.id.toString()}
-						onSelect={() => console.log('show profile')}
+						onSelect={(id) => {
+							// add friend request, close dialogue
+							sendFriendRequest(id);
+							open = false;
+						}}
 						class="cursor-pointer"
 					>
 						<div class="flex flex-col w-full gap-2">
 							<div class="flex justify-between gap-4">
 								<p>{user.nickname}</p>
+								<!-- This is a kinda fake button - you can just press the whole item to add friend -->
+								<Button>Add Friend</Button>
 							</div>
 						</div>
 					</Command.Item>
@@ -299,14 +331,12 @@
 					<Button
 						class="bg-red-500 text-white"
 						on:click={() => {
-							console.log(friend.id);
 							deleteFriend(friend.id);
 						}}>Delete</Button
 					>
 					<Button
 						class="bg-yellow-500 text-white"
 						on:click={() => {
-							console.log(`Friend ID: ${friend.id}`);
 							blockUser(friend.id);
 						}}>Block</Button
 					>
@@ -346,7 +376,7 @@
 {#if users.length !== 0}
 	<h1 class="text-xl font-bold mb-4">People you might know</h1>
 	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-		{#each users as user}
+		{#each getRandomUsers(users) as user}
 			<Card.Root class="card">
 				<Card.Header>
 					<Card.Title>{user.nickname}</Card.Title>
@@ -384,7 +414,6 @@
 					<Card.Title>{user.nickname}</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<!-- <Button on:click={() => console.log(user.id)}>Unblock User</Button> -->
 					<Button on:click={() => unblockUser(user.id)}>Unblock User</Button>
 				</Card.Content>
 			</Card.Root>
