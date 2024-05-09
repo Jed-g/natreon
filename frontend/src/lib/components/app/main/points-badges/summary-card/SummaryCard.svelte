@@ -16,7 +16,7 @@
 	export let inProgressTotalPoiReviews: BadgeStatus;
 </script>
 
-<p class="text-sm font-medium leading-none text-muted-foreground mb-3">Your Progression</p>
+<p class="text-lg font-medium leading-none text-muted-foreground mb-3">Your Progression</p>
 <div class="grid grid-cols-4 max-sm:grid-cols-2 max-sm:grid-rows-2 gap-2">
 	<SummaryCardTotalPoints {totalPoints} {inProgressTotalPoints} />
 	<SummaryCardTotalCheckIns {totalCheckInCounts} {inProgressTotalCheckIns} />

@@ -39,7 +39,7 @@
 	);
 </script>
 
-<p class="text-sm font-medium leading-none text-muted-foreground mb-3">Upcoming Milestones</p>
+<p class="text-lg font-medium leading-none text-muted-foreground mb-3">Upcoming Milestones</p>
 {#if collapsedViewData.length === 0}
 	<div class="flex justify-center items-center p-4">
 		<p>You have achieved all possible milestones, congratulations!</p>
