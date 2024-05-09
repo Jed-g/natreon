@@ -14,6 +14,13 @@ when "test"
         user.description = "test_description"
 
     end
+    User.find_or_create_by(email: "customer1@test.com") do |user|
+        user.password = "password"
+        user.user_type = 0
+        user.nickname = "test_customer1"
+        user.description = "test_description"
+
+      end
     # User.find_or_create_by(email: "reporter@test.com") do |user|
     #     user.password = "password"
     #     user.user_type = 2
