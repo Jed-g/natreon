@@ -92,42 +92,42 @@
 			<div class="stat card bg-base-300">
 				<div class="stat-title">Total Customers</div>
 				<div class="stat-value">{customerUsersInSystem}</div>
-				<div class="stat-figure text-secondary">
+				<div class="stat-figure text-primary">
 					<Icon icon={accountIcon} height={24} class="scale-125" />
 				</div>
 			</div>
 			<div class="stat card bg-base-300">
 				<div class="stat-title">Mailing List Signups</div>
 				<div class="stat-value">{mailingListSignups}</div>
-				<div class="stat-figure text-secondary">
+				<div class="stat-figure text-primary">
 					<Icon icon={mailIcon} height={24} class="scale-125" />
 				</div>
 			</div>
 			<div class="stat card bg-base-300">
 				<div class="stat-title">No. of Reviews</div>
 				<div class="stat-value">{totalReviews}</div>
-				<div class="stat-figure text-secondary">
+				<div class="stat-figure text-primary">
 					<Icon icon={forumIcon} height={24} class="scale-125" />
 				</div>
 			</div>
 			<div class="stat card bg-base-300">
 				<div class="stat-title">Average Review</div>
 				<div class="stat-value">{averageReviewRating.toFixed(1)}</div>
-				<div class="stat-figure text-secondary">
+				<div class="stat-figure text-primary">
 					<Icon icon={starIcon} height={24} class="scale-125" />
 				</div>
 			</div>
 			<div class="stat card bg-base-300">
 				<div class="stat-title">Questions Asked</div>
 				<div class="stat-value">{questionsAsked}</div>
-				<div class="stat-figure text-secondary">
+				<div class="stat-figure text-primary">
 					<Icon icon={helpIcon} height={24} class="scale-125" />
 				</div>
 			</div>
 			<div class="stat card bg-base-300">
 				<div class="stat-title">Questions Answered</div>
 				<div class="stat-value">{questionsAnswered}</div>
-				<div class="stat-figure text-secondary">
+				<div class="stat-figure text-primary">
 					<Icon icon={messageDrawIcon} height={24} class="scale-125" />
 				</div>
 			</div>

@@ -18,14 +18,4 @@
 #
 class AppVisit < ApplicationRecord
   self.table_name = "app_visits"
-
-  validate :viewed_pois_exist
-
-  private
-
-  def viewed_pois_exist
-    viewed_pois.each do |poi_id|
-      errors.add(:viewed_pois, "contains invalid poi_id: #{poi_id}") unless Poi.exists?(id: poi_id)
-    end
-  end
 end

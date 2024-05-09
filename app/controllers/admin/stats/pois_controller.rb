@@ -44,6 +44,8 @@ module Admin
           counts.each {|poi_id, count| agg[poi_id] += count }
         end
 
+        filtered_counts = aggregated_counts.select {|poi_id, _| pois.key?(poi_id) }
+
         result = aggregated_counts.map do |poi_id, count|
           {count:, poi: pois[poi_id]}
         end.sort_by {|h| -h[:count] }
