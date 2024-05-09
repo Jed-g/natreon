@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "rspec-benchmark"
+require "spec_helper"
+
+RSpec.configure do |config|
+  config.include RSpec::Benchmark::Matchers
+end
 
 RSpec.describe Customer::Social::FriendRequestsController do
   let(:user) { create(:user) }
@@ -25,6 +31,15 @@ RSpec.describe Customer::Social::FriendRequestsController do
       get :index
       expect(response).to be_successful
       expect(response.parsed_body["outgoing"].length).to eq(1)
+    end
+
+    it "will perform under 3 seconds under high data loads" do
+      user = User.first
+      1000.times do |i|
+        friend = User.create!(email: "user#{i}@test.com", password: "password", password_confirmation: "password")
+        FriendRequest.create!(user: user, friend: friend)
+      end
+      expect { get :index }.to perform_under(2000).ms
     end
   end
 

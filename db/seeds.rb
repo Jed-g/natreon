@@ -54,6 +54,7 @@ when "development"
         user.description = "test_description"
 
     end
+
     PoiComment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
     PoiComment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
     require_relative 'points_of_interest'

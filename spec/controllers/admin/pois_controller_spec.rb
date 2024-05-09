@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "rspec-benchmark"
+require "spec_helper"
+
+RSpec.configure do |config|
+  config.include RSpec::Benchmark::Matchers
+end
 
 RSpec.describe Admin::PoisController do
   let(:user) { create(:user, user_type: "customer") }
@@ -20,6 +26,13 @@ RSpec.describe Admin::PoisController do
 
       it "returns a success response" do
         expect(response).to have_http_status :ok
+      end
+
+      it "performs in under 3 seconds under high data loads" do
+        create_list(:poi, 1000)
+        expect {
+          get :all_pois
+        }.to perform_under(3000).ms
       end
     end
 
