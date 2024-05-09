@@ -1,13 +1,19 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import { Search } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import * as Command from '$lib/components/ui/command';
 
 	let users: any[] = [];
 	let friends: any[] = [];
 	let incomingFriendRequests: any[] = [];
 	let outgoingFriendRequests: any[] = [];
 	let blockedUsers: string | any[] = [];
+	let open = false;
+	let loading = false;
+	let searchQuery: string;
+	let matchingUsers: any[] = [];
 
 	const fetchUsers = async () => {
 		const response = await fetch('/api/social/users', {
@@ -210,10 +216,23 @@
 		fetchFriendRequests();
 	};
 
+	const searchUsers = async () => {
+		loading = true;
+		const response = await fetch(
+			`/api/social/users/search-by-nickname?nickname=${encodeURIComponent(searchQuery)}`
+		);
+		const data = await response.json();
+		matchingUsers = data;
+		loading = false;
+	};
+
 	onMount(fetchUsers);
 	onMount(fetchFriends);
 	onMount(fetchFriendRequests);
 	onMount(fetchBlockedUsers);
+	$: if (searchQuery?.trim()) {
+		searchUsers();
+	}
 
 	$: users = users.filter(
 		(user) =>
@@ -223,6 +242,50 @@
 </script>
 
 <h1 class="text-xl font-bold mb-4">Your Connections</h1>
+<Button
+	on:click={() => (open = true)}
+	class="text-secondary-foreground w-full sm:max-w-md bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground mb-4"
+>
+	<div class="flex gap-2 items-center">
+		<Search />
+		<p class="text-sm">Search users...</p>
+	</div>
+</Button>
+
+<Command.Dialog bind:open shouldFilter={false} loop>
+	<Command.Input placeholder={'Search by name…'} bind:value={searchQuery}/>
+	<Command.List class="my-2">
+		{#if loading}
+			<Command.Loading>
+				<div class="h-[300px] w-full flex items-center justify-center">
+					<span class="loading loading-ring loading-lg" />
+				</div>
+			</Command.Loading>
+		{:else if matchingUsers.length === 0}
+			<Command.Empty class="h-[300px] flex items-center justify-center"
+				>No results found.</Command.Empty
+			>
+		{:else}
+			<p class="px-4 py-2 font-medium leading-none">User Search</p>
+			<Command.Group>
+				{#each matchingUsers as user (user.id)}
+					<Command.Item
+						value={user.id.toString()}
+						onSelect={() => console.log('show profile')}
+						class="cursor-pointer"
+					>
+						<div class="flex flex-col w-full gap-2">
+							<div class="flex justify-between gap-4">
+								<p>{user.nickname}</p>
+							</div>
+						</div>
+					</Command.Item>
+				{/each}
+			</Command.Group>
+		{/if}
+	</Command.List>
+</Command.Dialog>
+
 {#if friends.length === 0}
 	<p class="mb-8">Add some friends to get started!</p>
 {:else}

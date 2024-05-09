@@ -146,7 +146,8 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :users, only: [:create, :index, :update, :destroy, :show]
+        get "/users/search-by-nickname", to: "users#search_by_nickname"
+        resources :users, only: [:create, :index, :update, :destroy]
         post 'users/block/:id', to: 'blocks#block', as: 'block_user'
         delete 'users/unblock/:id', to: 'blocks#unblock', as: 'unblock_user'
         resources :blocks, only: [:create, :index, :update, :destroy]
