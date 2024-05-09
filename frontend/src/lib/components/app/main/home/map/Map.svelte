@@ -210,6 +210,7 @@
 	};
 
 	const fetchPOIById = async (poiId: number) => {
+		// Potential early reject if POI has already been in viewport/lazily-loaded
 		if (pointsOfInterest.some((poi) => poi.id === poiId)) {
 			idOfSelectedPOI = poiId;
 			return;
@@ -309,6 +310,7 @@
 			userNickname = nickname;
 		};
 
+		// Make 3 fetch requests in parallel for efficiency
 		await Promise.allSettled([
 			ipGeolocationRequest(),
 			poiFeatureOptionsRequest(),
@@ -327,6 +329,7 @@
 		map.addControl(nav, 'bottom-right');
 		nav._container.parentElement!.style.zIndex = '10';
 
+		// Add a geolocate control to the map.
 		geolocate = new GeolocateControl({
 			positionOptions: {
 				enableHighAccuracy: true
