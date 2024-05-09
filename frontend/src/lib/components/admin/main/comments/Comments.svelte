@@ -13,28 +13,41 @@
         return data;
     };
 
-    // Function to toggle report status
-    const toggleReportStatus = async (id: number) => {
-        console.log("Toggling report status for comment with ID:", id);
-        const response = await fetch(`/api/admin/comments/${id}/toggle_report_status`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
+    async function toggleReportStatus(commentId: number): Promise<void> {
+        try {
+            const response = await fetch(`/api/admin/comments/${commentId}/toggle_report_status`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reported: false })
+            });
+            if (response.ok) {
+                // Optionally, update the UI to reflect the reported status
+                toast.success('Comment reported successfully.');
+            } else {
+                throw new Error('Failed to report comment.');
             }
-        });
-        authenticated.verify();
-        const data = await response.json();
-        console.log("Change comment status response:", data);
-
-        // Show toast notification
-        if (response.ok) {
-            toast.success('Comment report status changed successfully!')
-            getAllComments();
-        } else {
-            toast.error('Failed to change comment report status');
+        } catch (error) {
+            console.error('Error reporting comment:', error);
+            toast.error('An error occurred while reporting the comment.');
         }
-
-        return data;
+    }
+    
+    // Function to send email notification to user
+    const sendEmailNotification = async (commentId: number) => {
+        try {
+            const response = await fetch(`/api/comments/${commentId}/send_email_notification`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            console.log("Email notification response:", data);
+        } catch (error) {
+            console.error('Error sending email notification:', error);
+        }
     };
 
     // Function to handle comment deletion
@@ -47,16 +60,16 @@
             }
         });
         authenticated.verify();
+
+        if (!response.ok){
+            throw new Error ("Failed to delete comment")
+        }
+
         const data = await response.json();
         console.log("Delete response:", data);
-
-        // Show toast notification
-        if (response.ok) {
-            toast.success('Comment deleted successfully!');
-            getAllComments();
-        } else {
-            toast.error('Failed to delete comment');
-        }
+        await getAllComments(); // Await getAllComments completion
+        sendEmailNotification(id); // You need to implement this function
+        toast.success('Comment deleted successfully!'); // Show toast after getting comments
 
         return data;
     };

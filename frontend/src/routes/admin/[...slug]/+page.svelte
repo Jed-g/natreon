@@ -36,6 +36,7 @@
 				break;
 			case AdminDashboardUrls.COMMENTS:
 				mainComponent = Comments;
+				break;
 			case AdminDashboardUrls.STATS:
 				mainComponent = Stats;
 				break;

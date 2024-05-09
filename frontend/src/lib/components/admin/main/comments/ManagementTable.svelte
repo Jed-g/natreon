@@ -21,9 +21,6 @@
         loading = false;
     };
 
-    // Fetch items when component mounts
-    onMount(updateTableUiState);
-
     // Function to handle item deletion
     const handleDelete = async (id: number) => {
         console.log("Deleting item with ID:", id);
@@ -32,9 +29,12 @@
 
     // Function to handle toggling report status
     const handleToggleReportStatus = async (id: number) => {
-        console.log("Toggling report status for item with ID:", id);
         await toggleReportStatusAction(id);
     };
+
+    onMount(() => {
+        updateTableUiState(); // Call the getComments function when the component mounts
+	});
 </script>
 
 <div class="flex"><h1 class="text-2xl">{tableName}</h1></div>

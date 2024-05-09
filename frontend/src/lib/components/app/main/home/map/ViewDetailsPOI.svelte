@@ -176,43 +176,45 @@
 </script>
 
 <Dialog.Root open={true} onOpenChange={(newOpenValue) => newOpenValue || onClose()}>
-    <Dialog.Content>
+    <Dialog.Content class = "max-h-[90%] overflow-y-auto p-4 "style="max-width:max(70%, 800px);">
         <!-- Display the details using the props -->
         <div class="flex flex-col items-center w-full max-w-full mx-auto bg-gray-800 rounded-lg p-8">
             <h2 class="text-2xl font-bold text-white">{name}</h2>
             <p class="text-white">ID: {id}</p>
 
             <!-- Comments container with separate scroll -->
-            <div class="comment-container mt-8 overflow-y-auto max-h-48">
+            <div class="comment-container mt-8 overflow-y-auto max-h-48" style="width: 80%;"> <!-- Adjust width as needed -->
                 <h3 class="text-lg font-bold text-white mb-4">Comments</h3>
                 <div class="comments-scroll">
                     <!-- Table for column headers -->
                     <div class="comment-header flex items-center bg-gray-700 text-white py-2 px-4 mb-4">
-                        <div class="w-1/4">User</div>
-                        <div class="w-1/4">Comment</div>
-                        <div class="w-1/4">Rating</div>
+                        <div class="w-1/3">User</div>
+                        <div class="w-1/2">Comment</div>
+                        <div class="w-1/6">Rating and Report</div>
                         <!-- No header for the fourth column -->
                     </div>
 
                     <!-- Individual comment lines -->
                     {#each comments as comment, i}
                         <div class="comment-wrapper flex items-center justify-between px-4 mb-4 w-full">
-                            <div class="comment-info w-1/4">
+                            <div class="comment-info w-1/3"> <!-- Adjust width as needed, e.g., w-1/3 -->
                                 <div class="user-name text-white">{comment.nickname}</div>
                             </div>
-                            <div class="comment-info w-1/4">
+                            <div class="comment-info w-1/2"> <!-- Adjust width as needed, e.g., w-1/2 -->
                                 <div class="comment-text text-white">{comment.text}</div>
                             </div>
-                            <div class="comment-info w-1/4">
+                            <div class="comment-info w-1/6"> <!-- Adjust width as needed, e.g., w-1/6 -->
                                 <div class="comment-rating text-white">{comment.rating}</div>
                             </div>
-                            <div class="comment-info w-1/4"> <!-- Fourth column for report buttons -->
+                            <div class="comment-info w-1/6"> <!-- Fourth column for report buttons -->
                                 <button class="report-button py-2 px-4 bg-red-600 text-white rounded-lg" on:click={() => reportComment(comment.id)}>Report</button>
                             </div>
                         </div>
                     {/each}
+
                 </div>
             </div>
+                    
 
 
             <!-- Textarea for user to input comments -->
@@ -238,65 +240,3 @@
         </div>
     </Dialog.Content>
 </Dialog.Root>
-
-<style>
-	.details-container {
-		position: fixed;
-		top: 50%;
-		left: 40%;
-		transform: translate(-50%, -50%);
-		background-color: rgb(16, 16, 16);
-		padding: 20px;
-		border: 2px solid #ccc;
-		border-radius: 8px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		z-index: 999; 
-		color: white;
-		max-width: 400px;
-		width: 200%;
-	}
-
-	.comment-container {
-		margin-top: 20px;
-	}
-
-	.comments-scroll {
-		max-height: 200px; 
-		overflow-y: auto;
-	}
-
-	.comment-wrapper {
-		display: flex;
-		align-items: center;
-	}
-
-	.comment {
-		flex: 1;
-		background-color: #333;
-		padding: 10px;
-		border-radius: 8px;
-		margin-bottom: 10px;
-	}
-
-	.report-button {
-		margin-left: 10px;
-		padding: 8px 12px;
-		background-color: #f44336;
-		color: white;
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-	}
-
-	.report-button:hover {
-		background-color: #d32f2f;
-	}
-
-	h2 {
-		margin-top: 0;
-	}
-
-	ul {
-		padding-left: 20px;
-	}
-</style>
