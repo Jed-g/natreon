@@ -1,5 +1,4 @@
 import UserType from '$lib/enums/userType';
-import type { Test } from 'vitest';
 
 /**
  * Checks if the user is authenticated / Determines userType by making a request to the server.

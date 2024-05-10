@@ -18,7 +18,7 @@ module Customer
           likes:       poi.likes,
           pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
           checkedIn:   poi.check_ins.exists?(user: @user),
-          comments:    [] 
+          comments:    []
         }
       end
 
@@ -44,7 +44,7 @@ module Customer
         likes:       poi.likes,
         pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
         checkedIn:   poi.check_ins.exists?(user: @user),
-        comments:    [] 
+        comments:    []
       }
 
       render json: poi_formatted
@@ -85,7 +85,7 @@ module Customer
           likes:       poi.likes,
           pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
           checkedIn:   poi.check_ins.exists?(user: @user),
-          comments:    [] 
+          comments:    []
         }
       end
 

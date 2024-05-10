@@ -25,17 +25,16 @@
 #
 
 FactoryBot.define do
-    factory :poi_comment do
-      association :user
-      association :poi
-      text { "This is a sample comment." }
-      rating { rand(1..5) }
-      reported { false }
-  
-      # If you want to create reported comments in your tests
-      trait :reported do
-        reported { true }
-      end
+  factory :poi_comment do
+    user
+    poi
+    text { "This is a sample comment." }
+    rating { rand(1..5) }
+    reported { false }
+
+    # If you want to create reported comments in your tests
+    trait :reported do
+      reported { true }
     end
   end
-  
+end
