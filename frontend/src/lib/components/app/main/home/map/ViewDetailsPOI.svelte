@@ -161,47 +161,48 @@
 </script>
 
 <Dialog.Root open={true} onOpenChange={(newOpenValue) => newOpenValue || onClose()}>
-	<Dialog.Content>
-		<div class="flex flex-col items-center w-full max-w-full mx-auto bg-gray-800 rounded-lg p-8">
-			<h2 class="text-2xl font-bold text-white">{name}</h2>
-			<p class="text-white">ID: {id}</p>
+    <Dialog.Content class = "max-h-[90%] overflow-y-auto p-4 "style="max-width:max(70%, 800px);">
+        <!-- Display the details using the props -->
+        <div class="flex flex-col items-center w-full max-w-full mx-auto bg-gray-800 rounded-lg p-8">
+            <h2 class="text-2xl font-bold text-white">{name}</h2>
+            <p class="text-white">ID: {id}</p>
 
-			<div class="comment-container mt-8 overflow-y-auto max-h-48">
-				<h3 class="text-lg font-bold text-white mb-4">Comments</h3>
-				<div class="comments-scroll">
-					<div class="comment-header flex items-center bg-gray-700 text-white py-2 px-4 mb-4">
-						<div class="w-1/4">User</div>
-						<div class="w-1/4">Comment</div>
-						<div class="w-1/4">Rating</div>
-					</div>
+            <!-- Comments container with separate scroll -->
+            <div class="comment-container mt-8 overflow-y-auto max-h-48" style="width: 80%;"> <!-- Adjust width as needed -->
+                <h3 class="text-lg font-bold text-white mb-4">Comments</h3>
+                <div class="comments-scroll">
+                    <div class="comment-header flex items-center bg-gray-700 text-white py-2 px-4 mb-4">
+                        <div class="w-1/4">User</div>
+                        <div class="w-1/2">Review</div>
+                        <div class="w-1/6">Rating </div>
+                        <div class="w-1/6">Report </div>
+                        <!-- No header for the fourth column -->
+                    </div>
 
-					{#each comments as comment, i}
-						<div class="comment-wrapper flex items-center justify-between px-4 mb-4 w-full">
-							<div class="comment-info w-1/4">
-								<div class="user-name text-white">{comment.nickname}</div>
-							</div>
-							<div class="comment-info w-1/4">
-								<div class="comment-text text-white">{comment.text}</div>
-							</div>
-							<div class="comment-info w-1/4">
-								<div class="comment-rating text-white">{comment.rating}</div>
-							</div>
-							<div class="comment-info w-1/4">
-								<button
-									class="report-button py-2 px-4 bg-red-600 text-white rounded-lg"
-									on:click={() => reportComment(comment.id)}>Report</button
-								>
-							</div>
-						</div>
-					{/each}
-				</div>
-			</div>
+                    {#each comments as comment, i}
+                        <div class="comment-wrapper flex items-center justify-between px-4 mb-4 w-full">
+                            <div class="comment-info w-1/4"> <!-- Adjust width as needed, e.g., w-1/3 -->
+                                <div class="user-name text-white">{comment.nickname}</div>
+                            </div>
+                            <div class="comment-info w-1/4"> <!-- Adjust width as needed, e.g., w-1/2 -->
+                                <div class="comment-text text-white break-words">{comment.text}</div>
+                            </div>                            
+                            <div class="comment-info w-1/6"> <!-- Adjust width as needed, e.g., w-1/6 -->
+                                <div class="comment-rating text-white">{comment.rating}</div>
+                            </div>
+                            <div class="comment-info w-1/6"> <!-- Fourth column for report buttons -->
+                                <button class="report-button py-2 px-4 bg-red-600 text-white rounded-lg" on:click={() => reportComment(comment.id)}>Report</button>
+                            </div>
+                        </div>
+                    {/each}
 
-			<textarea
-				class="comment-input mt-4 w-full rounded-lg px-4 py-2"
-				bind:value={newComment}
-				placeholder="Type your comment here..."
-			/>
+                </div>
+            </div>
+                    
+
+
+            <!-- Textarea for user to input comments -->
+            <textarea class="comment-input mt-4 w-full rounded-lg px-4 py-2" bind:value={newComment} placeholder="Type your comment here..."></textarea>
 
 			<div class="rating-container mt-4">
 				<label for="rating" class="text-white">Rating:</label>
@@ -236,37 +237,3 @@
 		</div>
 	</Dialog.Content>
 </Dialog.Root>
-
-<style>
-	.comment-container {
-		margin-top: 20px;
-	}
-
-	.comments-scroll {
-		max-height: 200px;
-		overflow-y: auto;
-	}
-
-	.comment-wrapper {
-		display: flex;
-		align-items: center;
-	}
-
-	.report-button {
-		margin-left: 10px;
-		padding: 8px 12px;
-		background-color: #f44336;
-		color: white;
-		border: none;
-		border-radius: 4px;
-		cursor: pointer;
-	}
-
-	.report-button:hover {
-		background-color: #d32f2f;
-	}
-
-	h2 {
-		margin-top: 0;
-	}
-</style>

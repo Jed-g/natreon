@@ -6,6 +6,7 @@
 #
 #  id         :bigint           not null, primary key
 #  content    :text
+#  reported   :boolean          default(FALSE)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  post_id    :bigint           not null

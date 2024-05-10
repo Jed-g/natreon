@@ -52,18 +52,12 @@ module Customer
     def report
       @comment = PoiComment.find(params[:id])
       if @comment.update(reported: params[:reported])
+        Rails.logger.debug { "Reported comment: #{@comment.inspect}" }
+
         render json: {message: "Comment reported successfully."}, status: :ok
       else
         render json: {error: "Failed to report comment."}, status: :unprocessable_entity
       end
-    end
-
-    def get_total_comment_user
-      Rails.logger.debug { "Received user ID: #{@user.id}" }
-
-      total_comments = PoiComment.where(user_id: @user.id).count
-
-      render json: {total_comments:}
     end
 
     private
@@ -74,7 +68,7 @@ module Customer
     end
 
     def comment_params
-      params.require(:poi_comment).permit(:id, :user_id, :poi_id, :text, :rating)
+      params.require(:poi_comment).permit(:id, :user_id, :poi_id, :text, :rating, :reported)
     end
   end
 end

@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     post "/stats/landing/registration-completed", to: "stats/landing_page#registration_completed"
 
     get "/stats/admin/register-new-page-visit", to: "stats/admin_page#register_new_page_visit"
+    post "/stats/admin/register-new-page-visit", to: "stats/admin_page#register_new_page_visit"
     post "/stats/admin/register-new-page-visit-with-ip-param", to: "stats/admin_page#register_new_page_visit_with_ip_param"
     post "/stats/admin/update-page-visit", to: "stats/admin_page#update_page_visit"
 
@@ -57,10 +58,10 @@ Rails.application.routes.draw do
     delete "/admin/questions", to: "admin/questions#delete_question"
     get "/admin/mailinglist", to: "admin/mailing_list#all_emails"
     get "/admin/report-response", to: "admin/mailing_list#all_emails"
-    get "/admin/comments", to: "admin/poi_comments#all_comments"
-    post "/admin/comments", to: "admin/poi_comments#create_comment"
-    patch "/admin/comments/:id/toggle_report_status", to: "admin/poi_comments#toggle_report_status"
-    delete "/admin/comments/:id", to: "admin/poi_comments#delete_comment"
+    get "/admin/comments", to: "admin/comments#all_comments"
+    patch "/admin/comments/:id/toggle_report_status", to: "admin/comments#toggle_report_status"
+    delete "/admin/comments/:id", to: "admin/comments#delete_comment"
+    post '/admin/comments/:id/send_email_notification', to: 'admin/comments#create_email'
     
     get "/admin/pois", to: "admin/pois#all_pois"
     post "/admin/pois", to: "admin/pois#create_poi"

@@ -34,10 +34,26 @@
 
 		return data;
 	};
-
+    // Function to send email notification to user
+    const sendEmailNotification = async (commentId: number) => {
+            try {
+                const response = await fetch(`/api/admin/comments/${commentId}/send_email_notification`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                console.log("Email notification response:", data);
+            } catch (error) {
+                console.error('Error sending email notification:', error);
+            }
+        };
 	// Function to handle comment deletion
 	const deleteComment = async (id: number) => {
+        await sendEmailNotification(id)
 		console.log('Deleting comment with ID:', id);
+
 		const response = await fetch(`/api/admin/comments/${id}`, {
 			method: 'DELETE',
 			headers: {
@@ -55,8 +71,8 @@
 			toast.error('Failed to delete comment');
 		}
 
-		return data;
-	};
+        return data;
+    };
 </script>
 
 <div class="relative p-6 h-full w-full">

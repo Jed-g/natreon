@@ -87,10 +87,8 @@ class User < ApplicationRecord
   end
 
   def total_poi_review_counts
-    0
+    poi_comments.count
 
-    # TODO
-    # poi_reviews.count
   end
 
   def badge_statuses_for_total_points
