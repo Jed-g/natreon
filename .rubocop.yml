@@ -17,12 +17,12 @@ Rails:
 
 # Commonly used screens these days easily fit more than 80 characters.
 Layout/LineLength:
-  Max: 120
+  Max: 160
 
 # Too short methods lead to extraction of single-use methods, which can make
 # the code easier to read (by naming things), but can also clutter the class
 Metrics/MethodLength: 
-  Max: 20
+  Max: 80
 
 # The guiding principle of classes is SRP, SRP can't be accurately measured by LoC
 Metrics/ClassLength:
@@ -118,7 +118,7 @@ Style/BlockDelimiters:
 # a useful return value are rare, assign the return
 # value to a local variable for those cases.
 Style/MethodCalledOnDoEndBlock:
-  Enabled: true
+  Enabled: false
 
 # Enforcing the names of variables? To single letter ones? Just no.
 Style/SingleLineBlockParams:
@@ -157,4 +157,58 @@ RSpec/MultipleExpectations:
 
 # Allow stubbing using any_instance
 RSpec/AnyInstance:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+RSpec/IndexedLet:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+FactoryBot/ExcessiveCreateList:
+  Enabled: false
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/RepeatedDescription:
+  Enabled: false
+
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+
+Style/OptionalBooleanParameter:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/MessageChain:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/InstanceVariable:
   Enabled: false

@@ -4,7 +4,6 @@ module Stats
   class ReporterPageController < ApplicationController
     before_action :authorize_reporter_controllers
 
-    # rubocop:disable Metrics/AbcSize
     def register_new_page_visit
       return render_bad_request if geolocation_from_ip(request.remote_ip).nil?
 

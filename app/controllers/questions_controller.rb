@@ -54,9 +54,7 @@ class QuestionsController < ApplicationController
   def cancel_upvote_question
     read_id_param
     question = find_question
-    unless session[:questions_upvoted].include?(@id)
-      return render json: {message: "Nothing to cancel, question hasn't been upvoted"}, status: :bad_request
-    end
+    return render json: {message: "Nothing to cancel, question hasn't been upvoted"}, status: :bad_request unless session[:questions_upvoted].include?(@id)
 
     session[:questions_upvoted].delete(@id)
     question.upvotes -= 1
@@ -69,9 +67,7 @@ class QuestionsController < ApplicationController
   def cancel_downvote_question
     read_id_param
     question = find_question
-    unless session[:questions_downvoted].include?(@id)
-      return render json: {message: "Nothing to cancel, question hasn't been downvoted"}, status: :bad_request
-    end
+    return render json: {message: "Nothing to cancel, question hasn't been downvoted"}, status: :bad_request unless session[:questions_downvoted].include?(@id)
 
     session[:questions_downvoted].delete(@id)
     question.downvotes -= 1

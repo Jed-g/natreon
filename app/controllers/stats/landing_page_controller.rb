@@ -2,7 +2,6 @@
 
 module Stats
   class LandingPageController < ApplicationController
-    # rubocop:disable Metrics/AbcSize
     def register_new_page_visit
       coords = geolocation_from_ip(request.remote_ip)
       return render_bad_request if coords.nil?
@@ -64,7 +63,6 @@ module Stats
                     "/login", "/signup"].freeze
 
     # rubocop:disable Metrics/AbcSize
-    # rubocop:disable Metrics/CyclomaticComplexity
     def path_to_registration_append
       path = params[:path]
       return render_bad_request unless path.is_a?(String) && PATH_OPTIONS.include?(path)

@@ -96,7 +96,6 @@ RSpec.describe QuestionsController do
       session[:questions_downvoted] = [@question.id]
     end
 
-    # rubocop:disable RSpec/InstanceVariable
     context "when question is upvoted successfully" do
       it "upvotes a question and returns a success message" do
         post :upvote_question, params: {id: @question.id}

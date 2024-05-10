@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/EmptyBlock
+
 # == Schema Information
 #
 # Table name: poi_pictures
@@ -15,3 +17,5 @@ FactoryBot.define do
   factory :poi_picture do
   end
 end
+
+# rubocop:enable Lint/EmptyBlock
