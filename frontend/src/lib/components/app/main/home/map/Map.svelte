@@ -397,6 +397,7 @@
 		);
 
 		geolocate.on('geolocate', (e) => {
+			// eslint-disable-next-line
 			const coords: GeolocationCoordinates = e.coords;
 			userLocation = {
 				lat: coords.latitude,

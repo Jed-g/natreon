@@ -20,7 +20,9 @@ describe('signUp', () => {
 		expect(result).toBe(true);
 		expect(mockFetch).toHaveBeenCalledWith('/api/auth/signup', {
 			method: 'POST',
-			body: JSON.stringify({ user: { email: EMAIL, nickname: NICKNAME, description: DESCRIPTION, password: PASSWORD } }),
+			body: JSON.stringify({
+				user: { email: EMAIL, nickname: NICKNAME, description: DESCRIPTION, password: PASSWORD }
+			}),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -33,7 +35,9 @@ describe('signUp', () => {
 		expect(result).toBe(false);
 		expect(mockFetch).toHaveBeenCalledWith('/api/auth/signup', {
 			method: 'POST',
-			body: JSON.stringify({ user: { email: EMAIL, nickname: NICKNAME, description: DESCRIPTION, password: PASSWORD } }),
+			body: JSON.stringify({
+				user: { email: EMAIL, nickname: NICKNAME, description: DESCRIPTION, password: PASSWORD }
+			}),
 			headers: {
 				'Content-Type': 'application/json'
 			}
@@ -46,7 +50,9 @@ describe('signUp', () => {
 		expect(result).toBe(false);
 		expect(mockFetch).toHaveBeenCalledWith('/api/auth/signup', {
 			method: 'POST',
-			body: JSON.stringify({ user: { email: EMAIL, nickname: NICKNAME, description: DESCRIPTION, password: PASSWORD } }),
+			body: JSON.stringify({
+				user: { email: EMAIL, nickname: NICKNAME, description: DESCRIPTION, password: PASSWORD }
+			}),
 			headers: {
 				'Content-Type': 'application/json'
 			}
