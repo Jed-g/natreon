@@ -95,7 +95,6 @@
 					toast.success('Successfully added picture for POI!');
 					inProgressBadges.checkForUpdates();
 					onClose();
-				} else {
 				}
 			} catch (error) {
 				console.error('Error uploading file:', error);
@@ -240,22 +239,6 @@
 </Dialog.Root>
 
 <style>
-	.details-container {
-		position: fixed;
-		top: 50%;
-		left: 40%;
-		transform: translate(-50%, -50%);
-		background-color: rgb(16, 16, 16);
-		padding: 20px;
-		border: 2px solid #ccc;
-		border-radius: 8px;
-		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		z-index: 999;
-		color: white;
-		max-width: 400px;
-		width: 200%;
-	}
-
 	.comment-container {
 		margin-top: 20px;
 	}
@@ -268,14 +251,6 @@
 	.comment-wrapper {
 		display: flex;
 		align-items: center;
-	}
-
-	.comment {
-		flex: 1;
-		background-color: #333;
-		padding: 10px;
-		border-radius: 8px;
-		margin-bottom: 10px;
 	}
 
 	.report-button {
@@ -294,9 +269,5 @@
 
 	h2 {
 		margin-top: 0;
-	}
-
-	ul {
-		padding-left: 20px;
 	}
 </style>

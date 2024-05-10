@@ -108,7 +108,6 @@
 					class="nav-button">←</button
 				>
 			</div>
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
 			<IntersectionObserver
 				element={slidesContainer}
 				bind:intersecting={slidesContainerIntersecting}

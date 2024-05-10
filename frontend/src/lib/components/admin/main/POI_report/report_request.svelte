@@ -7,7 +7,6 @@
 		features: string[];
 		comments: string[];
 	};
-	async function deleteComment(id: string) {}
 </script>
 
 <div>
