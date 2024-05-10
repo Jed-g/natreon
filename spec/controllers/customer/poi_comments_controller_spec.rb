@@ -17,6 +17,13 @@ RSpec.describe Customer::PoiCommentsController do
     allow(controller).to receive(:current_user).and_return(user)
   end
 
+  describe '#all' do
+    it 'returns http success' do
+      get :all, params: { poiId: poi.id }
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "#create" do
     it "creates a new comment" do
       post :create, params: { poi_comment: { poi_id: poi.id, text: "Test comment", rating: 5 } }
