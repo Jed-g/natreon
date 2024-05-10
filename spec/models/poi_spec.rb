@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: pois
@@ -17,8 +19,8 @@
 #
 #  index_pois_on_name  (name) UNIQUE
 #
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe Poi, type: :model do
+RSpec.describe Poi do
   pending "add some examples to (or delete) #{__FILE__}"
 end

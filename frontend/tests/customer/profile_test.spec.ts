@@ -45,7 +45,7 @@ test('A customer can edit their nickname', async ({ page }) => {
   await page.locator('#edit-nickname').click();
   await page.locator('#edit-nickname').fill('customer223');
   await page.getByRole('button', { name: 'Save Changes' }).click();
-  await page.getByRole('list').click();
+  //await page.getByRole('list').click();
   await page.getByRole('link', { name: 'Home' }).click();
   await page.getByRole('link', { name: 'Settings' }).click();
   await expect(page.getByLabel('Nickname:')).toHaveValue('customer223');

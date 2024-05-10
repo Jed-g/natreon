@@ -20,7 +20,7 @@
 <script lang="ts">
 	import { MapLibre, Popup, Marker } from 'svelte-maplibre';
 	import { Map, NavigationControl, GeolocateControl, ScaleControl } from 'maplibre-gl';
-	import { onMount, tick } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import POIcard from './POIcard.svelte';
 	import layers from '$lib/components/app/main/home/map/search-bar/layers';
 	import SearchBar from '$lib/components/app/main/home/map/search-bar/SearchBar.svelte';
@@ -241,6 +241,10 @@
 	let userNickname: string;
 
 	let geolocationDisabled = false;
+	let geolocationDisabledShowDialog = false;
+	let geolocationPermissionsWatchInterval: ReturnType<typeof setInterval>;
+
+	onDestroy(() => clearInterval(geolocationPermissionsWatchInterval));
 
 	const registerPOIClick = (id: number) =>
 		fetch('/api/stats/app/register-new-poi-click?poi_id=' + encodeURIComponent(id), {
@@ -373,7 +377,19 @@
 
 		updateSearchBarOffset();
 
-		geolocate.on('error', () => (geolocationDisabled = true));
+		geolocate.on('error', () => {
+			geolocationDisabled = true;
+			geolocationDisabledShowDialog = true;
+			geolocationPermissionsWatchInterval = setInterval(() => {
+				if ('permissions' in navigator) {
+					navigator.permissions.query({ name: 'geolocation' }).then((permissionStatus) => {
+						if (permissionStatus.state === 'granted') {
+							geolocate.trigger();
+						}
+					});
+				}
+			}, 1000);
+		});
 
 		geolocate.on(
 			'trackuserlocationend',
@@ -468,17 +484,22 @@
 		</div>
 	{/if}
 	<Dialog.Root
-		bind:open={geolocationDisabled}
-		onOpenChange={(isOpen) => isOpen || location.reload()}
+		open={geolocationDisabledShowDialog}
+		onOpenChange={(isOpen) => {
+			if (!isOpen) {
+				geolocationDisabledShowDialog = false;
+			}
+		}}
 	>
 		<Dialog.Content>
 			<Dialog.Header>
 				<Dialog.Description>
-					Please allow geolocation permissions and turn on location services.
+					Please allow geolocation permissions and turn on location services for check-in
+					functionality.
 				</Dialog.Description>
 			</Dialog.Header>
 			<Dialog.Footer>
-				<Button on:click={() => location.reload()}>Confirm & Refresh Page</Button>
+				<Button on:click={() => (geolocationDisabledShowDialog = false)}>Close</Button>
 			</Dialog.Footer>
 		</Dialog.Content>
 	</Dialog.Root>

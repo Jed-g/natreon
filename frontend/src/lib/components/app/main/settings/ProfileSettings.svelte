@@ -7,6 +7,7 @@
 	import * as Card from '$lib/components/ui/card';
 	import { getContext } from 'svelte';
 	import type { Writable } from 'svelte/store';
+  	import { Separator } from "$lib/components/ui/separator"
 
 	const refreshAvatarData: Writable<null | (() => Promise<void>)> = getContext('refreshAvatarData');
 
@@ -132,7 +133,7 @@
 	onMount(getUserProfile);
 </script>
 
-<div class="flex flex-wrap justify-between">
+<div class="flex max-lg:flex-col max-lg:items-center gap-4 justify-between">
 	{#if loading}
 		<div class="grow flex items-center justify-center">
 			<span class="loading loading-ring loading-lg" />
@@ -214,7 +215,8 @@
 				<Button on:click={saveChanges}>Save Changes</Button>
 			{/if}
 		</div>
-
+		<Separator orientation="horizontal" class="lg:hidden" />
+		<Separator orientation="vertical" class="max-lg:hidden" />
 		<div class="relative card h-full w-full md:w-3/4 max-w-3xl max-h-none flex bg-base-200 shadow-xl p-6 flex-col">
 				<h2 class="text-2xl font-bold mb-2">Profile Picture</h2>
 				{#if user.profile_picture === undefined}
