@@ -32,14 +32,6 @@ module Admin
       render json: reported_comments_with_user_info
     end
 
-    def update
-      if @comment.update(comment_params)
-        render json: @comment
-      else
-        render json: @comment.errors, status: :unprocessable_entity
-      end
-    end
-
     def delete_comment
       comment = PoiComment.find_by(id: params[:id])
       if comment

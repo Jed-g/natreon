@@ -19,8 +19,6 @@
 	import TotalPoiPhotos from './total-poi-photos/TotalPoiPhotos.svelte';
 	import TotalPoiReviews from './total-poi-reviews/TotalPoiReviews.svelte';
 
-	export let slug: string;
-
 	export let updateLayoutOffsets: () => void;
 
 	type BadgeCounts = {

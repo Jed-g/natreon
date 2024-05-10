@@ -24,8 +24,6 @@
 	import UpcomingMilestones from './upcoming-milestones/UpcomingMilestones.svelte';
 	import PastAchievements from './past-achievements/PastAchievements.svelte';
 
-	export let slug: string;
-
 	let cardHeader: HTMLDivElement;
 	let cardHeaderHeight = 64;
 

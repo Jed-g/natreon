@@ -44,7 +44,6 @@
 		} else {
 			console.error('Failed to get posts');
 		}
-		
 	};
 
 	const updatePost = async (postId: string | number, editedText: string) => {
@@ -76,7 +75,7 @@
 
 	const likePost = async (postId: any) => {
 		const response = await fetch(`/api/social/posts/${postId}/like`, {
-			method: 'POST',
+			method: 'POST'
 			// headers: {
 			// 	Authorization: `Bearer ${localStorage.getItem('jwt')}`
 			// }
@@ -119,7 +118,11 @@
 	onMount(fetchPosts);
 </script>
 
-<Textarea bind:value={content} class="px-4 mb-2 focus-visible:mx-1 focus-visible:mt-1 focus-visible:w-[calc(100%-0.5rem)]" placeholder="What's on your mind?" />
+<Textarea
+	bind:value={content}
+	class="px-4 mb-2 focus-visible:mx-1 focus-visible:mt-1 focus-visible:w-[calc(100%-0.5rem)]"
+	placeholder="What's on your mind?"
+/>
 <Button
 	variant="outline"
 	on:click={() => {

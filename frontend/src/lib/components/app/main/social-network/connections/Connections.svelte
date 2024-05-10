@@ -3,6 +3,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Search } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
 	import * as Command from '$lib/components/ui/command';
 
 	let current_user: { id: any } | null = null;
@@ -86,7 +87,7 @@
 	const sendFriendRequest = async (userId: any) => {
 		await fetchFriendRequests();
 		if (outgoingFriendRequests.some((request) => String(request.friend_id) === String(userId))) {
-			window.alert('Friend request already sent!');
+			toast.warning('Friend request already sent!');
 			return;
 		}
 		const response = await fetch('/api/social/friend_requests', {
@@ -97,7 +98,9 @@
 			body: JSON.stringify({ friend_id: userId })
 		});
 
-		if (!response.ok) {
+		if (response.ok) {
+			toast.success('Friend request sent!');
+		} else {
 			const message = `[Connections.svelte] ERROR: ${response.status}`;
 			throw new Error(message);
 		}

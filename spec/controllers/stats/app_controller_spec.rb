@@ -12,9 +12,11 @@ RSpec.describe Stats::AppController do
   describe "#register_new_page_visit" do
     context "with valid geolocation" do
       let(:valid_coords) { {lat: 23.456, lon: 45.678} }
+      let(:valid_country) { "GB" }
 
       before do
         allow(controller).to receive(:geolocation_from_ip).with(request.remote_ip).and_return(valid_coords)
+        allow(controller).to receive(:country_from_ip).with(request.remote_ip).and_return(valid_country)
       end
 
       it "registers a new page visit and returns a success message" do
@@ -36,6 +38,7 @@ RSpec.describe Stats::AppController do
     context "with missing geolocation" do
       before do
         allow(controller).to receive(:geolocation_from_ip).with(request.remote_ip).and_return(nil)
+        allow(controller).to receive(:country_from_ip).with(request.remote_ip).and_return(nil)
       end
 
       it "renders a bad request response" do
@@ -47,9 +50,11 @@ RSpec.describe Stats::AppController do
 
     context "when AppVisit is not valid" do
       let(:valid_coords) { {lat: 23.456, lon: 45.678} }
+      let(:valid_country) { "GB" }
 
       before do
         allow(controller).to receive(:geolocation_from_ip).with(request.remote_ip).and_return(valid_coords)
+        allow(controller).to receive(:country_from_ip).with(request.remote_ip).and_return(valid_country)
         allow_any_instance_of(AppVisit).to receive(:valid?).and_return(false)
       end
 
@@ -62,12 +67,14 @@ RSpec.describe Stats::AppController do
   end
 
   describe "#register_new_page_visit_with_ip_param" do
-    let(:valid_ip) { "192.168.1.1" }
+    let(:valid_ip) { "31.94.30.32" }
     let(:valid_coords) { {lat: 23.456, lon: 45.678} }
+    let(:valid_country) { "GB" }
 
     context "with valid IP and geolocation" do
       before do
         allow(controller).to receive(:geolocation_from_ip).with(valid_ip).and_return(valid_coords)
+        allow(controller).to receive(:country_from_ip).with(valid_ip).and_return(valid_country)
       end
 
       it "registers a new page visit and returns a success message" do
@@ -87,6 +94,11 @@ RSpec.describe Stats::AppController do
     end
 
     context "with missing IP parameter" do
+      before do
+        allow(controller).to receive(:geolocation_from_ip).with(valid_ip).and_return(valid_coords)
+        allow(controller).to receive(:country_from_ip).with(valid_ip).and_return(valid_country)
+      end
+
       it "renders a bad request response" do
         post :register_new_page_visit_with_ip_param
 
@@ -115,8 +127,13 @@ RSpec.describe Stats::AppController do
     end
 
     context "when AppVisit is not valid" do
+      let(:valid_ip) { "31.94.30.32" }
+      let(:valid_coords) { {lat: 23.456, lon: 45.678} }
+      let(:valid_country) { "GB" }
+
       before do
         allow(controller).to receive(:geolocation_from_ip).with(valid_ip).and_return(valid_coords)
+        allow(controller).to receive(:country_from_ip).with(valid_ip).and_return(valid_country)
         allow_any_instance_of(AppVisit).to receive(:valid?).and_return(false)
       end
 
@@ -130,11 +147,6 @@ RSpec.describe Stats::AppController do
 
   describe "#update_page_visit" do
     let(:valid_visit_id) { 1 }
-    let(:valid_coords) { {lat: 23.456, lon: 45.678} }
-
-    before do
-      allow(controller).to receive(:geolocation_from_ip).with(request.remote_ip).and_return(valid_coords)
-    end
 
     context "with valid parameters" do
       before do
