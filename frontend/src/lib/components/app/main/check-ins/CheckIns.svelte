@@ -6,8 +6,6 @@
 	import { POIType, type POI } from '../home/map/Map.svelte';
 	import { isRight } from 'fp-ts/lib/Either';
 
-	export let slug: string;
-
 	let cardHeader: HTMLDivElement;
 	let cardHeaderHeight = 64;
 

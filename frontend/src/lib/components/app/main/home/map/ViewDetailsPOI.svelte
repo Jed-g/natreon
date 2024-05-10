@@ -9,7 +9,6 @@
 
 	export let poi: POI;
 	const { id, name, description, features } = poi;
-	export let userNickname: string;
 	export let onClose: () => void;
 	export let refreshPOIs: () => void;
 

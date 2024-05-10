@@ -21,8 +21,6 @@
 	import DataTable from './data-table/data-table.svelte';
 	import { isRight } from 'fp-ts/lib/Either';
 
-	export let slug: string;
-
 	export let updateLayoutOffsets: () => void;
 
 	onMount(updateLayoutOffsets);

@@ -4,8 +4,6 @@ module Customer
   class PoiCommentsController < ApplicationController
     before_action :authorize_customer_controllers, :get_user
 
-    
-
     def all
       poi_id = params[:poiId]
       Rails.logger.debug { "Received poi_id: #{poi_id}" }
@@ -27,20 +25,23 @@ module Customer
 
     def create
       return render json: {error: "Unauthorized"}, status: :unauthorized unless @user
-    
+
       Rails.logger.debug { "Incoming parameters: #{params}" }
-    
-      return render json: {error: "Invalid POI ID"}, status: :unprocessable_entity unless Poi.exists?(id: comment_params[:poi_id])
-    
-      poi = Poi.find(comment_params[:poi_id])
-    
+
+      unless Poi.exists?(id: comment_params[:poi_id])
+        return render json:   {error: "Invalid POI ID"},
+                      status: :unprocessable_entity
+      end
+
+      Poi.find(comment_params[:poi_id])
+
       comment = @user.poi_comments.build(comment_params)
       Rails.logger.debug { "New comment: #{comment.inspect}" }
-    
+
       if comment.user_id != @user.id
         return render json: {error: "User ID does not match the current user"}, status: :unprocessable_entity
       end
-    
+
       if comment.save
         render json: comment, status: :created
       else
@@ -59,7 +60,7 @@ module Customer
 
     def get_total_comment_user
       Rails.logger.debug { "Received user ID: #{@user.id}" }
-      
+
       total_comments = PoiComment.where(user_id: @user.id).count
 
       render json: {total_comments:}
