@@ -33,7 +33,8 @@ class Poi < ApplicationRecord
     "Shopping District",
     "Food and Drink",
     "Entertainment Venue",
-    "Water Fountain"
+    "Water Fountain",
+    "Pond"
   ].freeze
 
   validates :latitude, numericality: {greater_than_or_equal_to: -90, less_than_or_equal_to: 90}
