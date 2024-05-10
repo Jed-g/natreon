@@ -1,13 +1,21 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import { Search } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
+	import * as Command from '$lib/components/ui/command';
 
+	let current_user: { id: any } | null = null;
 	let users: any[] = [];
 	let friends: any[] = [];
 	let incomingFriendRequests: any[] = [];
 	let outgoingFriendRequests: any[] = [];
 	let blockedUsers: string | any[] = [];
+	let open = false;
+	let loading = false;
+	let searchQuery: string;
+	let matchingUsers: any[] = [];
 
 	const fetchUsers = async () => {
 		const response = await fetch('/api/social/users', {
@@ -53,7 +61,6 @@
 		}
 
 		const blockedUsers = await blockedResponse.json();
-		console.log('Blocked users:', blockedUsers);
 		const unblockedUsers = friends.filter((user: { id: any }) => !blockedUsers.includes(user.id));
 
 		friends = unblockedUsers;
@@ -78,6 +85,11 @@
 	};
 
 	const sendFriendRequest = async (userId: any) => {
+		await fetchFriendRequests();
+		if (outgoingFriendRequests.some((request) => String(request.friend_id) === String(userId))) {
+			toast.warning('Friend request already sent!');
+			return;
+		}
 		const response = await fetch('/api/social/friend_requests', {
 			method: 'POST',
 			headers: {
@@ -86,7 +98,9 @@
 			body: JSON.stringify({ friend_id: userId })
 		});
 
-		if (!response.ok) {
+		if (response.ok) {
+			toast.success('Friend request sent!');
+		} else {
 			const message = `[Connections.svelte] ERROR: ${response.status}`;
 			throw new Error(message);
 		}
@@ -210,10 +224,42 @@
 		fetchFriendRequests();
 	};
 
+	const searchUsers = async () => {
+		loading = true;
+		const response = await fetch(
+			`/api/social/users/search-by-nickname?nickname=${encodeURIComponent(searchQuery)}`
+		);
+		let data = await response.json();
+
+		// remove current usr from search results to stop them adding self
+		data = data.filter((user: { id: any }) => user.id !== current_user?.id);
+		matchingUsers = data;
+		loading = false;
+	};
+
+	// get random users from the list of all and put them in peopke you might know
+	function getRandomUsers(users: any[]) {
+		const shuffledUsers = users.sort(() => 0.5 - Math.random());
+		return shuffledUsers.slice(0, 5);
+	}
+
+	// grab users, friends, frienqRequests and blocked users from the API
 	onMount(fetchUsers);
 	onMount(fetchFriends);
 	onMount(fetchFriendRequests);
 	onMount(fetchBlockedUsers);
+
+	// get current user from API
+	onMount(async () => {
+		const response = await fetch('/api/social/users/show', {});
+		if (response.ok) {
+			current_user = await response.json();
+		}
+	});
+
+	$: if (searchQuery?.trim()) {
+		searchUsers();
+	}
 
 	$: users = users.filter(
 		(user) =>
@@ -223,6 +269,59 @@
 </script>
 
 <h1 class="text-xl font-bold mb-4">Your Connections</h1>
+<Button
+	on:click={() => {
+		searchQuery = '';
+		open = true;
+	}}
+	class="text-secondary-foreground w-full bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input hover:bg-accent hover:text-accent-foreground mb-4"
+>
+	<div class="flex gap-2 items-center">
+		<Search />
+		<p class="text-sm">Search users...</p>
+	</div>
+</Button>
+
+<Command.Dialog bind:open shouldFilter={false} loop>
+	<Command.Input placeholder={'Search by name…'} bind:value={searchQuery} />
+	<Command.List class="my-2">
+		{#if loading}
+			<Command.Loading>
+				<div class="h-[300px] w-full flex items-center justify-center">
+					<span class="loading loading-ring loading-lg" />
+				</div>
+			</Command.Loading>
+		{:else if matchingUsers.length === 0}
+			<Command.Empty class="h-[300px] flex items-center justify-center"
+				>No results found.</Command.Empty
+			>
+		{:else}
+			<p class="px-4 py-2 font-medium leading-none">User Search</p>
+			<Command.Group>
+				{#each matchingUsers as user (user.id)}
+					<Command.Item
+						value={user.id.toString()}
+						onSelect={(id) => {
+							// add friend request, close dialogue
+							sendFriendRequest(id);
+							open = false;
+						}}
+						class="cursor-pointer"
+					>
+						<div class="flex flex-col w-full gap-2">
+							<div class="flex justify-between gap-4">
+								<p>{user.nickname}</p>
+								<!-- This is a kinda fake button - you can just press the whole item to add friend -->
+								<Button>Add Friend</Button>
+							</div>
+						</div>
+					</Command.Item>
+				{/each}
+			</Command.Group>
+		{/if}
+	</Command.List>
+</Command.Dialog>
+
 {#if friends.length === 0}
 	<p class="mb-8">Add some friends to get started!</p>
 {:else}
@@ -236,14 +335,12 @@
 					<Button
 						class="bg-red-500 text-white"
 						on:click={() => {
-							console.log(friend.id);
 							deleteFriend(friend.id);
 						}}>Delete</Button
 					>
 					<Button
 						class="bg-yellow-500 text-white"
 						on:click={() => {
-							console.log(`Friend ID: ${friend.id}`);
 							blockUser(friend.id);
 						}}>Block</Button
 					>
@@ -283,7 +380,7 @@
 {#if users.length !== 0}
 	<h1 class="text-xl font-bold mb-4">People you might know</h1>
 	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
-		{#each users as user}
+		{#each getRandomUsers(users) as user}
 			<Card.Root class="card">
 				<Card.Header>
 					<Card.Title>{user.nickname}</Card.Title>
@@ -321,7 +418,6 @@
 					<Card.Title>{user.nickname}</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<!-- <Button on:click={() => console.log(user.id)}>Unblock User</Button> -->
 					<Button on:click={() => unblockUser(user.id)}>Unblock User</Button>
 				</Card.Content>
 			</Card.Root>

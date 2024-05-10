@@ -3,13 +3,13 @@
 module Customer
   module Social
     class PostsController < ApplicationController
-      before_action :authorize_customer_controllers
+      before_action :authorize_customer_controllers, :get_user
       before_action :set_post, only: %i[show update destroy like]
       before_action :authorize_post, only: %i[update destroy]
 
       def index
-        friend_ids = current_user.friends.pluck(:id)
-        @posts = Post.where(user_id: friend_ids + [current_user.id]).order(created_at: :desc)
+        friend_ids = @user.friends.pluck(:id)
+        @posts = Post.where(user_id: friend_ids + [@user.id]).order(created_at: :desc)
         render json: @posts.as_json(include: {
                                       user:     {only: %i[id nickname]},
                                       comments: {
@@ -19,7 +19,7 @@ module Customer
       end
 
       def create
-        @post = current_user.posts.new(post_params)
+        @post = @user.posts.new(post_params)
 
         if @post.save
           render json: @post, status: :created
@@ -42,13 +42,13 @@ module Customer
       end
 
       def like
-        like = @post.likes.find_by(user: current_user)
+        like = @post.likes.find_by(user: @user)
 
         if like
           like.destroy
           render json: {message: "post unliked"}, status: :ok
         else
-          like = @post.likes.build(user: current_user)
+          like = @post.likes.build(user: @user)
 
           if like.save
             render json: @post, status: :created
@@ -69,9 +69,15 @@ module Customer
       end
 
       def authorize_post
-        return if @post.user_id == current_user.id
+        return if @post.user_id == @user.id
 
         render json: {error: "Not authorized"}, status: :unauthorized
+      end
+
+      def get_user
+        @user = current_user
+
+        render_internal_server_error if @user.nil?
       end
     end
   end

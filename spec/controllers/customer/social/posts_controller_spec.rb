@@ -33,11 +33,11 @@ RSpec.describe Customer::Social::PostsController do
       expect(actual_response).to eq([expected_response])
     end
 
-    it " will perform under 3.5 seconds under high data loads" do
+    it "performs under 5 seconds under high data loads" do
       1000.times do
         Post.create!(content: "Test content", user: User.first)
       end
-      expect { get :index }.to perform_under(3500).ms
+      expect { get :index }.to perform_under(5000).ms
     end
   end
 

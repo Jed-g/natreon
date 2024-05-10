@@ -3,7 +3,7 @@
 module Customer
   module Social
     class CommentsController < ApplicationController
-      before_action :authorize_customer_controllers
+      before_action :authorize_customer_controllers, :get_user
       before_action :set_post
       before_action :set_comment, only: %i[update destroy]
       before_action :authorize_comment, only: %i[update destroy]
@@ -15,7 +15,7 @@ module Customer
 
       def create
         @comment = @post.comments.build(comment_params)
-        @comment.user = current_user
+        @comment.user = @user
 
         if @comment.save
           render json: @comment, status: :created
@@ -52,9 +52,15 @@ module Customer
       end
 
       def authorize_comment
-        return if @comment.user_id == current_user.id
+        return if @comment.user_id == @user.id
 
         render json: {error: "Not authorized"}, status: :unauthorized
+      end
+
+      def get_user
+        @user = current_user
+
+        render_internal_server_error if @user.nil?
       end
     end
   end

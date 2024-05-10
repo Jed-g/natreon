@@ -11,3 +11,7 @@ node_modules
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+
+# Ignore shadcn-svelte components (external library-like), assumed to be correct
+src/lib/components/ui
+src/lib/components/new-york

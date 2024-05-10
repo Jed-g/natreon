@@ -1,5 +1,6 @@
 <script lang="ts" context="module">
 	import { graphic as eChartsGraphic, init } from 'echarts';
+	// eslint-disable-next-line
 	export type EChartsOptions = echarts.EChartsOption;
 	export type EChartsTheme = string | object;
 	export type EChartsRenderer = 'canvas' | 'svg';
@@ -40,6 +41,7 @@
 </script>
 
 <script lang="ts">
+	// eslint-disable-next-line
 	export let options: echarts.EChartsOption;
 	export let { theme, renderer } = DEFAULT_OPTIONS;
 </script>

@@ -103,5 +103,5 @@
 			on:click={() => dispatch('sideMenuItemClicked')}
 			><Icon icon={cardAccountMailIcon} height={24} class="scale-125 mr-2" />Manage Comments</a
 		>
-	</li>	
+	</li>
 </ul>

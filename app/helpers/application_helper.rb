@@ -69,7 +69,7 @@ module ApplicationHelper
     return nil if results.first.nil?
 
     coords = results.first.coordinates
-    return {lat: coords[0], lon: coords[1]} unless coords.empty?
+    return {lat: coords[0], lon: coords[1]} if coords.present?
 
     nil
   end
@@ -79,7 +79,7 @@ module ApplicationHelper
     return nil if results.first.nil?
 
     country = results.first.country
-    return country unless country.empty?
+    return country if country.present?
 
     nil
   end
