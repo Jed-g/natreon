@@ -44,19 +44,19 @@ RSpec.describe Customer::Social::UsersController do
     end
   end
 
-  describe 'GET #search_by_nickname' do
-    let(:nickname_query_string) { 'test' }
+  describe "GET #search_by_nickname" do
+    let(:nickname_query_string) { "test" }
 
-    it 'returns a success response' do
-      get :search_by_nickname, params: { nickname: nickname_query_string }
+    it "returns a success response" do
+      get :search_by_nickname, params: {nickname: nickname_query_string}
       expect(response).to be_successful
     end
 
-    it 'returns users with similar nicknames' do
+    it "returns users with similar nicknames" do
       similar_user = create(:user, nickname: "#{nickname_query_string}123")
-      get :search_by_nickname, params: { nickname: nickname_query_string }
-      json_response = JSON.parse(response.body)
-      expect(json_response.map { |user| user['id'] }).to include(similar_user.id)
+      get :search_by_nickname, params: {nickname: nickname_query_string}
+      json_response = response.parsed_body
+      expect(json_response.pluck("id")).to include(similar_user.id)
     end
   end
 end

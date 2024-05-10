@@ -4,7 +4,6 @@
 	import * as DropdownMenu from '$lib/components/new-york/ui/dropdown-menu';
 	import type { POI } from '../../home/map/Map.svelte';
 
-	export let row: POI;
 	export let rowId: number;
 	export let removeFavourite: (id: number) => Promise<void>;
 </script>

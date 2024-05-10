@@ -36,7 +36,8 @@ RSpec.describe Customer::Social::FriendRequestsController do
     it "performs under 2 seconds under high data loads" do
       user = User.first
       1000.times do |i|
-        friend = User.create!(email: "user#{i}@test.com", password: "password", password_confirmation: "password")
+        friend = User.create!(email: "user#{i}@test.com", nickname: "nickname#{i}", description: "description#{i}",
+                              password: "password", password_confirmation: "password")
         FriendRequest.create!(user:, friend:)
       end
       expect { get :index }.to perform_under(2000).ms
