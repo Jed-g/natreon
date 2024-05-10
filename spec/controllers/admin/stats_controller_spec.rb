@@ -43,18 +43,17 @@ RSpec.describe Admin::StatsController do
     end
   end
 
-  # rubocop:disable Layout/LineLength
   describe "#all_visits" do
     context "when the user is an admin" do
       let(:current_user) { admin }
 
       it "returns JSON data with all and unique visit details" do
         create(:landing_page_visit, country: "Country A", created_at: 2.days.ago, time_spent_seconds: 120,
-email_of_registered_user: "user1@example.com")
+  email_of_registered_user: "user1@example.com")
         create(:landing_page_visit, country: "Country B", created_at: 1.day.ago, time_spent_seconds: 180,
-email_of_registered_user: nil)
+  email_of_registered_user: nil)
         create(:landing_page_visit, country: "Country A", created_at: 3.days.ago, time_spent_seconds: 90,
-email_of_registered_user: "user2@example.com")
+  email_of_registered_user: "user2@example.com")
 
         get :all_visits
         expect(response).to have_http_status(:ok)
@@ -86,7 +85,6 @@ email_of_registered_user: "user2@example.com")
       end
     end
   end
-  # rubocop:enable Layout/LineLength
 
   describe "#route_visits" do
     context "when authorized admin user" do

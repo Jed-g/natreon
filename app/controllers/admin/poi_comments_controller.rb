@@ -18,19 +18,19 @@ module Admin
         poi = Poi.find_by(id: comment.poi_id)
 
         # Proceed only if both user and POI exist
-        if user && poi
-          user_nickname = user.nickname
-          poi_name = poi.name
+        next unless user && poi
 
-          # Push the reported comment with user information into the array
-          reported_comments_with_user_info << {
-            id:            comment.id,
-            user_nickname: user_nickname,
-            poi_name:      poi_name,
-            text:          comment.text,
-            rating:        comment.rating
-          }
-        end
+        user_nickname = user.nickname
+        poi_name = poi.name
+
+        # Push the reported comment with user information into the array
+        reported_comments_with_user_info << {
+          id:            comment.id,
+          user_nickname:,
+          poi_name:,
+          text:          comment.text,
+          rating:        comment.rating
+        }
       end
       Rails.logger.info "Reported comments fetched with user nicknames: #{reported_comments_with_user_info}"
       render json: reported_comments_with_user_info
@@ -49,12 +49,12 @@ module Admin
       if comment
         if comment.destroy
 
-          render json: {message: 'Comment deleted successfully'}, status: :ok
+          render json: {message: "Comment deleted successfully"}, status: :ok
         else
-          render json: {error: 'Failed to delete comment'}, status: :unprocessable_entity
+          render json: {error: "Failed to delete comment"}, status: :unprocessable_entity
         end
       else
-        render json: {error: 'Comment not found'}, status: :not_found
+        render json: {error: "Comment not found"}, status: :not_found
       end
     end
 
@@ -69,7 +69,7 @@ module Admin
 
       ReportedCommentMailer.reported_comments_noti(user_email).deliver_now
 
-      render json: {message: 'Email notification sent successfully'}, status: :ok
+      render json: {message: "Email notification sent successfully"}, status: :ok
     end
 
     def toggle_report_status
@@ -79,7 +79,7 @@ module Admin
       Rails.logger.info("ID received in toggle_report_status: #{params[:id]}")
 
       @comment.update(reported: !@comment.reported)
-      render json: {message: 'Status is changed to ok'}
+      render json: {message: "Status is changed to ok"}
     end
 
     private

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable RSpec/VerifiedDoubles
 require "rails_helper"
 
 RSpec.describe UtilsController do

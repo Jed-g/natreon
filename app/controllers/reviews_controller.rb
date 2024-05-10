@@ -48,9 +48,7 @@ class ReviewsController < ApplicationController
   def cancel_upvote_review
     review = find_review
 
-    unless session[:reviews_upvoted].include?(@id)
-      return render json: {message: "Nothing to cancel, review hasn't been upvoted"}, status: :bad_request
-    end
+    return render json: {message: "Nothing to cancel, review hasn't been upvoted"}, status: :bad_request unless session[:reviews_upvoted].include?(@id)
 
     session[:reviews_upvoted].delete(@id)
     review.upvotes -= 1
@@ -63,9 +61,7 @@ class ReviewsController < ApplicationController
   def cancel_downvote_review
     review = find_review
 
-    unless session[:reviews_downvoted].include?(@id)
-      return render json: {message: "Nothing to cancel, review hasn't been downvoted"}, status: :bad_request
-    end
+    return render json: {message: "Nothing to cancel, review hasn't been downvoted"}, status: :bad_request unless session[:reviews_downvoted].include?(@id)
 
     session[:reviews_downvoted].delete(@id)
     review.downvotes -= 1

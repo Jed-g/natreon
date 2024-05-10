@@ -88,7 +88,6 @@ class User < ApplicationRecord
 
   def total_poi_review_counts
     poi_comments.count
-
   end
 
   def badge_statuses_for_total_points

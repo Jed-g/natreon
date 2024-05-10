@@ -38,9 +38,7 @@ module Customer
       comment = @user.poi_comments.build(comment_params)
       Rails.logger.debug { "New comment: #{comment.inspect}" }
 
-      if comment.user_id != @user.id
-        return render json: {error: "User ID does not match the current user"}, status: :unprocessable_entity
-      end
+      return render json: {error: "User ID does not match the current user"}, status: :unprocessable_entity if comment.user_id != @user.id
 
       if comment.save
         render json: comment, status: :created

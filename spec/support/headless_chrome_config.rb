@@ -31,9 +31,7 @@ Capybara.javascript_driver = :headless_chrome
 if ENV["SELENIUM_HOST"]
   RSpec.configure do |config|
     config.before(:each, :js) do
-      if ENV["SELENIUM_HOST"]
-        Capybara.app_host = "http://#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}"
-      end
+      Capybara.app_host = "http://#{Capybara.current_session.server.host}:#{Capybara.current_session.server.port}" if ENV["SELENIUM_HOST"]
     end
 
     config.after(:each, :js) do
