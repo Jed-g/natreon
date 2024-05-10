@@ -18,7 +18,7 @@ module Customer
           likes:       poi.likes,
           pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
           checkedIn:   poi.check_ins.exists?(user: @user),
-          comments:    [] # Add later...
+          comments:    [] 
         }
       end
 
@@ -44,7 +44,7 @@ module Customer
         likes:       poi.likes,
         pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
         checkedIn:   poi.check_ins.exists?(user: @user),
-        comments:    [] # Add later...
+        comments:    [] 
       }
 
       render json: poi_formatted
@@ -70,7 +70,7 @@ module Customer
                        .includes([:poi_pictures])
 
       combined_query = Poi.from("(#{similarity_query.to_sql} UNION #{ilike_query.to_sql}) as pois")
-                          .select('DISTINCT ON (id) *')
+                          .select("DISTINCT ON (id) *")
                           .order("id, similarity_score DESC")
                           .limit(MAXIMUM_NUMBER_OF_POI_SEARCH_RESULTS)
 
@@ -85,7 +85,7 @@ module Customer
           likes:       poi.likes,
           pictures:    poi.poi_pictures.map {|poi_picture| url_for(poi_picture.picture) }, # Include picture URLs,
           checkedIn:   poi.check_ins.exists?(user: @user),
-          comments:    [] # Add later...
+          comments:    [] 
         }
       end
 
@@ -96,9 +96,9 @@ module Customer
       poi_id = params[:poi_id]
       @poi = Poi.find_by(id: poi_id)
 
-      return render_not_found unless @poi # Handle case where POI is not found
+      return render_not_found unless @poi
 
-      picture = params[:picture] # Assuming you're sending the pictures as part of the request params
+      picture = params[:picture]
       poi_picture = @poi.poi_pictures.build(user: @user)
       poi_picture.picture.attach(picture)
 
@@ -116,7 +116,15 @@ module Customer
     def get_user
       @user = current_user
 
-      return render_internal_server_error if @user.nil?
+      render_internal_server_error if @user.nil?
+    end
+
+    def total_comments
+      comments.count
+    end
+
+    def latest_comment
+      comments.order(created_at: :desc).first
     end
 
     def render_not_found
@@ -139,9 +147,9 @@ module Customer
         return render_bad_request
       end
 
-      unless @north >= @south && @east >= @west
-        return render_bad_request
-      end
+      return if @north >= @south && @east >= @west
+
+      render_bad_request
     end
   end
 end

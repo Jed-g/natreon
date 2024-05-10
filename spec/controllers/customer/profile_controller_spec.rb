@@ -1,4 +1,6 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe Customer::ProfileController do
   let(:user) { create(:user, user_type: "customer") }
@@ -52,10 +54,10 @@ RSpec.describe Customer::ProfileController do
   describe "PUT #update_profile_picture" do
     context "with valid params" do
       let(:valid_picture) {
-        Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'image0001.jpeg'), 'image/jpeg')
+        Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/image0001.jpeg"), "image/jpeg")
       }
 
-      let (:current_user) { user }
+      let(:current_user) { user }
 
       it "updates the requested user's profile picture" do
         put :update_profile_picture, params: {profile_picture: valid_picture}
@@ -65,10 +67,10 @@ RSpec.describe Customer::ProfileController do
 
     context "with invalid params" do
       let(:invalid_picture) {
-        Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'invalid_picture.txt'), 'text/plain')
+        Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/invalid_picture.txt"), "text/plain")
       }
 
-      let (:current_user) { user }
+      let(:current_user) { user }
 
       it "does not update the user's profile picture" do
         put :update_profile_picture, params: {profile_picture: invalid_picture}

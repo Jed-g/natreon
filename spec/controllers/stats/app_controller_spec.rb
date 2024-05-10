@@ -3,7 +3,7 @@
 RSpec.describe Stats::AppController do
   let(:user) { create(:user, user_type: "customer") }
   let(:admin) { create(:user, user_type: "admin") }
-  let(:current_user) { user } 
+  let(:current_user) { user }
 
   before do
     allow(controller).to receive(:current_user).and_return(current_user)

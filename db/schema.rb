@@ -160,6 +160,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_07_164206) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "poi_comments", force: :cascade do |t|
+    t.bigint "poi_id", null: false
+    t.bigint "user_id", null: false
+    t.string "text"
+    t.integer "rating"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "reported", default: false
+    t.index ["poi_id"], name: "index_poi_comments_on_poi_id"
+    t.index ["user_id"], name: "index_poi_comments_on_user_id"
+  end
+
   create_table "poi_pictures", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "poi_id", null: false
@@ -254,5 +266,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_07_164206) do
   add_foreign_key "friendships", "users", column: "friend_id"
   add_foreign_key "likes", "posts"
   add_foreign_key "likes", "users"
+  add_foreign_key "poi_comments", "pois"
+  add_foreign_key "poi_comments", "users"
   add_foreign_key "posts", "users"
 end

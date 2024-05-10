@@ -38,6 +38,7 @@ gem "bootsnap", require: false
 
 gem "activerecord-session_store"
 gem "active_storage_validations"
+gem "base64", "0.1.1"
 gem "cancancan"
 gem "daemons"
 gem "delayed_job"
@@ -63,16 +64,15 @@ gem "sentry-ruby"
 gem "shakapacker", "7.0.3"
 gem "simple_form"
 gem "whenever"
-gem "base64", "0.1.1"
 
 group :development do
   gem "annotate"
   gem "brakeman"
+  gem "bullet"
   gem "bundler-audit"
   gem "letter_opener"
-  gem "web-console"
-  gem "bullet"
   gem "rspec-benchmark"
+  gem "web-console"
 
   gem "capistrano"
   gem "capistrano-bundler", require: false

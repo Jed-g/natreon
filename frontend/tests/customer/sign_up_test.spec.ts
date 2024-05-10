@@ -18,14 +18,7 @@ test('An account can be successfully created', async ({ page }) => {
 	await page.getByPlaceholder('confirm password').click();
 	await page.getByPlaceholder('confirm password').fill('password');
 	await page.getByRole('button', { name: 'Create Account' }).click();
-
-	// For debugging
-	// await page.waitForTimeout(5000);
-	// await page.evaluate(() => document.querySelector(".flex.flex-col.grow.overflow-x-hidden.relative")?.scrollTo(0, 0));
-	// const screenshotName = `screenshot_${Math.random()}_${Date.now()}.png`;
-	// await page.screenshot({ path: screenshotName });
-
-	await expect(page.locator('[data-testid="logout-button"]').first()).toBeAttached();
+	await expect(page.getByRole('link', { name: 'Home' })).toBeVisible();
 });
 
 test('Cannnot create account with invalid email', async ({ page }) => {

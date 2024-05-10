@@ -51,7 +51,7 @@ RSpec.describe QuestionsController do
         post :submit_question, params: {question: valid_question}
         expect {
           post :submit_question, params: {question: valid_question}
-      }.to perform_under(50).ms
+        }.to perform_under(50).ms
         expect(response).to have_http_status :ok
         json_response = response.parsed_body
 
@@ -121,15 +121,14 @@ RSpec.describe QuestionsController do
         }.to change { @question.upvotes }.by(1)
       end
 
-      it 'decreases the downvotes count and removes the question ID from session[:questions_downvoted]' do
+      it "decreases the downvotes count and removes the question ID from session[:questions_downvoted]" do
         session[:questions_downvoted] = [@question.id]
-        post :upvote_question, params: { id: @question.id }
+        post :upvote_question, params: {id: @question.id}
         @question.reload
-  
+
         expect(@question.downvotes).to eq(0)
         expect(session[:questions_downvoted]).not_to include(@question.id.to_s)
       end
-  
     end
     # rubocop:enable RSpec/InstanceVariable
 
