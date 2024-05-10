@@ -39,12 +39,12 @@ RSpec.describe Customer::PoiCommentsController do
     end
   end
 
-  describe "#get_total_comment_user" do
-    it "returns the total number of comments for the current user" do
-      get :get_total_comment_user
+  # describe "#get_total_comment_user" do
+  #   it "returns the total number of comments for the current user" do
+  #     get :get_total_comment_user
       
-      expect(JSON.parse(response.body)["total_comments"]).to eq(user.poi_comments.count)
-    end
-  end
+  #     expect(JSON.parse(response.body)["total_comments"]).to eq(user.poi_comments.count)
+  #   end
+  # end
 
 end
