@@ -44,7 +44,7 @@ module Customer
 
       return render_bad_request if poi.nil?
 
-      favourite = @user.favourites.create(poi: poi)
+      favourite = @user.favourites.create(poi:)
 
       if favourite.persisted?
         render json: {message: "OK"}
@@ -62,7 +62,7 @@ module Customer
 
       return render_bad_request if poi.nil?
 
-      favourite = @user.favourites.find_by(poi: poi)
+      favourite = @user.favourites.find_by(poi:)
 
       if favourite
         favourite.destroy
@@ -77,7 +77,7 @@ module Customer
     def get_user
       @user = current_user
 
-      return render_internal_server_error if @user.nil?
+      render_internal_server_error if @user.nil?
     end
   end
 end

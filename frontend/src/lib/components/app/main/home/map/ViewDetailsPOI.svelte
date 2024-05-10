@@ -7,14 +7,12 @@
 	import { inProgressBadges } from '$lib/stores';
 	import { onMount } from 'svelte';
 
-	// Define props with type annotations
 	export let poi: POI;
 	const { id, name, description, features } = poi;
 	export let userNickname: string;
 	export let onClose: () => void;
 	export let refreshPOIs: () => void;
 
-    // Define the Comment type
     interface Comment {
 		id: number;
         userId: number;
@@ -25,10 +23,9 @@
     }
 
 	let newComment = '';
-    let newRating = 1; // Default rating value
+    let newRating = 1; 
 
 	let selectedFile: File | undefined;
-    // Define comments variable
     let comments: Comment[] = [];
 
     const getComments = async (poiId: number | undefined) => {
@@ -40,7 +37,7 @@
             const response = await fetch(url);
             if (response.ok) {
                 const data = await response.json();
-                console.log('Fetched comments:', data); // Log the fetched comments
+                console.log('Fetched comments:', data); 
                 comments = data;
             } else {
                 console.error('Failed to fetch comments:', response.statusText);
@@ -55,8 +52,8 @@
     async function addNewComment() {
         if (newComment.trim() !== '') {
             try {
-                // Log user ID, POI ID, comment text, and rating
-                console.log('User ID:', 1); // Change this to the actual user ID
+                
+                console.log('User ID:', 1);
                 console.log('POI ID:', poi.id);
                 console.log('Comment Text:', newComment);
                 console.log('Rating:', newRating);
@@ -67,16 +64,15 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        user_id: 1, // Change this to the actual user ID
+                        user_id: 1, 
                         poi_id: poi.id,
                         text: newComment,
-                        rating: newRating // Set the default rating or prompt the user to provide one
+                        rating: newRating 
                     })
                 });
                 if (response.ok) {
-                    // Refresh comments after adding a new one
                     getComments(poi.id);
-                    newComment = ''; // Clear the input field after adding comment
+                    newComment = '';
                 } else {
                     console.error('Failed to add ViewDetails comment:', response.statusText);
                 }
@@ -97,19 +93,19 @@
 					method: 'POST',
 					body: formData
 				});
-				// Check response status and handle accordingly
+				
 				if (response.ok) {
-					// Handle successful upload
+					
 					syncPOIPictures(poi.id);
 					toast.success('Successfully added picture for POI!');
 					inProgressBadges.checkForUpdates();
 					onClose();
 				} else {
-					// Handle HTTP error
+					
 				}
 			} catch (error) {
 				console.error('Error uploading file:', error);
-				// Handle fetch error
+				
 			}
 		}
 	}
@@ -158,7 +154,7 @@
                 body: JSON.stringify({ reported: true })
             });
             if (response.ok) {
-                // Optionally, update the UI to reflect the reported status
+                
                 toast.success('Comment reported successfully.');
             } else {
                 throw new Error('Failed to report comment.');
@@ -171,7 +167,7 @@
 
 
 	onMount(() => {
-	getComments(poi.id); // Call the getComments function when the component mounts
+	getComments(poi.id); 
 	});
 </script>
 
@@ -186,7 +182,6 @@
             <div class="comment-container mt-8 overflow-y-auto max-h-48" style="width: 80%;"> <!-- Adjust width as needed -->
                 <h3 class="text-lg font-bold text-white mb-4">Comments</h3>
                 <div class="comments-scroll">
-                    <!-- Table for column headers -->
                     <div class="comment-header flex items-center bg-gray-700 text-white py-2 px-4 mb-4">
                         <div class="w-1/3">User</div>
                         <div class="w-1/2">Comment</div>
@@ -194,7 +189,6 @@
                         <!-- No header for the fourth column -->
                     </div>
 
-                    <!-- Individual comment lines -->
                     {#each comments as comment, i}
                         <div class="comment-wrapper flex items-center justify-between px-4 mb-4 w-full">
                             <div class="comment-info w-1/3"> <!-- Adjust width as needed, e.g., w-1/3 -->
@@ -220,13 +214,11 @@
             <!-- Textarea for user to input comments -->
             <textarea class="comment-input mt-4 w-full rounded-lg px-4 py-2" bind:value={newComment} placeholder="Type your comment here..."></textarea>
 
-            <!-- Rating input -->
             <div class="rating-container mt-4">
                 <label for="rating" class="text-white">Rating:</label>
                 <input id="rating" type="number" min="1" max="5" bind:value={newRating} class="w-full rounded-lg px-4 py-2 bg-gray-700 text-white" />
             </div>
 
-            <!-- Button to add comment -->
             <button on:click={addNewComment} class="bg-blue-500 text-white rounded-lg px-4 py-2 mt-4">Add Comment</button>
         </div>
 

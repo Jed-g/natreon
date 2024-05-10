@@ -1,13 +1,14 @@
-<!-- Your main Svelte component -->
+
 <script lang="ts">
     import ManagementTable from '$lib/components/admin/main/comments/ManagementTable.svelte';
     import { authenticated } from '$lib/stores';
+	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 
-
+    // Function to get all comments
     const getAllComments = async () => {
-        console.log("Fetching all comments...");
-        const response = await fetch('/api/admin/comments'); // Fetch comments from this endpoint
+        console.log("Fetching all ...");
+        const response = await fetch('/api/admin/comments');
         const data = await response.json();
         console.log("Comments fetched:", data);
         return data;
@@ -24,7 +25,7 @@
             });
             if (response.ok) {
                 // Optionally, update the UI to reflect the reported status
-                toast.success('Comment reported successfully.');
+                toast.success('Comment changed to not reported successfully.');
             } else {
                 throw new Error('Failed to report comment.');
             }
@@ -36,8 +37,9 @@
     
     // Function to send email notification to user
     const sendEmailNotification = async (commentId: number) => {
+        console.log("Check ID still here?", )
         try {
-            const response = await fetch(`/api/comments/${commentId}/send_email_notification`, {
+            const response = await fetch(`/api/admin/comments/${commentId}/send_email_notification`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -52,8 +54,11 @@
 
     // Function to handle comment deletion
     const deleteComment = async (id: number) => {
+        await sendEmailNotification(id); 
+
         console.log("Deleting comment with ID:", id);
-        const response = await fetch(`/api/admin/comments/${id}`, { // Delete comment using this endpoint
+
+        const response = await fetch(`/api/admin/comments/${id}`, { 
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -68,11 +73,14 @@
         const data = await response.json();
         console.log("Delete response:", data);
         await getAllComments(); // Await getAllComments completion
-        sendEmailNotification(id); // You need to implement this function
         toast.success('Comment deleted successfully!'); // Show toast after getting comments
 
         return data;
     };
+
+    onMount(() => {
+        getAllComments(); 
+	});
 </script>
 
 <div class="relative p-6 h-full w-full">

@@ -59,11 +59,9 @@ Rails.application.routes.draw do
     get "/admin/mailinglist", to: "admin/mailing_list#all_emails"
     get "/admin/report-response", to: "admin/mailing_list#all_emails"
     get "/admin/comments", to: "admin/comments#all_comments"
-    post "/admin/comments", to: "admin/comments#create_comment"
     patch "/admin/comments/:id/toggle_report_status", to: "admin/comments#toggle_report_status"
     delete "/admin/comments/:id", to: "admin/comments#delete_comment"
-    post '/api/comments/:id/send_email_notification', to: 'admin/comments#send_email_notification'
-
+    post '/admin/comments/:id/send_email_notification', to: 'admin/comments#create_email'
     
     get "/admin/pois", to: "admin/pois#all_pois"
     post "/admin/pois", to: "admin/pois#create_poi"
@@ -127,9 +125,9 @@ Rails.application.routes.draw do
     end
     
     scope "comments" do
-      get "/", to: "customer/comments#all"
-      post "/", to: "customer/comments#create"
-      post "/:id/report", to: "customer/comments#report"
+      get "/", to: "customer/poi_comments#all"
+      post "/", to: "customer/poi_comments#create"
+      post "/:id/report", to: "customer/poi_comments#report"
 
     end
 
@@ -144,6 +142,28 @@ Rails.application.routes.draw do
       get "/", to: "customer/points_badges#all"
       get "/avatar", to: "customer/points_badges#avatar_dropdown_current_total_points"
       get "/in-progress", to: "customer/points_badges#all_in_progress"
+    end
+
+    namespace :customer, path: '' do
+      namespace :social, path: 'social' do
+        resources :posts, only: [:index, :create, :update, :destroy] do
+          post 'like', on: :member
+        
+          resources :comments, only: [:index, :create, :update, :destroy]
+        end
+
+        resources :friend_requests, only: [:create, :index, :update, :destroy, :show] do
+          member do
+            put :accept
+          end
+        end
+
+        resources :users, only: [:create, :index, :update, :destroy, :show]
+        post 'users/block/:id', to: 'blocks#block', as: 'block_user'
+        delete 'users/unblock/:id', to: 'blocks#unblock', as: 'unblock_user'
+        resources :blocks, only: [:create, :index, :update, :destroy]
+        resources :friends, only: [:index, :destroy]
+      end
     end
   end
 end

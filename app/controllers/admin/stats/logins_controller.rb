@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   module Stats
     class LoginsController < ApplicationController

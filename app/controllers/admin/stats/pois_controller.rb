@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   module Stats
     class PoisController < ApplicationController
@@ -24,14 +26,14 @@ module Admin
 
         email_grouped = transform_counts_to_array(email_poi_counts, pois, true)
         session_id_grouped = transform_counts_to_array(session_poi_counts, pois, true)
-        pois_grouped_with_duplicates = transform_counts_to_array({'all' => total_poi_counts}, pois, true)
-        app_visit_grouped = transform_counts_to_array({'all' => app_visit_poi_counts}, pois, true)
+        pois_grouped_with_duplicates = transform_counts_to_array({"all" => total_poi_counts}, pois, true)
+        app_visit_grouped = transform_counts_to_array({"all" => app_visit_poi_counts}, pois, true)
 
         render json: {
-          email_grouped:                email_grouped,
-          session_id_grouped:           session_id_grouped,
-          pois_grouped_with_duplicates: pois_grouped_with_duplicates,
-          app_visit_grouped:            app_visit_grouped
+          email_grouped:,
+          session_id_grouped:,
+          pois_grouped_with_duplicates:,
+          app_visit_grouped:
         }
       end
 
@@ -42,8 +44,10 @@ module Admin
           counts.each {|poi_id, count| agg[poi_id] += count }
         end
 
+        filtered_counts = aggregated_counts.select {|poi_id, _| pois.key?(poi_id) }
+
         result = aggregated_counts.map do |poi_id, count|
-          {count: count, poi: pois[poi_id]}
+          {count:, poi: pois[poi_id]}
         end.sort_by {|h| -h[:count] }
 
         flatten_all ? result.flatten(1) : result

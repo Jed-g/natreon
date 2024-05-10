@@ -4,7 +4,7 @@ module Admin
 
       def all_comments
         Rails.logger.info "Fetching all reported comments..."
-        reported_comments = Comment.where(reported: true).order(created_at: :desc)
+        reported_comments = PoiComment.where(reported: true).order(created_at: :desc)
         Rails.logger.info "Reported comments fetched: #{reported_comments.inspect}"
         
         # Create an array to store the reported comments with user information
@@ -44,7 +44,7 @@ module Admin
       end
 
       def delete_comment
-        comment = Comment.find_by(id: params[:id])
+        comment = PoiComment.find_by(id: params[:id])
         if comment
           if comment.destroy
 
@@ -58,19 +58,22 @@ module Admin
       end
 
       def create_email
-        comment = Comment.find(params[:id])
-        @friend_request = current_user.friend_requests.new(friend: friend)
+        Rails.logger.info "Check: #{PoiComment.all.inspect}"
+        comment = PoiComment.find(params[:id])
       
-        if @friend_request.save
-          FriendRequestMailer.friend_request(@friend_request).deliver_now
-          render :show, status: :created, location: @friend_request
-        else
-          render json: @friend_request.errors, status: :unprocessable_entity
-        end
+        Rails.logger.info "Check: #{comment.inspect}"
+      
+        user_email = User.find(comment.user_id).email
+        Rails.logger.info "Email to: #{user_email}"
+      
+        ReportedCommentMailer.reported_comments_noti(user_email).deliver_now
+      
+        render json: { message: 'Email notification sent successfully' }, status: :ok
       end
+      
 
       def toggle_report_status
-        @comment = Comment.find(params[:id])
+        @comment = PoiComment.find(params[:id])
       
         # Log the id parameter
         Rails.logger.info("ID received in toggle_report_status: #{params[:id]}")

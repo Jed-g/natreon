@@ -17,7 +17,7 @@ module Admin
       poi = Poi.new(poi_params)
 
       if poi.save
-        render json: {message: "Poi created successfully", poi: poi}
+        render json: {message: "Poi created successfully", poi:}
       else
         render json: poi.errors
       end
@@ -47,7 +47,7 @@ module Admin
       poi.destroy
       render json: {message: "Deleted poi successfully"}
     end
-  
+
     private
 
     # Only allow a list of trusted parameters through.

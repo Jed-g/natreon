@@ -24,9 +24,9 @@ RSpec.describe Admin::StatsController do
         expect(response).to have_http_status :ok
       end
 
-      it 'returns the correct data' do
-        data = JSON.parse(response.body)
-        expect(data['unique'].length).to eq(1)
+      it "returns the correct data" do
+        data = response.parsed_body
+        expect(data["unique"].length).to eq(1)
       end
     end
 

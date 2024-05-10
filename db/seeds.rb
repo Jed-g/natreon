@@ -14,6 +14,13 @@ when "test"
         user.description = "test_description"
 
     end
+    User.find_or_create_by(email: "customer1@test.com") do |user|
+        user.password = "password"
+        user.user_type = 0
+        user.nickname = "test_customer1"
+        user.description = "test_description"
+
+      end
     # User.find_or_create_by(email: "reporter@test.com") do |user|
     #     user.password = "password"
     #     user.user_type = 2
@@ -23,8 +30,8 @@ when "test"
     Question.create(answer:nil , question:"test_question_1", upvotes:0, downvotes:0)
     Question.create(answer:"test_answer_2" , question:"test_question_2", upvotes:0, downvotes:0)
     # Create sample comments associated with the POI
-    Comment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
-    Comment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
+    PoiComment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
+    PoiComment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
 when "development"
     User.find_or_create_by(email: "customer@test.com") do |user|
         user.password = "password"
@@ -54,8 +61,9 @@ when "development"
         user.description = "test_description"
 
     end
-    Comment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
-    Comment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
+
+    PoiComment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
+    PoiComment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
     require_relative 'points_of_interest'
 
 when "production"
@@ -85,7 +93,7 @@ when "demo"
         user.nickname = "reporter"
         user.description = "reporter_description"
     end
-    Comment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
-    Comment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
+    PoiComment.create(user_id: 1, poi_id: 31, text: "Sample comment 1 for POI 31", rating: 4)
+    PoiComment.create(user_id: 2, poi_id: 31, text: "Sample comment 2 for POI 31", rating: 5)
     require_relative 'points_of_interest'
 end

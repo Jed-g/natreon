@@ -31,7 +31,12 @@ require "rails_helper"
 # end
 # rubocop:disable RSpec/NamedSubject
 RSpec.describe User do
-  subject { described_class.new(email: "test@example.com", nickname: "user", description: "description",  password: "password", user_type: "customer") }
+  subject {
+    described_class.new(email: "test@example.com", nickname: "user", description: "description", password: "password",
+                        user_type: "customer")
+  }
+
+  let(:user) { create(:user) }
 
   describe "validations" do
     it "is valid with valid attributes" do
@@ -44,7 +49,8 @@ RSpec.describe User do
     end
 
     it "is not valid with a duplicate email" do
-      described_class.create!(email: "test@example.com", nickname: "user", description: "description", password: "password", user_type: "customer")
+      described_class.create!(email: "test@example.com", nickname: "user", description: "description",
+                              password: "password", user_type: "customer")
       expect(subject).not_to be_valid
     end
 
@@ -72,55 +78,24 @@ RSpec.describe User do
       expect { subject.user_type = "invalid" }.to raise_error(ArgumentError)
     end
   end
-  let(:user) { create(:user) }
 
-  describe '#active_for_authentication?' do
-    context 'when user is deactivated' do
+  describe "#active_for_authentication?" do
+    context "when user is deactivated" do
       before do
         user.update(deactivated: true)
       end
 
-      it 'returns false' do
-        expect(user.active_for_authentication?).to eq(false)
+      it "returns false" do
+        expect(user.active_for_authentication?).to be(false)
       end
     end
 
-    context 'when user is not deactivated' do
-      it 'returns true' do
-        expect(user.active_for_authentication?).to eq(true)
+    context "when user is not deactivated" do
+      it "returns true" do
+        expect(user.active_for_authentication?).to be(true)
       end
     end
   end
-
-  describe '#badge_statuses_for_total_check_in_counts' do
-    context 'when user has achieved a badge' do
-      before do
-        create_list(:check_in, Constants::BADGE_THRESHOLDS_FOR_TOTAL_COUNTS_IN_CATEGORY.values.first, user: user)
-      end
-
-     
-    end
-  end
-
-  describe '#badge_statuses_for_total_poi_photo_counts' do
-    context 'when user has achieved a badge' do
-      before do
-        create_list(:poi_picture, Constants::BADGE_THRESHOLDS_FOR_TOTAL_COUNTS_IN_CATEGORY.values.first, user: user)
-      end
-
-   
-    end
-  end
-
-  describe '#badge_statuses_for_total_poi_review_counts' do
-    context 'when user has achieved a badge' do
-      before do
-        create_list(:poi_review, Constants::BADGE_THRESHOLDS_FOR_TOTAL_COUNTS_IN_CATEGORY.values.first, user: user)
-      end
-
-    end
-  end
-  
 end
 
 # rubocop:enable RSpec/NamedSubject

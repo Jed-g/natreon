@@ -2,7 +2,7 @@
 
 require "rails_helper"
 require "rspec-benchmark"
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.configure do |config|
   config.include RSpec::Benchmark::Matchers
@@ -28,10 +28,8 @@ RSpec.describe Admin::UsersController do
         expect(response).to have_http_status :ok
       end
 
-      it "will perform in under 500 ms under high data loads" do
-        5000.times do
-          create(:user)
-        end
+      it "performs in under 500 ms under high data loads" do
+        create_list(:user, 5000)
         expect {
           get :all_users
         }.to perform_under(500).ms

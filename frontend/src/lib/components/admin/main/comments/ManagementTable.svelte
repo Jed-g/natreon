@@ -1,16 +1,14 @@
-<!-- ManagementTable.svelte -->
+
 <script lang="ts">
-    // Import dependencies
+    
     import { onMount } from 'svelte';
 
-    // Define props
     export let getItemsAction: () => Promise<any[]>;
     export let deleteAction: (id: number) => Promise<void>;
-    export let toggleReportStatusAction: (id: number) => Promise<void>; // New prop
+    export let toggleReportStatusAction: (id: number) => Promise<void>;
     export let tableName: string;
     export let tableHeaders: string[];
 
-    // Define state variables
     let loading = true;
     let items: any[];
 
@@ -59,20 +57,16 @@
             <tbody>
                 {#each items as item (item.id)}
                     <tr>
-                        <!-- Render each field from the item object -->
                         <td>{item.user_nickname}</td>
                         <td>{item.poi_name}</td>
                         <td>{item.text}</td>
                         <td>{item.rating}</td>
-                        <!-- Add buttons for editing/deleting if needed -->
                         <td>
-                            <!-- Example: Delete button -->
                             <button class="btn btn-error" on:click={() => handleDelete(item.id)}>
                                 Delete
                             </button>
                         </td>
                         <td>
-                            <!-- Toggle report status button -->
                             <button class="btn btn-primary" on:click={() => handleToggleReportStatus(item.id)}>
                                 Toggle Report Status
                             </button>
@@ -83,7 +77,3 @@
         </table>
     </div>
 {/if}
-
-<style>
-    /* Add your custom styles here */
-</style>
