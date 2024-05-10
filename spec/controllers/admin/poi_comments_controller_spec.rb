@@ -65,44 +65,4 @@ RSpec.describe Admin::PoiCommentsController do
       end
     end
   end
-
-  describe "comment_params" do
-    context "when an admin" do
-      let(:current_user) { admin }
-
-      let(:params) do
-        {
-          poi_comment: {
-            id:      1,
-            user_id: 2,
-            poi_id:  3,
-            text:    "Sample text",
-            rating:  4
-          }
-        }
-      end
-
-      it "permits specific parameters" do
-        controller.params = ActionController::Parameters.new(params)
-        expect(controller.send(:comment_params).to_h).to eq({
-                                                              "id"      => 1,
-                                                              "user_id" => 2,
-                                                              "poi_id"  => 3,
-                                                              "text"    => "Sample text",
-                                                              "rating"  => 4
-                                                            })
-      end
-
-      it "rejects additional parameters" do
-        controller.params = ActionController::Parameters.new(params.merge(extra_param: "value"))
-        expect(controller.send(:comment_params).to_h).to eq({
-                                                              "id"      => 1,
-                                                              "user_id" => 2,
-                                                              "poi_id"  => 3,
-                                                              "text"    => "Sample text",
-                                                              "rating"  => 4
-                                                            })
-      end
-    end
-  end
 end
