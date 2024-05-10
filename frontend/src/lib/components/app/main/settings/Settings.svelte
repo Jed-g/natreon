@@ -4,8 +4,6 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Separator } from '$lib/components/ui/separator';
 
-	export let slug: string;
-
 	let cardHeader: HTMLDivElement;
 	let cardHeaderHeight = 64;
 

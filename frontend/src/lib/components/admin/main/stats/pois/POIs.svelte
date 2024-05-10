@@ -28,11 +28,7 @@
 	import { onMount } from 'svelte';
 	import DataTable from './data-table/data-table.svelte';
 	import { isRight } from 'fp-ts/lib/Either';
-	import { Separator } from '$lib/components/ui/separator';
-	import { Button } from '$lib/components/ui/button';
 	import * as Tabs from '$lib/components/ui/tabs';
-
-	export let slug: string;
 
 	export let updateLayoutOffsets: () => void;
 
