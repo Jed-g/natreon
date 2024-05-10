@@ -3,13 +3,13 @@
 module Customer
   module Social
     class FriendRequestsController < ApplicationController
-      before_action :authorize_customer_controllers
+      before_action :authorize_customer_controllers, :get_user
       # before_action :authenticate_user!
       before_action :set_friend_request, except: %i[index create]
 
       def index
-        @incoming = FriendRequest.where(friend: current_user).includes(:user)
-        @outgoing = current_user.friend_requests.includes(:friend)
+        @incoming = FriendRequest.where(friend: @user).includes(:user)
+        @outgoing = @user.friend_requests.includes(:friend)
 
         render json: {incoming: @incoming.as_json(include: :user),
                       outgoing: @outgoing.as_json(include: {friend: {only: :nickname}})}
@@ -20,8 +20,14 @@ module Customer
       end
 
       def create
+        friend_id = params[:friend_id].to_i
+        unless friend_id.to_s == params[:friend_id].to_s && User.exists?(friend_id)
+          render json: {error: "Invalid friend_id param"}, status: :unprocessable_entity
+          return
+        end
+
         friend = User.find(params[:friend_id])
-        @friend_request = current_user.friend_requests.new(friend:)
+        @friend_request = @user.friend_requests.new(friend:)
 
         if @friend_request.save
           FriendRequestMailer.friend_request(@friend_request).deliver_now
@@ -45,6 +51,12 @@ module Customer
 
       def set_friend_request
         @friend_request = FriendRequest.find(params[:id])
+      end
+
+      def get_user
+        @user = current_user
+
+        render_internal_server_error if @user.nil?
       end
     end
   end

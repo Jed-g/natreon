@@ -3,15 +3,15 @@
 module Customer
   module Social
     class UsersController < ApplicationController
-      before_action :authorize_customer_controllers
+      before_action :authorize_customer_controllers, :get_user
       # before_action :authenticate_user!
 
       # this is to return all users except current user, friends and requested friends
       # TODO: should almost certainly rename this
       def index
-        friends_ids = current_user.friends.pluck(:id)
-        requested_friends_ids = current_user.friend_requests.pluck(:friend_id)
-        exclude_ids = friends_ids + requested_friends_ids + [current_user.id]
+        friends_ids = @user.friends.pluck(:id)
+        requested_friends_ids = @user.friend_requests.pluck(:friend_id)
+        exclude_ids = friends_ids + requested_friends_ids + [@user.id]
         exclude_ids += User.where(user_type: User.user_types["admin"]).pluck(:id)
         exclude_ids += User.where(user_type: User.user_types["reporter"]).pluck(:id)
         users = User.where.not(id: exclude_ids).select(:id, :nickname)
@@ -19,7 +19,7 @@ module Customer
       end
 
       def show
-        render json: current_user
+        render json: @user
       end
 
       SIMILARITY_THRESHOLD = 0.3
@@ -48,6 +48,14 @@ module Customer
         end
 
         render json: users_formatted
+      end
+
+      private
+
+      def get_user
+        @user = current_user
+
+        render_internal_server_error if @user.nil?
       end
     end
   end
