@@ -15,12 +15,17 @@ module Customer
                       outgoing: @outgoing.as_json(include: {friend: {only: :nickname}})}
       end
 
+      def show
+        @friend_request = FriendRequest.find(params[:id])
+      end
+
       def create
         friend = User.find(params[:friend_id])
         @friend_request = current_user.friend_requests.new(friend:)
 
         if @friend_request.save
-          render :show, status: :created, location: @friend_request
+          FriendRequestMailer.friend_request(@friend_request).deliver_now
+          render :show, status: :created, location: customer_social_friend_request_url(@friend_request)
         else
           render json: @friend_request.errors, status: :unprocessable_entity
         end
