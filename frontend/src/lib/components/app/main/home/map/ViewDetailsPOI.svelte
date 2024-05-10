@@ -183,20 +183,21 @@
                 <h3 class="text-lg font-bold text-white mb-4">Comments</h3>
                 <div class="comments-scroll">
                     <div class="comment-header flex items-center bg-gray-700 text-white py-2 px-4 mb-4">
-                        <div class="w-1/3">User</div>
-                        <div class="w-1/2">Comment</div>
-                        <div class="w-1/6">Rating and Report</div>
+                        <div class="w-1/4">User</div>
+                        <div class="w-1/4">Review</div>
+                        <div class="w-1/6">Rating </div>
+                        <div class="w-1/6">Report </div>
                         <!-- No header for the fourth column -->
                     </div>
 
                     {#each comments as comment, i}
                         <div class="comment-wrapper flex items-center justify-between px-4 mb-4 w-full">
-                            <div class="comment-info w-1/3"> <!-- Adjust width as needed, e.g., w-1/3 -->
+                            <div class="comment-info w-1/4"> <!-- Adjust width as needed, e.g., w-1/3 -->
                                 <div class="user-name text-white">{comment.nickname}</div>
                             </div>
-                            <div class="comment-info w-1/2"> <!-- Adjust width as needed, e.g., w-1/2 -->
-                                <div class="comment-text text-white">{comment.text}</div>
-                            </div>
+                            <div class="comment-info w-1/4"> <!-- Adjust width as needed, e.g., w-1/2 -->
+                                <div class="comment-text text-white break-words">{comment.text}</div>
+                            </div>                            
                             <div class="comment-info w-1/6"> <!-- Adjust width as needed, e.g., w-1/6 -->
                                 <div class="comment-rating text-white">{comment.rating}</div>
                             </div>
